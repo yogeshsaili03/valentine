@@ -17,7 +17,7 @@
       --bg2:#f3d2db;
       --bg3:#fbf2f5;
 
-      --paper: rgba(255, 252, 253, .80);
+      --paper: rgba(255, 252, 253, .82);
       --paper2: rgba(255, 252, 253, .58);
       --stroke: rgba(255,255,255,.62);
       --shadow: 0 24px 84px rgba(36, 10, 20, .14);
@@ -207,7 +207,8 @@
       grid-template-columns: repeat(7, 1fr);
       gap: 8px;
       margin-bottom: 8px;
-      opacity:.78;
+      opacity:.80;
+      padding-inline: 2px;
     }
     .dow{
       text-align:center;
@@ -222,6 +223,7 @@
       gap: 8px;
       align-items: center;
       justify-items: center;
+      padding-inline: 2px;
     }
 
     .dateBtn{
@@ -296,10 +298,10 @@
       font-weight: 800;
       color: rgba(43,15,29,.78);
       font-size: clamp(12px, 3.6vw, 15px);
-      min-height: 1.4em;
+      min-height: 1.6em;
     }
 
-    /* ===== Screen 2: TicTacToe ===== */
+    /* ===== Screen 2: TicTacToe (fix phone cut) ===== */
     .tttWrap{ margin-top: 12px; display:grid; gap: 10px; }
 
     .tttTopWin{
@@ -322,10 +324,15 @@
       50%{ opacity:1; transform: translateY(-1px); }
     }
 
+    /* extra padding so board never touches right edge on phone */
     .tttBoardShell{
-      width: min(360px, 92vw);
+      width: min(380px, 96vw);
       margin: 0 auto;
       position:relative;
+      padding: 0 10px;            /* ✅ this fixes the “cut” on phone */
+    }
+    @media (max-width: 420px){
+      .tttBoardShell{ padding: 0 14px; }
     }
 
     .tttBoard{
@@ -339,6 +346,7 @@
       border: 1px solid rgba(255,255,255,.55);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.45);
       touch-action: manipulation;
+      overflow: hidden; /* keep clean */
     }
 
     .cell{
@@ -379,9 +387,17 @@
 
     .winSvg{
       position:absolute;
-      inset: 0;
+      inset: 0 10px 0 10px;  /* match shell padding ✅ */
+      width: calc(100% - 20px);
+      height: 100%;
       pointer-events:none;
       overflow: visible;
+    }
+    @media (max-width: 420px){
+      .winSvg{
+        inset: 0 14px 0 14px;
+        width: calc(100% - 28px);
+      }
     }
 
     /* ===== Screen 3: Valentine ===== */
@@ -401,7 +417,7 @@
       font-weight: 900;
       font-size: clamp(13px, 3.9vw, 16px);
       color: rgba(43,15,29,.84);
-      min-height: 1.8em;
+      min-height: 2.0em;
       padding: 0 8px;
     }
 
@@ -428,7 +444,7 @@
       position:absolute;
       left:0; top:0;
       z-index: 5;
-      will-change: transform, opacity;
+      will-change: transform, opacity, filter;
     }
 
     /* smaller No */
@@ -448,25 +464,106 @@
       margin-top: 10px;
     }
 
-    /* ===== Screen 4: Final ===== */
-    .finalBox{
+    /* dust layer for thanos effect */
+    .dustLayer{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index: 6;
+    }
+    .dust{
+      position:absolute;
+      border-radius: 999px;
+      opacity: 0;
+      will-change: transform, opacity, filter;
+      mix-blend-mode: multiply;
+    }
+
+    /* ===== Screen 4: Final (more emotions) ===== */
+    .finalWrap{
+      position: relative;
       margin-top: 14px;
+    }
+
+    .finalBox{
       border-radius: 22px;
-      background: rgba(255,255,255,.45);
+      background: rgba(255,255,255,.46);
       border: 1px solid rgba(255,255,255,.55);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.45);
       padding: 16px;
       text-align:center;
+      position:relative;
+      overflow:hidden;
+      isolation: isolate;
     }
+
+    /* animated glow + shimmer for final box */
+    .finalBox::before{
+      content:"";
+      position:absolute;
+      inset:-60px;
+      background: radial-gradient(circle at 30% 20%, rgba(240,143,177,.28), transparent 62%),
+                  radial-gradient(circle at 70% 20%, rgba(181,22,82,.20), transparent 60%),
+                  radial-gradient(circle at 50% 90%, rgba(255,255,255,.30), transparent 60%);
+      filter: blur(10px);
+      opacity:.95;
+      z-index: -1;
+      animation: finalGlow 3.8s ease-in-out infinite;
+    }
+    @keyframes finalGlow{
+      0%,100%{ transform: translateY(0) scale(1); opacity:.85; }
+      50%{ transform: translateY(-6px) scale(1.02); opacity:1; }
+    }
+    .finalBox::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.22) 38%, transparent 70%);
+      transform: translateX(-140%) skewX(-18deg);
+      animation: finalSweep 4.2s ease-in-out infinite;
+      pointer-events:none;
+      z-index: 0;
+    }
+    @keyframes finalSweep{
+      0%{ transform: translateX(-140%) skewX(-18deg); }
+      45%{ transform: translateX(160%) skewX(-18deg); }
+      100%{ transform: translateX(160%) skewX(-18deg); }
+    }
+
     .finalEmoji{
       font-size: clamp(68px, 18vw, 110px);
       line-height:1;
       margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 18px 22px rgba(181,22,82,.12));
+      animation: heartbeat 1.6s ease-in-out infinite;
     }
+    @keyframes heartbeat{
+      0%,100%{ transform: scale(1); }
+      18%{ transform: scale(1.08); }
+      36%{ transform: scale(1.0); }
+      55%{ transform: scale(1.06); }
+      72%{ transform: scale(1.0); }
+    }
+
     .finalLine{
       font-weight: 900;
       color: rgba(43,15,29,.82);
       font-size: clamp(13px, 3.9vw, 16px);
+      position: relative;
+      z-index: 1;
+    }
+    .finalLine.glowy{
+      text-shadow:
+        0 0 16px rgba(181,22,82,.20),
+        0 0 34px rgba(240,143,177,.18);
+      animation: textGlow 2.2s ease-in-out infinite;
+    }
+    @keyframes textGlow{
+      0%,100%{ opacity:.92; transform: translateY(0); }
+      50%{ opacity:1; transform: translateY(-1px); }
     }
 
     .cheesyGrid{
@@ -487,7 +584,20 @@
       padding: 12px 12px 10px;
       position:relative;
       overflow:hidden;
+      transform: translateZ(0);
+      animation: cardFloat 4.2s ease-in-out infinite;
     }
+    .noteCard:nth-child(2){ animation-delay: .4s; }
+    .noteCard:nth-child(3){ animation-delay: .8s; }
+    .noteCard:nth-child(4){ animation-delay: 1.2s; }
+    .noteCard:nth-child(5){ animation-delay: 1.6s; }
+    .noteCard:nth-child(6){ animation-delay: 2.0s; }
+
+    @keyframes cardFloat{
+      0%,100%{ transform: translateY(0); }
+      50%{ transform: translateY(-4px); }
+    }
+
     .noteCard::after{
       content:"";
       position:absolute;
@@ -513,8 +623,30 @@
       position:absolute;
       right: 10px;
       top: 10px;
-      opacity:.9;
+      opacity:.95;
       filter: drop-shadow(0 10px 14px rgba(181,22,82,.10));
+      animation: iconGlow 2.8s ease-in-out infinite;
+    }
+    @keyframes iconGlow{
+      0%,100%{ transform: scale(1); opacity:.92; }
+      50%{ transform: scale(1.06); opacity:1; }
+    }
+
+    /* floating hearts in final screen */
+    .heartLayer{
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index: 2;
+      border-radius: 22px;
+    }
+    .floatHeart{
+      position:absolute;
+      font-size: 16px;
+      opacity: 0;
+      filter: drop-shadow(0 10px 14px rgba(181,22,82,.10));
+      will-change: transform, opacity;
     }
   </style>
 </head>
@@ -537,11 +669,9 @@
           <div class="paperBlock">
             <div class="monthTitle" id="monthTitle">December 2022</div>
 
-            <!-- weekdays -->
             <div class="dowRow" id="dowRow"></div>
-
-            <!-- days -->
             <div class="calendarGrid" id="calendarGrid"></div>
+
             <div class="noteLine" id="dateNote">Choose our day…</div>
           </div>
 
@@ -585,12 +715,16 @@
 
           <div class="arena" id="arena">
             <button class="btn primary" id="yesBtn" type="button">Yes 💘</button>
+
             <div id="noWrap" aria-hidden="true">
               <button class="btn ghost" id="noBtn" type="button">No 🙈</button>
             </div>
+
+            <!-- ✅ Thanos dust particles render here -->
+            <div id="dustLayer" class="dustLayer"></div>
           </div>
 
-          <div class="hint">Tap “No” 😌 (it excuses… snaps… then teleports)</div>
+          <div class="hint">Tap “No” 😌 (excuse → dust snap → teleport)</div>
         </section>
 
         <!-- SCREEN 4 -->
@@ -598,13 +732,17 @@
           <h2>Yayyy!! 💞</h2>
           <div class="divider">🌹</div>
 
-          <div class="finalBox">
-            <div class="finalEmoji" id="finalEmoji">😍</div>
-            <div class="finalLine" id="finalLine1">You have won my heart.</div>
-            <div class="finalLine" id="finalLine2" style="margin-top:6px;">Happy Valentine’s Day ✨</div>
-          </div>
+          <div class="finalWrap">
+            <div class="finalBox">
+              <div class="heartLayer" id="heartLayer"></div>
 
-          <div class="cheesyGrid" id="cheesyGrid"></div>
+              <div class="finalEmoji" id="finalEmoji">😍</div>
+              <div class="finalLine glowy" id="finalLine1">You have won my heart.</div>
+              <div class="finalLine glowy" id="finalLine2" style="margin-top:6px;">Happy Valentine’s Day ✨</div>
+            </div>
+
+            <div class="cheesyGrid" id="cheesyGrid"></div>
+          </div>
 
           <div class="row">
             <button class="btn ghost" id="replay">Play again ↻</button>
@@ -647,10 +785,14 @@
       document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
       document.getElementById(id).classList.add("active");
       window.scrollTo({top: 0, behavior: "smooth"});
+
+      if(id === "s4"){
+        startFinalEffects();
+      }
     }
 
     // =======================
-    // SCREEN 1: Calendar with DOW + offset + correct hint glow
+    // SCREEN 1: Calendar (DOW + offset + correct hint glow)
     // =======================
     const monthTitle = document.getElementById("monthTitle");
     const calendarGrid = document.getElementById("calendarGrid");
@@ -666,14 +808,12 @@
     function buildCalendar(){
       calendarGrid.innerHTML = "";
 
-      // blanks before day 1
       for(let i=0;i<MONTH_START_DOW;i++){
         const b = document.createElement("div");
         b.className = "blank";
         calendarGrid.appendChild(b);
       }
 
-      // actual dates
       for(let d=1; d<=DAYS_IN_MONTH; d++){
         const btn = document.createElement("button");
         btn.className = "dateBtn";
@@ -699,12 +839,17 @@
       btn.classList.add("selected");
       toS2.disabled = false;
 
-      if(CORRECT_DAY && day !== CORRECT_DAY){
-        dateNote.textContent = `Hmm… close 😌 Try the glowing date 💗`;
-        suggestCorrectDay();
-      } else {
-        dateNote.textContent = `So… ${MONTH_NAME} ${day}, ${YEAR} 💗`;
-      }
+      if (CORRECT_DAY) {
+  if (day !== CORRECT_DAY) {
+    dateNote.textContent = wrongDayMessage(day);
+    suggestCorrectDay();
+  } else {
+    dateNote.textContent = wrongDayMessage(day); // exact bucket message
+  }
+} else {
+  dateNote.textContent = `So… ${MONTH_NAME} ${day}, ${YEAR} 💗`;
+}
+
 
       gsap.fromTo(btn, {scale:0.96}, {scale:1.03, duration:0.16, ease:"power2.out", yoyo:true, repeat:1});
     }
@@ -859,7 +1004,6 @@
     }
 
     function drawWinLine(line){
-      // line has 3 indices; draw a path from center of first to center of third
       const a = tttBoard.querySelector(`.cell[data-i="${line[0]}"]`);
       const c = tttBoard.querySelector(`.cell[data-i="${line[2]}"]`);
       if(!a || !c) return;
@@ -892,7 +1036,6 @@
       path.style.strokeDasharray = `${len}`;
       path.style.strokeDashoffset = `${len}`;
 
-      // draw + heartbeat pulse
       gsap.to(path, { strokeDashoffset: 0, duration: 0.45, ease: "power2.out" });
       gsap.fromTo(path, { opacity: 0.65 }, { opacity: 1, duration: 0.18, yoyo: true, repeat: 3, ease: "power2.inOut" });
       gsap.fromTo(heart, { scale: 0.9 }, { scale: 1.22, duration: 0.18, yoyo: true, repeat: 3, ease: "power2.inOut",
@@ -913,7 +1056,7 @@
       tttStatus.textContent = "Okay okay… you win 😌";
       toS3.disabled = false;
 
-      confetti({ particleCount: 75, spread: 70, startVelocity: 22, scalar: 0.9, origin: { y: 0.55 } });
+      confetti({ particleCount: 80, spread: 70, startVelocity: 22, scalar: 0.9, origin: { y: 0.55 } });
       gsap.fromTo(tttTopWin, {scale:0.98}, {scale:1.02, duration:0.22, ease:"power2.out", yoyo:true, repeat:1});
     }
 
@@ -928,12 +1071,13 @@
     });
 
     // =======================
-    // SCREEN 3: No click -> reason 1s -> snap -> teleport (no top bubble)
+    // SCREEN 3: Thanos dust snap (REAL dust)
     // =======================
     const arena = document.getElementById("arena");
     const yesBtn = document.getElementById("yesBtn");
     const noWrap = document.getElementById("noWrap");
     const noBtn = document.getElementById("noBtn");
+    const dustLayer = document.getElementById("dustLayer");
 
     const valEmoji = document.getElementById("valEmoji");
     const valMood = document.getElementById("valMood");
@@ -948,8 +1092,6 @@
       "System error: NO blocked ✨",
       "I’m shy… choose YES 🥺"
     ];
-
-    function clamp(v, min, max){ return Math.max(min, Math.min(max, v)); }
 
     function arenaMetrics(){
       const r = arena.getBoundingClientRect();
@@ -977,7 +1119,6 @@
       return !(a.right < b.left || a.left > b.right || a.bottom < b.top || a.top > b.bottom);
     }
 
-    let pos = { x: 0, y: 0 };
     let noBusy = false;
 
     function randomSpot(){
@@ -995,18 +1136,16 @@
     }
 
     function moveNoTo(target, instant=false){
-      pos = {x: target.x, y: target.y};
       if(instant){
-        gsap.set(noWrap, { x: pos.x, y: pos.y, rotate: 0, opacity: 1, scale: 1 });
+        gsap.set(noWrap, { x: target.x, y: target.y, rotate: 0, opacity: 1, scale: 1, filter:"blur(0px)" });
         return;
       }
-      gsap.to(noWrap, { x: pos.x, y: pos.y, duration: 0.40, ease: "power3.out", overwrite: true });
+      gsap.to(noWrap, { x: target.x, y: target.y, duration: 0.40, ease: "power3.out", overwrite: true });
     }
 
     function placeNoInitial(){
       moveNoTo(randomSpot(), true);
       noBtn.textContent = "No 🙈";
-      gsap.set(noWrap, { opacity: 1, scale: 1 });
       noBusy = false;
       valEmoji.textContent = "😊";
       valMood.textContent = "Be honest… but be gentle 😌";
@@ -1026,7 +1165,70 @@
       gsap.fromTo(valEmoji, {scale:0.99}, {scale:1.06, duration:0.18, ease:"power2.out", yoyo:true, repeat:1});
     }
 
-    // No click: show reason for ~1s -> snap fade -> teleport -> reset to "No"
+    // ✅ REAL Thanos dust: particles spawn from the No button area
+    function thanosDustFrom(element){
+      const ar = arena.getBoundingClientRect();
+      const r  = element.getBoundingClientRect();
+
+      const left = r.left - ar.left;
+      const top  = r.top  - ar.top;
+      const w = r.width, h = r.height;
+
+      const count = Math.max(90, Math.min(190, Math.floor((w*h)/190))); // denser = more “sand”
+      const colors = [
+        "rgba(181,22,82,.55)",
+        "rgba(240,143,177,.55)",
+        "rgba(43,15,29,.22)",
+        "rgba(255,255,255,.35)"
+      ];
+
+      for(let i=0;i<count;i++){
+        const p = document.createElement("span");
+        p.className = "dust";
+
+        const size = 1.8 + Math.random()*6.0; // 1.8..7.8px
+        p.style.width = size + "px";
+        p.style.height = size + "px";
+        p.style.background = colors[(Math.random()*colors.length)|0];
+
+        const x = left + Math.random()*w;
+        const y = top  + Math.random()*h;
+
+        p.style.left = x + "px";
+        p.style.top  = y + "px";
+
+        dustLayer.appendChild(p);
+
+        // wind drift: right + slight up/down + tiny gravity
+        const driftX = 90 + Math.random()*220;
+        const driftY = -80 + Math.random()*160;
+
+        const rot = -40 + Math.random()*80;
+
+        gsap.fromTo(p,
+          { opacity: 0, x: 0, y: 0, scale: 1, filter: "blur(0px)" },
+          {
+            opacity: 1,
+            duration: 0.04,
+            ease: "power1.out",
+            onComplete: () => {
+              gsap.to(p, {
+                x: driftX,
+                y: driftY,
+                rotation: rot,
+                scale: 0.15 + Math.random()*0.9,
+                opacity: 0,
+                filter: "blur(2.2px)",
+                duration: 0.45 + Math.random()*0.70,
+                ease: "power2.out",
+                onComplete: () => p.remove()
+              });
+            }
+          }
+        );
+      }
+    }
+
     function noClickSequence(reason){
       if(noBusy) return;
       noBusy = true;
@@ -1034,23 +1236,30 @@
       setValMood("no", `Excuse: ${reason}`);
       noBtn.textContent = reason;
 
-      // hold reason visible (mobile-friendly)
+      // keep reason visible for a second
       setTimeout(() => {
-        // snap dust
-        confetti({ particleCount: 24, spread: 60, startVelocity: 13, scalar: 0.75, origin: { x: 0.5, y: 0.12 } });
+        // dust + disintegrate
+        thanosDustFrom(noBtn);
 
-        // Thanos snap fade
-        gsap.to(noWrap, { opacity: 0, scale: 0.82, duration: 0.22, ease: "power2.in" });
+        gsap.to(noWrap, {
+          opacity: 0,
+          scale: 0.82,
+          filter: "blur(3px)",
+          duration: 0.28,
+          ease: "power2.in"
+        });
 
         setTimeout(() => {
           moveNoTo(randomSpot(), true);
           noBtn.textContent = "No 🙈";
+
           gsap.fromTo(noWrap,
-            { opacity: 0, scale: 0.92 },
+            { opacity: 0, scale: 0.92, filter:"blur(0px)" },
             { opacity: 1, scale: 1, duration: 0.26, ease: "power2.out" }
           );
+
           noBusy = false;
-        }, 240);
+        }, 320);
       }, 950);
     }
 
@@ -1059,45 +1268,44 @@
       noClickSequence(reason);
     });
 
-    // Yes click: heart beat grow -> final
     yesBtn.addEventListener("click", () => {
       setValMood("yes", "Yesss… you just made my whole heart blush 💗");
 
-      // heart beat & grow (use 💓 for the beat)
+      // heart beat grow (use 💓)
       valEmoji.textContent = "💓";
-      const tl = gsap.timeline();
-      tl.to(valEmoji, { scale: 1.12, duration: 0.12, ease: "power2.out" })
+      gsap.timeline()
+        .to(valEmoji, { scale: 1.12, duration: 0.12, ease: "power2.out" })
         .to(valEmoji, { scale: 1.02, duration: 0.10, ease: "power2.inOut" })
         .to(valEmoji, { scale: 1.20, duration: 0.14, ease: "power2.out" })
         .to(valEmoji, { scale: 1.00, duration: 0.18, ease: "power2.inOut" });
 
-      confetti({ particleCount: 160, spread: 75, startVelocity: 32, scalar: 0.95, origin: { y: 0.6 } });
-      setTimeout(() => confetti({ particleCount: 110, spread: 110, startVelocity: 26, scalar: 0.85, origin: { y: 0.55 } }), 160);
+      confetti({ particleCount: 170, spread: 75, startVelocity: 32, scalar: 0.95, origin: { y: 0.6 } });
+      setTimeout(() => confetti({ particleCount: 120, spread: 110, startVelocity: 26, scalar: 0.85, origin: { y: 0.55 } }), 160);
 
       const day = state.metDay ?? "";
       document.getElementById("finalLine1").textContent = `You have won my heart, ${CUTIE_NAME}.`;
       document.getElementById("finalLine2").textContent =
         day ? `And I’ll never forget ${MONTH_NAME} ${day}, ${YEAR}. 💗` : `Happy Valentine’s Day ✨`;
 
-      // cheesy cards
       renderCheesyCards();
-
       setTimeout(() => showScreen("s4"), 520);
     });
 
     // =======================
-    // SCREEN 4: cheesy premium cards (inspired by your image)
+    // SCREEN 4: Cheesy premium cards + floating hearts/glow
     // =======================
     const cheesyGrid = document.getElementById("cheesyGrid");
+    const heartLayer = document.getElementById("heartLayer");
+    let finalHeartsTimer = null;
 
     function renderCheesyCards(){
       const cards = [
         { icon:"👻", title:"Ghost Hug", text:"You can’t see it… but it’s always there." },
-        { icon:"🤍", title:"Hugs Speak", text:"Hugs speak louder than words. Always." },
+        { icon:"🫂", title:"Hugs Speak", text:"Hugs speak louder than words. Always." },
         { icon:"🌍", title:"Wherever You Are", text:"No distance can change this: I love you." },
         { icon:"📈", title:"My Love Graph", text:"It’s increasing… day by day. (No limit 😌)" },
         { icon:"📐", title:"If you were an angle…", text:"You’d be A-CUTE-ONE 💗" },
-        { icon:"🫶", title:"Thank You", text:"For being you. For existing. For making me smile." },
+        { icon:"📝", title:"Thank You", text:"For being you. For existing. For making me smile." },
       ];
 
       cheesyGrid.innerHTML = cards.map(c => `
@@ -1109,6 +1317,117 @@
       `).join("");
     }
 
+    function spawnFloatingHeart(){
+      const hearts = ["💗","💞","💘","💕","💓"];
+      const el = document.createElement("div");
+      el.className = "floatHeart";
+      el.textContent = hearts[(Math.random()*hearts.length)|0];
+
+      const w = heartLayer.clientWidth;
+      const h = heartLayer.clientHeight;
+
+      const x = 12 + Math.random()*(w - 24);
+      const startY = h + 10;
+      const endY = -40 - Math.random()*60;
+
+      el.style.left = x + "px";
+      el.style.top = startY + "px";
+      el.style.fontSize = (14 + Math.random()*12) + "px";
+      heartLayer.appendChild(el);
+
+      const driftX = -30 + Math.random()*60;
+      const rot = -18 + Math.random()*36;
+
+      gsap.fromTo(el,
+        { opacity: 0, y: 0, x: 0, rotation: 0, scale: 0.9 },
+        { opacity: 0.85, duration: 0.18, ease: "power2.out",
+          onComplete: () => {
+            gsap.to(el, {
+              y: endY - startY,
+              x: driftX,
+              rotation: rot,
+              opacity: 0,
+              scale: 1.15,
+              duration: 2.8 + Math.random()*1.6,
+              ease: "power1.out",
+              onComplete: () => el.remove()
+            });
+          }
+        }
+      );
+    }
+
+    function startFinalEffects(){
+      // burst confetti every entry
+      confetti({ particleCount: 120, spread: 80, startVelocity: 28, scalar: 0.95, origin: { y: 0.55 } });
+      setTimeout(() => confetti({ particleCount: 90, spread: 120, startVelocity: 22, scalar: 0.8, origin: { y: 0.5 } }), 180);
+
+      // clear existing hearts
+      heartLayer.innerHTML = "";
+
+      // spawn floating hearts for a while
+      if(finalHeartsTimer) clearInterval(finalHeartsTimer);
+      finalHeartsTimer = setInterval(spawnFloatingHeart, 220);
+
+      // stop after ~8 seconds so it doesn't run forever
+      setTimeout(() => {
+        if(finalHeartsTimer) clearInterval(finalHeartsTimer);
+        finalHeartsTimer = null;
+      }, 8000);
+    }
+    
+    function pick(arr){ return arr[(Math.random() * arr.length) | 0]; }
+
+function distanceBucket(diff){
+  // diff = absolute difference in days
+  if(diff === 0) return "exact";
+  if(diff === 1) return "one";
+  if(diff <= 3) return "near";
+  if(diff <= 7) return "mid";
+  return "far";
+}
+
+function wrongDayMessage(day){
+  const diff = Math.abs(day - CORRECT_DAY);
+  const bucket = distanceBucket(diff);
+
+  const msgs = {
+    one: [
+      "Oof… SO close 😭 Just one day away 💗",
+      "Almost! You’re literally 1 day off 😌✨",
+      "My heart says… ‘one tiny step’ 💞",
+      "You nearly nailed it 🥺 (just 1 day!)"
+    ],
+    near: [
+      "Closeee 😌 Try the glowing date 💗",
+      "You’re in the neighborhood 🏡✨ (look for the ring)",
+      "Warm warm warm 🔥💗 The glow will guide you",
+      "Not perfect… but cute attempt 🥺💞"
+    ],
+    mid: [
+      "Hmm… not quite 😌 Follow the glowing ring 💗",
+      "A little off… but I like the confidence 😏✨",
+      "We’re drifting 😭 Find the shining date 💞",
+      "Nope 🙈 but I’ll help—watch the glow 💗"
+    ],
+    far: [
+      "That’s… very wrong 😭😂 The glow will save you 💗",
+      "Aww nooo 🙈 That’s far… look for the shining ring ✨",
+      "We weren’t even close 🥺💞 Try the glowing date",
+      "My calendar just blushed and panicked 😂💗 Follow the glow"
+    ],
+    exact: [
+      `YESSS 😍 ${MONTH_NAME} ${CORRECT_DAY}, ${YEAR} 💗`,
+      `Perfect! You remembered 🥹💞 ${MONTH_NAME} ${CORRECT_DAY}, ${YEAR}`,
+      `That’s the one! My heart approves 💘`,
+      `Correct 😌💗 (I knew you’d get it)`
+    ]
+  };
+
+  return pick(msgs[bucket] || msgs.mid);
+}
+
+
     // =======================
     // Replay
     // =======================
@@ -1119,18 +1438,20 @@
       toS2.disabled = true;
       dateNote.textContent = "Choose our day…";
       document.querySelectorAll(".dateBtn").forEach(x => x.classList.remove("selected"));
+
       initTTT();
       showScreen("s1");
     });
 
-    // Init
-    initTTT();
+    // Keep No inside arena on resize
     window.addEventListener("resize", () => {
-      // keep no button inside arena on resize
       if(document.getElementById("s3").classList.contains("active")){
         placeNoInitial();
       }
     });
+
+    // Init
+    initTTT();
   </script>
 </body>
 </html>
