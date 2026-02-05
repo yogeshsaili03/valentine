@@ -18,7 +18,6 @@
       --bg3:#fbf2f5;
 
       --paper: rgba(255, 252, 253, .82);
-      --paper2: rgba(255, 252, 253, .58);
       --stroke: rgba(255,255,255,.62);
       --shadow: 0 24px 84px rgba(36, 10, 20, .14);
 
@@ -219,7 +218,7 @@
 
     .calendarGrid{
       display:grid;
-      grid-template-columns: repeat(7, 1fr);
+      grid-template-columns: repeat(7, minmax(0, 1fr));
       gap: 8px;
       align-items: center;
       justify-items: center;
@@ -298,10 +297,10 @@
       font-weight: 800;
       color: rgba(43,15,29,.78);
       font-size: clamp(12px, 3.6vw, 15px);
-      min-height: 1.6em;
+      min-height: 1.7em;
     }
 
-    /* ===== Screen 2: TicTacToe (fix phone cut) ===== */
+    /* ===== Screen 2: TicTacToe (iPhone safe) ===== */
     .tttWrap{ margin-top: 12px; display:grid; gap: 10px; }
 
     .tttTopWin{
@@ -324,21 +323,22 @@
       50%{ opacity:1; transform: translateY(-1px); }
     }
 
-    /* extra padding so board never touches right edge on phone */
     .tttBoardShell{
-      width: min(380px, 96vw);
+      width: 100%;
+      max-width: 420px;
       margin: 0 auto;
       position:relative;
-      padding: 0 10px;            /* ✅ this fixes the “cut” on phone */
+      padding: 0 16px;
     }
     @media (max-width: 420px){
-      .tttBoardShell{ padding: 0 14px; }
+      .tttBoardShell{ padding: 0 18px; }
     }
 
     .tttBoard{
       width: 100%;
+      margin: 0 auto;
       display:grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: clamp(8px, 2.2vw, 10px);
       padding: clamp(10px, 2.6vw, 12px);
       border-radius: 22px;
@@ -346,7 +346,7 @@
       border: 1px solid rgba(255,255,255,.55);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.45);
       touch-action: manipulation;
-      overflow: hidden; /* keep clean */
+      overflow: hidden;
     }
 
     .cell{
@@ -356,12 +356,19 @@
       background: rgba(255,255,255,.90);
       font-weight: 900;
       font-size: clamp(22px, 7vw, 34px);
+      font-family:"Playfair Display", serif;
+      letter-spacing:.2px;
       display:grid;
       place-items:center;
       cursor:pointer;
       user-select:none;
       position:relative;
       overflow:hidden;
+    }
+    .cell.pop{ animation: popIn .22s ease-out; }
+    @keyframes popIn{
+      from{ transform: scale(.78); filter: blur(1px); opacity:.2; }
+      to{ transform: scale(1); filter: blur(0); opacity:1; }
     }
 
     .cell.hint::after{
@@ -387,17 +394,10 @@
 
     .winSvg{
       position:absolute;
-      inset: 0 10px 0 10px;  /* match shell padding ✅ */
-      width: calc(100% - 20px);
+      inset: 0;
+      width: 100%;
       height: 100%;
       pointer-events:none;
-      overflow: visible;
-    }
-    @media (max-width: 420px){
-      .winSvg{
-        inset: 0 14px 0 14px;
-        width: calc(100% - 28px);
-      }
     }
 
     /* ===== Screen 3: Valentine ===== */
@@ -447,7 +447,6 @@
       will-change: transform, opacity, filter;
     }
 
-    /* smaller No */
     #noBtn{
       padding: 9px 12px;
       font-size: clamp(12px, 3.6vw, 14px);
@@ -474,17 +473,24 @@
     }
     .dust{
       position:absolute;
-      border-radius: 999px;
       opacity: 0;
       will-change: transform, opacity, filter;
       mix-blend-mode: multiply;
+      border-radius: 999px;
+    }
+    .spark{
+      position:absolute;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.85);
+      filter: drop-shadow(0 0 10px rgba(240,143,177,.9));
+      opacity: 0;
+      pointer-events:none;
     }
 
     /* ===== Screen 4: Final (more emotions) ===== */
-    .finalWrap{
-      position: relative;
-      margin-top: 14px;
-    }
+    .finalWrap{ position: relative; margin-top: 14px; }
 
     .finalBox{
       border-radius: 22px;
@@ -498,7 +504,6 @@
       isolation: isolate;
     }
 
-    /* animated glow + shimmer for final box */
     .finalBox::before{
       content:"";
       position:absolute;
@@ -569,11 +574,11 @@
     .cheesyGrid{
       margin-top: 14px;
       display:grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 10px;
     }
     @media (max-width: 720px){
-      .cheesyGrid{ grid-template-columns: repeat(2, 1fr); }
+      .cheesyGrid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     .noteCard{
@@ -584,7 +589,6 @@
       padding: 12px 12px 10px;
       position:relative;
       overflow:hidden;
-      transform: translateZ(0);
       animation: cardFloat 4.2s ease-in-out infinite;
     }
     .noteCard:nth-child(2){ animation-delay: .4s; }
@@ -612,12 +616,16 @@
       letter-spacing:.15px;
       color: rgba(43,15,29,.92);
       margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
     }
     .noteText{
       font-weight: 800;
       font-size: 12.5px;
       color: rgba(43,15,29,.76);
       line-height: 1.25;
+      position: relative;
+      z-index: 1;
     }
     .noteIcon{
       position:absolute;
@@ -626,13 +634,13 @@
       opacity:.95;
       filter: drop-shadow(0 10px 14px rgba(181,22,82,.10));
       animation: iconGlow 2.8s ease-in-out infinite;
+      z-index: 1;
     }
     @keyframes iconGlow{
       0%,100%{ transform: scale(1); opacity:.92; }
       50%{ transform: scale(1.06); opacity:1; }
     }
 
-    /* floating hearts in final screen */
     .heartLayer{
       position:absolute;
       inset:0;
@@ -643,7 +651,6 @@
     }
     .floatHeart{
       position:absolute;
-      font-size: 16px;
       opacity: 0;
       filter: drop-shadow(0 10px 14px rgba(181,22,82,.10));
       will-change: transform, opacity;
@@ -667,11 +674,9 @@
           <p class="sub">Tap the date… <b>when we met</b> 💗</p>
 
           <div class="paperBlock">
-            <div class="monthTitle" id="monthTitle">July 2022</div>
-
+            <div class="monthTitle" id="monthTitle">December 2022</div>
             <div class="dowRow" id="dowRow"></div>
             <div class="calendarGrid" id="calendarGrid"></div>
-
             <div class="noteLine" id="dateNote">Choose our day…</div>
           </div>
 
@@ -720,7 +725,6 @@
               <button class="btn ghost" id="noBtn" type="button">No 🙈</button>
             </div>
 
-            <!-- ✅ Thanos dust particles render here -->
             <div id="dustLayer" class="dustLayer"></div>
           </div>
 
@@ -770,7 +774,7 @@
     // 0=Mon, 1=Tue, 2=Wed, 3=Thu, 4=Fri, 5=Sat, 6=Sun
     const MONTH_START_DOW = 4; // Dec 1, 2022 was Wednesday ✅
 
-    // If you want a “correct date hint”, set it (1..DAYS_IN_MONTH). Or set null to disable.
+    // Set correct day (1..DAYS_IN_MONTH) or null to disable
     const CORRECT_DAY = 2;
 
     // =======================
@@ -779,20 +783,67 @@
     const state = { metDay: null, tttWon: false };
 
     // =======================
-    // Screen navigation
+    // Helpers
     // =======================
     function showScreen(id){
       document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
       document.getElementById(id).classList.add("active");
       window.scrollTo({top: 0, behavior: "smooth"});
+      if(id === "s4") startFinalEffects();
+    }
 
-      if(id === "s4"){
-        startFinalEffects();
-      }
+    function pick(arr){ return arr[(Math.random() * arr.length) | 0]; }
+
+    function distanceBucket(diff){
+      if(diff === 0) return "exact";
+      if(diff === 1) return "one";
+      if(diff <= 3) return "near";
+      if(diff <= 7) return "mid";
+      return "far";
+    }
+
+    function wrongDayMessage(day){
+      const diff = Math.abs(day - CORRECT_DAY);
+      const bucket = distanceBucket(diff);
+
+      const msgs = {
+        one: [
+          "Oof… SO close 😭 Just one day away 💗",
+          "Almost! You’re literally 1 day off 😌✨",
+          "My heart says… ‘one tiny step’ 💞",
+          "You nearly nailed it 🥺 (just 1 day!)"
+        ],
+        near: [
+          "Closeee 😌 Try the glowing date 💗",
+          "You’re in the neighborhood 🏡✨ (look for the ring)",
+          "Warm warm warm 🔥💗 The glow will guide you",
+          "Not perfect… but cute attempt 🥺💞"
+        ],
+        mid: [
+          "Hmm… not quite 😌 Follow the glowing ring 💗",
+          "A little off… but I like the confidence 😏✨",
+          "We’re drifting 😭 Find the shining date 💞",
+          "Nope 🙈 but I’ll help—watch the glow 💗"
+        ],
+        far: [
+          "That’s… very wrong 😭😂 The glow will save you 💗",
+          "Aww nooo 🙈 That’s far… look for the shining ring ✨",
+          "We weren’t even close 🥺💞 Try the glowing date",
+          "My calendar just blushed and panicked 😂💗 Follow the glow"
+        ],
+        exact: [
+          `YESSS 😍 ${MONTH_NAME} ${CORRECT_DAY}, ${YEAR} 💗`,
+          `Perfect! You remembered 🥹💞 ${MONTH_NAME} ${CORRECT_DAY}, ${YEAR}`,
+          `That’s the one! My heart approves 💘`,
+          `Correct 😌💗 (I knew you’d get it)`
+        ]
+      };
+
+      return pick(msgs[bucket] || msgs.mid);
     }
 
     // =======================
-    // SCREEN 1: Calendar (DOW + offset + correct hint glow)
+    // SCREEN 1: Calendar
     // =======================
     const monthTitle = document.getElementById("monthTitle");
     const calendarGrid = document.getElementById("calendarGrid");
@@ -801,19 +852,16 @@
     const toS2 = document.getElementById("toS2");
 
     monthTitle.textContent = `${MONTH_NAME} ${YEAR}`;
-
     const DOW = ["M","T","W","T","F","S","S"];
     dowRow.innerHTML = DOW.map(d => `<div class="dow">${d}</div>`).join("");
 
     function buildCalendar(){
       calendarGrid.innerHTML = "";
-
       for(let i=0;i<MONTH_START_DOW;i++){
         const b = document.createElement("div");
         b.className = "blank";
         calendarGrid.appendChild(b);
       }
-
       for(let d=1; d<=DAYS_IN_MONTH; d++){
         const btn = document.createElement("button");
         btn.className = "dateBtn";
@@ -829,8 +877,20 @@
       if(!CORRECT_DAY) return;
       const el = calendarGrid.querySelector(`.dateBtn[data-day="${CORRECT_DAY}"]`);
       if(!el) return;
+
+      // intensity based on distance if user selected something
+      let intensity = 1;
+      if(state.metDay && CORRECT_DAY){
+        const diff = Math.abs(state.metDay - CORRECT_DAY);
+        intensity = diff <= 1 ? 1.2 : diff <= 3 ? 1.1 : diff <= 7 ? 1.0 : 0.92;
+      }
+
       el.classList.add("suggest");
-      setTimeout(() => el.classList.remove("suggest"), 1200);
+      el.style.transform = `scale(${intensity})`;
+      setTimeout(() => {
+        el.classList.remove("suggest");
+        el.style.transform = "";
+      }, 1200);
     }
 
     function selectDay(day, btn){
@@ -839,30 +899,26 @@
       btn.classList.add("selected");
       toS2.disabled = false;
 
-      if (CORRECT_DAY) {
-  if (day !== CORRECT_DAY) {
-    dateNote.textContent = wrongDayMessage(day);
-    suggestCorrectDay();
-  } else {
-    dateNote.textContent = wrongDayMessage(day); // exact bucket message
-  }
-} else {
-  dateNote.textContent = `So… ${MONTH_NAME} ${day}, ${YEAR} 💗`;
-}
-
+      if(CORRECT_DAY){
+        if(day !== CORRECT_DAY){
+          dateNote.textContent = wrongDayMessage(day);
+          suggestCorrectDay();
+        } else {
+          dateNote.textContent = wrongDayMessage(day);
+        }
+      } else {
+        dateNote.textContent = `So… ${MONTH_NAME} ${day}, ${YEAR} 💗`;
+      }
 
       gsap.fromTo(btn, {scale:0.96}, {scale:1.03, duration:0.16, ease:"power2.out", yoyo:true, repeat:1});
     }
 
     buildCalendar();
 
-    toS2.addEventListener("click", () => {
-      showScreen("s2");
-      initTTT();
-    });
+    toS2.addEventListener("click", () => { showScreen("s2"); initTTT(); });
 
     // =======================
-    // SCREEN 2: TicTacToe (user always wins) + win line heartbeat + glow text
+    // SCREEN 2: TicTacToe (user always wins) + messages
     // =======================
     const tttBoard = document.getElementById("tttBoard");
     const tttStatus = document.getElementById("tttStatus");
@@ -872,7 +928,7 @@
     const resetTTT = document.getElementById("resetTTT");
 
     const USER = "💗";
-    const AI = "✕";
+    const AI = "🖤"; // prettier than ✕ (or use 💔)
 
     const LINES = [
       [0,1,2],[3,4,5],[6,7,8],
@@ -884,22 +940,6 @@
     let userMoves = 0;
     let locked = false;
 
-    function initTTT(){
-      state.tttWon = false;
-      toS3.disabled = true;
-      tttTopWin.textContent = "";
-      tttTopWin.classList.remove("glow");
-      winSvg.innerHTML = "";
-
-      board = Array(9).fill(null);
-      userMoves = 0;
-      locked = false;
-
-      tttStatus.textContent = "Your turn 💗";
-      renderTTT();
-      hintBestMove();
-    }
-
     function renderTTT(){
       tttBoard.innerHTML = "";
       board.forEach((v, i) => {
@@ -907,6 +947,7 @@
         c.className = "cell";
         c.dataset.i = String(i);
         c.textContent = v ? v : "";
+        if(v) c.classList.add("pop");
         c.addEventListener("click", () => onUserMove(i));
         if(v) c.style.cursor = "default";
         tttBoard.appendChild(c);
@@ -962,10 +1003,10 @@
       let choices = empties.filter(i => !avoid.has(i));
       if(choices.length === 0) choices = empties;
 
-      const pick = choices[Math.floor(Math.random()*choices.length)];
-      board[pick] = AI;
+      const pickI = choices[Math.floor(Math.random()*choices.length)];
+      board[pickI] = AI;
       renderTTT();
-      animateCell(pick);
+      animateCell(pickI);
     }
 
     function forceUserWin(){
@@ -979,6 +1020,11 @@
       if(winningLine(USER)) winTTT();
     }
 
+    function countInLine(sym, line){ return line.filter(i => board[i] === sym).length; }
+    function emptyInLine(line){ return line.filter(i => !board[i]).length; }
+    function userAlmostWinning(){ return LINES.some(line => countInLine(USER, line) === 2 && emptyInLine(line) === 1); }
+    function userCloseLines(){ return LINES.some(line => countInLine(USER, line) === 1 && emptyInLine(line) === 2); }
+
     function onUserMove(i){
       if(locked) return;
       if(board[i]) return;
@@ -990,6 +1036,15 @@
 
       if(winningLine(USER)){ winTTT(); return; }
 
+      // dynamic messages based on closeness to win
+      if(userAlmostWinning()){
+        tttStatus.textContent = pick(["OMG one more and you win 😳💞","Final move incoming… 😌💗","So close I can feel it 🥹💘"]);
+      } else if(userCloseLines()){
+        tttStatus.textContent = pick(["That was cute 😌💗","Okayyy I see you 👀💞","Ooo this is getting serious 💘"]);
+      } else {
+        tttStatus.textContent = pick(["Your turn 💗","Go on 😌","Make it count 💘"]);
+      }
+
       locked = true;
       setTimeout(() => {
         aiMoveSoft();
@@ -999,7 +1054,6 @@
 
         if(userMoves >= 4) forceUserWin();
         hintBestMove();
-        tttStatus.textContent = "Your turn 💗";
       }, 230);
     }
 
@@ -1045,7 +1099,6 @@
 
     function winTTT(){
       state.tttWon = true;
-
       const line = winningLine(USER);
       if(line) drawWinLine(line);
 
@@ -1053,11 +1106,24 @@
       tttTopWin.classList.add("glow");
       setTimeout(() => tttTopWin.classList.remove("glow"), 1300);
 
-      tttStatus.textContent = "Okay okay… you win 😌";
+      tttStatus.textContent = pick(["Okay okay… you win 😌💗","I surrender 🥹💞","Fine… take my heart 💘"]);
       toS3.disabled = false;
 
-      confetti({ particleCount: 80, spread: 70, startVelocity: 22, scalar: 0.9, origin: { y: 0.55 } });
-      gsap.fromTo(tttTopWin, {scale:0.98}, {scale:1.02, duration:0.22, ease:"power2.out", yoyo:true, repeat:1});
+      confetti({ particleCount: 90, spread: 70, startVelocity: 22, scalar: 0.9, origin: { y: 0.55 } });
+    }
+
+    function initTTT(){
+      state.tttWon = false;
+      toS3.disabled = true;
+      tttTopWin.textContent = "";
+      tttTopWin.classList.remove("glow");
+      winSvg.innerHTML = "";
+      board = Array(9).fill(null);
+      userMoves = 0;
+      locked = false;
+      tttStatus.textContent = "Your turn 💗";
+      renderTTT();
+      hintBestMove();
     }
 
     resetTTT.addEventListener("click", initTTT);
@@ -1071,14 +1137,13 @@
     });
 
     // =======================
-    // SCREEN 3: Thanos dust snap (REAL dust)
+    // SCREEN 3: Valentine (Thanos dust + emoji wiggles)
     // =======================
     const arena = document.getElementById("arena");
     const yesBtn = document.getElementById("yesBtn");
     const noWrap = document.getElementById("noWrap");
     const noBtn = document.getElementById("noBtn");
     const dustLayer = document.getElementById("dustLayer");
-
     const valEmoji = document.getElementById("valEmoji");
     const valMood = document.getElementById("valMood");
 
@@ -1092,6 +1157,8 @@
       "System error: NO blocked ✨",
       "I’m shy… choose YES 🥺"
     ];
+
+    let noBusy = false;
 
     function arenaMetrics(){
       const r = arena.getBoundingClientRect();
@@ -1119,15 +1186,13 @@
       return !(a.right < b.left || a.left > b.right || a.bottom < b.top || a.top > b.bottom);
     }
 
-    let noBusy = false;
-
     function randomSpot(){
       const { r, bw, bh } = arenaMetrics();
       const minX = 10, minY = 10;
       const maxX = Math.max(minX, r.width - bw - 10);
       const maxY = Math.max(minY, r.height - bh - 10);
 
-      for(let i=0;i<90;i++){
+      for(let i=0;i<120;i++){
         const x = minX + Math.random()*(maxX - minX);
         const y = minY + Math.random()*(maxY - minY);
         if(!overlapsYes(x,y)) return {x,y};
@@ -1137,7 +1202,7 @@
 
     function moveNoTo(target, instant=false){
       if(instant){
-        gsap.set(noWrap, { x: target.x, y: target.y, rotate: 0, opacity: 1, scale: 1, filter:"blur(0px)" });
+        gsap.set(noWrap, { x: target.x, y: target.y, opacity: 1, scale: 1, filter:"blur(0px)" });
         return;
       }
       gsap.to(noWrap, { x: target.x, y: target.y, duration: 0.40, ease: "power3.out", overwrite: true });
@@ -1152,20 +1217,64 @@
     }
 
     function setValMood(kind, text){
-      if(kind === "yes"){
-        valEmoji.textContent = "😍";
-        valMood.textContent = text || "Say yes… and I’ll be the happiest 🥹";
-      } else if(kind === "no"){
-        valEmoji.textContent = "🥺";
-        valMood.textContent = text || "No? that hurts 😭";
-      } else {
-        valEmoji.textContent = "😊";
-        valMood.textContent = text || "Be honest… but be gentle 😌";
-      }
-      gsap.fromTo(valEmoji, {scale:0.99}, {scale:1.06, duration:0.18, ease:"power2.out", yoyo:true, repeat:1});
-    }
+  const moods = {
+    yes: [
+      { e:"😍", m:"YES?? 😭💗 My heart just did a backflip." },
+      { e:"🥹", m:"Stoppp—I'm melting 🥹💞" },
+      { e:"💓", m:"Okay… heart is beating FAST 💓" },
+      { e:"😘", m:"Come here you 😘💘" },
+      { e:"🤭", m:"Hehe… I knew you’d say yes 🤭💗" }
+    ],
+    no: [
+      { e:"🥺", m:"Ouch… my tiny heart 💔🥺" },
+      { e:"😤", m:"Hmph 😤 (I’m pretending I’m okay)" },
+      { e:"😶‍🌫️", m:"I’m disappearing… like your ‘No’ 😶‍🌫️✨" },
+      { e:"😭", m:"Why would you do that to me 😭💞" },
+      { e:"🙈", m:"No?? I didn’t hear that 🙈💗" }
+    ],
+    maybe: [
+      { e:"😊", m:"Your move 😌💗" },
+      { e:"😌", m:"Take your time… but choose wisely 😌✨" },
+      { e:"🫶", m:"I’m right here 🫶💞" },
+      { e:"🤍", m:"Softly waiting… 🤍🌙" },
+      { e:"😇", m:"I’ll be good… promise 😇💗" }
+    ]
+  };
 
-    // ✅ REAL Thanos dust: particles spawn from the No button area
+  const pool = moods[kind] || moods.maybe;
+  const pick = pool[(Math.random() * pool.length) | 0];
+
+  // set emoji/message (use provided text if passed)
+  valEmoji.textContent = pick.e;
+  valMood.textContent = text || pick.m;
+
+  // interaction feels alive: emoji + message animation
+  gsap.killTweensOf([valEmoji, valMood]);
+
+  // emoji: pop + tiny wobble
+  gsap.fromTo(valEmoji,
+    { scale: 0.92, rotation: -2 },
+    { scale: 1.08, rotation: 2, duration: 0.18, ease:"power2.out", yoyo:true, repeat:1 }
+  );
+
+  // message: fade/slide
+  gsap.fromTo(valMood,
+    { opacity: 0, y: 6 },
+    { opacity: 1, y: 0, duration: 0.22, ease:"power2.out" }
+  );
+
+  // extra vibe depending on kind
+  if(kind === "yes"){
+    gsap.fromTo(valEmoji, { filter:"drop-shadow(0 0 0 rgba(240,143,177,0))" },
+      { filter:"drop-shadow(0 0 18px rgba(240,143,177,.55))", duration: 0.22, yoyo:true, repeat:1, ease:"power2.out" }
+    );
+  } else if(kind === "no"){
+    gsap.fromTo(valEmoji, { x: 0 },
+      { x: 6, duration: 0.06, yoyo:true, repeat: 5, ease:"power1.inOut" }
+    );
+  }
+}
+
     function thanosDustFrom(element){
       const ar = arena.getBoundingClientRect();
       const r  = element.getBoundingClientRect();
@@ -1174,52 +1283,80 @@
       const top  = r.top  - ar.top;
       const w = r.width, h = r.height;
 
-      const count = Math.max(90, Math.min(190, Math.floor((w*h)/190))); // denser = more “sand”
+      const count = Math.max(120, Math.min(260, Math.floor((w*h)/140)));
       const colors = [
-        "rgba(181,22,82,.55)",
-        "rgba(240,143,177,.55)",
+        "rgba(181,22,82,.60)",
+        "rgba(240,143,177,.60)",
         "rgba(43,15,29,.22)",
-        "rgba(255,255,255,.35)"
+        "rgba(255,255,255,.38)",
+        "rgba(255,224,235,.48)"
       ];
+
+      for(let s=0;s<10;s++){
+        const sp = document.createElement("span");
+        sp.className = "spark";
+        const sx = left + Math.random()*w;
+        const sy = top  + Math.random()*h;
+        sp.style.left = sx + "px";
+        sp.style.top  = sy + "px";
+        dustLayer.appendChild(sp);
+
+        gsap.fromTo(sp,
+          { opacity: 0, scale: 0.6 },
+          {
+            opacity: 1,
+            scale: 1.8,
+            duration: 0.12,
+            ease: "power2.out",
+            yoyo: true,
+            repeat: 1,
+            onComplete: () => sp.remove()
+          }
+        );
+      }
 
       for(let i=0;i<count;i++){
         const p = document.createElement("span");
         p.className = "dust";
 
-        const size = 1.8 + Math.random()*6.0; // 1.8..7.8px
+        const size = 1.6 + Math.random()*7.2;
         p.style.width = size + "px";
         p.style.height = size + "px";
         p.style.background = colors[(Math.random()*colors.length)|0];
 
+        const shape = Math.random();
+        if(shape < 0.22){
+          p.style.borderRadius = "3px";
+        } else if(shape < 0.38){
+          p.style.borderRadius = "10px 2px 10px 2px";
+        }
+
         const x = left + Math.random()*w;
         const y = top  + Math.random()*h;
-
         p.style.left = x + "px";
         p.style.top  = y + "px";
 
         dustLayer.appendChild(p);
 
-        // wind drift: right + slight up/down + tiny gravity
-        const driftX = 90 + Math.random()*220;
-        const driftY = -80 + Math.random()*160;
-
-        const rot = -40 + Math.random()*80;
+        const driftX = 120 + Math.random()*260;
+        const driftY = -110 + Math.random()*220;
+        const rot = -120 + Math.random()*240;
 
         gsap.fromTo(p,
           { opacity: 0, x: 0, y: 0, scale: 1, filter: "blur(0px)" },
           {
             opacity: 1,
-            duration: 0.04,
+            duration: 0.03,
             ease: "power1.out",
             onComplete: () => {
               gsap.to(p, {
                 x: driftX,
                 y: driftY,
                 rotation: rot,
-                scale: 0.15 + Math.random()*0.9,
+                scale: 0.10 + Math.random()*0.95,
                 opacity: 0,
-                filter: "blur(2.2px)",
-                duration: 0.45 + Math.random()*0.70,
+                filter: "blur(2.6px)",
+                duration: 0.55 + Math.random()*0.95,
                 ease: "power2.out",
                 onComplete: () => p.remove()
               });
@@ -1233,12 +1370,14 @@
       if(noBusy) return;
       noBusy = true;
 
-      setValMood("no", `Excuse: ${reason}`);
+      setValMood("no", `${reason}`);
       noBtn.textContent = reason;
 
-      // keep reason visible for a second
+      // make it feel interactive
+      gsap.fromTo(valEmoji, { rotation: -3 }, { rotation: 3, duration: 0.08, yoyo: true, repeat: 5, ease:"power1.inOut" });
+      gsap.fromTo(valMood, { opacity: 0.75 }, { opacity: 1, duration: 0.18, ease:"power2.out" });
+
       setTimeout(() => {
-        // dust + disintegrate
         thanosDustFrom(noBtn);
 
         gsap.to(noWrap, {
@@ -1252,6 +1391,7 @@
         setTimeout(() => {
           moveNoTo(randomSpot(), true);
           noBtn.textContent = "No 🙈";
+          setValMood("maybe", pick(["Try YES 😌💗","Still no? 🙈","I’m waiting… 🥺","Okay okay… your move 💞"]));
 
           gsap.fromTo(noWrap,
             { opacity: 0, scale: 0.92, filter:"blur(0px)" },
@@ -1264,14 +1404,13 @@
     }
 
     noBtn.addEventListener("click", () => {
-      const reason = REASONS[(Math.random()*REASONS.length)|0];
+      const reason = pick(REASONS);
       noClickSequence(reason);
     });
 
     yesBtn.addEventListener("click", () => {
       setValMood("yes", "Yesss… you just made my whole heart blush 💗");
 
-      // heart beat grow (use 💓)
       valEmoji.textContent = "💓";
       gsap.timeline()
         .to(valEmoji, { scale: 1.12, duration: 0.12, ease: "power2.out" })
@@ -1292,7 +1431,7 @@
     });
 
     // =======================
-    // SCREEN 4: Cheesy premium cards + floating hearts/glow
+    // SCREEN 4: Final (floating hearts)
     // =======================
     const cheesyGrid = document.getElementById("cheesyGrid");
     const heartLayer = document.getElementById("heartLayer");
@@ -1305,7 +1444,7 @@
         { icon:"🌍", title:"Wherever You Are", text:"No distance can change this: I love you." },
         { icon:"📈", title:"My Love Graph", text:"It’s increasing… day by day. (No limit 😌)" },
         { icon:"📐", title:"If you were an angle…", text:"You’d be A-CUTE-ONE 💗" },
-        { icon:"📝", title:"Thank You", text:"For being you. For existing. For making me smile." },
+        { icon:"💗", title:"Thank You", text:"For being you. For existing. For making me smile." },
       ];
 
       cheesyGrid.innerHTML = cards.map(c => `
@@ -1321,7 +1460,7 @@
       const hearts = ["💗","💞","💘","💕","💓"];
       const el = document.createElement("div");
       el.className = "floatHeart";
-      el.textContent = hearts[(Math.random()*hearts.length)|0];
+      el.textContent = pick(hearts);
 
       const w = heartLayer.clientWidth;
       const h = heartLayer.clientHeight;
@@ -1358,79 +1497,26 @@
     }
 
     function startFinalEffects(){
-      // burst confetti every entry
       confetti({ particleCount: 120, spread: 80, startVelocity: 28, scalar: 0.95, origin: { y: 0.55 } });
       setTimeout(() => confetti({ particleCount: 90, spread: 120, startVelocity: 22, scalar: 0.8, origin: { y: 0.5 } }), 180);
 
-      // clear existing hearts
       heartLayer.innerHTML = "";
-
-      // spawn floating hearts for a while
       if(finalHeartsTimer) clearInterval(finalHeartsTimer);
       finalHeartsTimer = setInterval(spawnFloatingHeart, 220);
 
-      // stop after ~8 seconds so it doesn't run forever
       setTimeout(() => {
         if(finalHeartsTimer) clearInterval(finalHeartsTimer);
         finalHeartsTimer = null;
-      }, 8000);
+      }, 9000);
     }
-    
-    function pick(arr){ return arr[(Math.random() * arr.length) | 0]; }
-
-function distanceBucket(diff){
-  // diff = absolute difference in days
-  if(diff === 0) return "exact";
-  if(diff === 1) return "one";
-  if(diff <= 3) return "near";
-  if(diff <= 7) return "mid";
-  return "far";
-}
-
-function wrongDayMessage(day){
-  const diff = Math.abs(day - CORRECT_DAY);
-  const bucket = distanceBucket(diff);
-
-  const msgs = {
-    one: [
-      "Oof… SO close 😭 Just one day away 💗",
-      "Almost! You’re literally 1 day off 😌✨",
-      "My heart says… ‘one tiny step’ 💞",
-      "You nearly nailed it 🥺 (just 1 day!)"
-    ],
-    near: [
-      "Closeee 😌 Try the glowing date 💗",
-      "You’re in the neighborhood 🏡✨ (look for the ring)",
-      "Warm warm warm 🔥💗 The glow will guide you",
-      "Not perfect… but cute attempt 🥺💞"
-    ],
-    mid: [
-      "Hmm… not quite 😌 Follow the glowing ring 💗",
-      "A little off… but I like the confidence 😏✨",
-      "We’re drifting 😭 Find the shining date 💞",
-      "Nope 🙈 but I’ll help—watch the glow 💗"
-    ],
-    far: [
-      "That’s… very wrong 😭😂 The glow will save you 💗",
-      "Aww nooo 🙈 That’s far… look for the shining ring ✨",
-      "We weren’t even close 🥺💞 Try the glowing date",
-      "My calendar just blushed and panicked 😂💗 Follow the glow"
-    ],
-    exact: [
-      `YESSS 😍 ${MONTH_NAME} ${CORRECT_DAY}, ${YEAR} 💗`,
-      `Perfect! You remembered 🥹💞 ${MONTH_NAME} ${CORRECT_DAY}, ${YEAR}`,
-      `That’s the one! My heart approves 💘`,
-      `Correct 😌💗 (I knew you’d get it)`
-    ]
-  };
-
-  return pick(msgs[bucket] || msgs.mid);
-}
-
 
     // =======================
+    // Nav buttons
+    // =======================
+    document.getElementById("toS2").addEventListener("click", () => { showScreen("s2"); });
+    document.getElementById("toS3").addEventListener("click", () => { /* handled above */ });
+
     // Replay
-    // =======================
     document.getElementById("replay").addEventListener("click", () => {
       state.metDay = null;
       state.tttWon = false;
@@ -1443,7 +1529,6 @@ function wrongDayMessage(day){
       showScreen("s1");
     });
 
-    // Keep No inside arena on resize
     window.addEventListener("resize", () => {
       if(document.getElementById("s3").classList.contains("active")){
         placeNoInitial();
