@@ -84,8 +84,55 @@
       pointer-events:none;
     }
 
-    .screens{ position: relative; min-height: 72svh; }
+    /* Audio toggle pill */
+    .audioPill{
+      position:absolute;
+      top: 12px;
+      right: 12px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(43,15,29,.10);
+      box-shadow: 0 12px 26px rgba(36,10,20,.08);
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+    }
+    .audioPill .dot{
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: rgba(181,22,82,.85);
+      box-shadow: 0 0 14px rgba(240,143,177,.35);
+    }
+    .audioPill .label{
+      font-weight: 900;
+      font-size: 12px;
+      color: rgba(43,15,29,.80);
+    }
+    .audioPill button{
+      border:0;
+      border-radius: 999px;
+      font-weight: 900;
+      padding: 7px 10px;
+      font-size: 12px;
+      cursor:pointer;
+      background: linear-gradient(135deg, rgba(181,22,82,.92), rgba(240,143,177,.92));
+      color:#fff;
+      box-shadow: 0 12px 26px rgba(181,22,82,.14);
+    }
+    .audioPill button.off{
+      background: rgba(255,255,255,.86);
+      color: rgba(43,15,29,.82);
+      border: 1px solid rgba(43,15,29,.10);
+      box-shadow: 0 10px 22px rgba(36,10,20,.07);
+    }
 
+    .screens{ position: relative; min-height: 72svh; }
     .screen{ display:none; animation: fadeIn .25s ease-out; }
     .screen.active{ display:block; }
 
@@ -112,7 +159,6 @@
       font-size: clamp(12px, 3.6vw, 15px);
       color: var(--muted);
     }
-
     .name{ color: var(--accent1); }
 
     .divider{
@@ -190,7 +236,6 @@
       box-shadow: inset 0 1px 0 rgba(255,255,255,.45);
       padding: 14px;
     }
-
     .monthTitle{
       text-align:center;
       font-family:"Playfair Display", serif;
@@ -200,7 +245,6 @@
       margin: 4px 0 8px;
       letter-spacing: .2px;
     }
-
     .dowRow{
       display:grid;
       grid-template-columns: repeat(7, 1fr);
@@ -215,7 +259,6 @@
       font-size: 12px;
       color: rgba(43,15,29,.78);
     }
-
     .calendarGrid{
       display:grid;
       grid-template-columns: repeat(7, minmax(0, 1fr));
@@ -224,7 +267,6 @@
       justify-items: center;
       padding-inline: 2px;
     }
-
     .dateBtn{
       width: 100%;
       aspect-ratio: 1 / 1;
@@ -240,7 +282,6 @@
       cursor:pointer;
       user-select:none;
     }
-
     .blank{
       width: 100%;
       aspect-ratio: 1 / 1;
@@ -248,7 +289,6 @@
       border: 1px dashed rgba(43,15,29,.06);
       background: rgba(255,255,255,.25);
     }
-
     .dateBtn.selected{
       border-color: rgba(181,22,82,.30);
       box-shadow: 0 14px 30px rgba(181,22,82,.12);
@@ -262,8 +302,6 @@
       font-size: 14px;
       filter: drop-shadow(0 8px 12px rgba(181,22,82,.12));
     }
-
-    /* shining suggestion ring */
     .dateBtn.suggest{
       border-color: rgba(181,22,82,.25);
       box-shadow: 0 18px 38px rgba(181,22,82,.18);
@@ -290,7 +328,6 @@
       0%,100%{ transform: scale(.98); opacity:.55; }
       50%{ transform: scale(1.03); opacity:.90; }
     }
-
     .noteLine{
       margin-top: 10px;
       text-align:center;
@@ -300,9 +337,8 @@
       min-height: 1.7em;
     }
 
-    /* ===== Screen 2: TicTacToe (iPhone safe) ===== */
+    /* ===== Screen 2: TicTacToe ===== */
     .tttWrap{ margin-top: 12px; display:grid; gap: 10px; }
-
     .tttTopWin{
       text-align:center;
       font-family:"Playfair Display", serif;
@@ -322,7 +358,6 @@
       0%,100%{ opacity:.85; transform: translateY(0); }
       50%{ opacity:1; transform: translateY(-1px); }
     }
-
     .tttBoardShell{
       width: 100%;
       max-width: 420px;
@@ -333,7 +368,6 @@
     @media (max-width: 420px){
       .tttBoardShell{ padding: 0 18px; }
     }
-
     .tttBoard{
       width: 100%;
       margin: 0 auto;
@@ -348,7 +382,6 @@
       touch-action: manipulation;
       overflow: hidden;
     }
-
     .cell{
       aspect-ratio: 1/1;
       border-radius: clamp(14px, 3.2vw, 18px);
@@ -370,7 +403,6 @@
       from{ transform: scale(.78); filter: blur(1px); opacity:.2; }
       to{ transform: scale(1); filter: blur(0); opacity:1; }
     }
-
     .cell.hint::after{
       content:"";
       position:absolute; inset: 10px;
@@ -383,7 +415,6 @@
       0%,100%{ opacity:.35; transform: scale(.98); }
       50%{ opacity:.75; transform: scale(1.02); }
     }
-
     .tttStatus{
       text-align:center;
       font-weight: 900;
@@ -391,7 +422,6 @@
       color: rgba(43,15,29,.82);
       min-height: 1.6em;
     }
-
     .winSvg{
       position:absolute;
       inset: 0;
@@ -424,7 +454,7 @@
     .arena{
       margin-top: 10px;
       position:relative;
-      height: clamp(290px, 44vh, 480px);
+      height: clamp(310px, 46vh, 520px);
       border-radius: 22px;
       border: 1px solid rgba(255,255,255,.55);
       background: rgba(255,255,255,.38);
@@ -432,12 +462,99 @@
       overflow:hidden;
     }
 
-    #yesBtn{
+    /* YES hold-to-fill water effect */
+    .chargeBtn{
       position:absolute;
       left:50%;
       bottom: 14px;
       transform: translateX(-50%);
       width: min(360px, 86vw);
+      height: 56px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      overflow:hidden;
+      touch-action: none;
+    }
+    .chargeBtn .yesText{ position:relative; z-index: 2; }
+    .chargeBtn .chargePct{ position:relative; z-index: 2; font-weight: 900; opacity: .92; }
+    .chargeBtn .wave{
+      position:absolute;
+      left:0; bottom:0;
+      width:100%;
+      height:0%;
+      z-index:1;
+      opacity:.95;
+      border-radius: 999px;
+      background:
+        radial-gradient(18px 12px at 18% 24%, rgba(255,255,255,.35), transparent 65%),
+        radial-gradient(22px 16px at 70% 35%, rgba(255,255,255,.22), transparent 65%),
+        linear-gradient(180deg, rgba(255,255,255,.18), rgba(0,0,0,.05)),
+        linear-gradient(135deg, rgba(181,22,82,.95), rgba(240,143,177,.95));
+      transform: translateY(8px);
+      will-change: transform, height, filter;
+    }
+    .chargeBtn .wave::after{
+      content:"";
+      position:absolute;
+      left:-30%;
+      top:8px;
+      width:160%;
+      height:22px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent);
+      filter: blur(1px);
+      opacity:.7;
+      animation: waveSweep 1.35s ease-in-out infinite;
+    }
+    @keyframes waveSweep{
+      0%{ transform: translateX(-25%); }
+      50%{ transform: translateX(18%); }
+      100%{ transform: translateX(-25%); }
+    }
+    .chargeBtn.charged{
+      box-shadow: 0 22px 50px rgba(181,22,82,.24);
+    }
+
+    /* bubbles inside wave */
+    .bubble{
+      position:absolute;
+      bottom: 8px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.55);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.65);
+      opacity: 0;
+      pointer-events:none;
+      filter: blur(.1px);
+      will-change: transform, opacity;
+    }
+
+    /* Catch-the-heart */
+    .catchHeart{
+      position:absolute;
+      width: 52px;
+      height: 52px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(43,15,29,.10);
+      box-shadow: 0 16px 34px rgba(181,22,82,.12);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      z-index: 7;
+      touch-action: manipulation;
+    }
+    .catchHeart span{
+      font-size: 26px;
+      filter: drop-shadow(0 10px 14px rgba(181,22,82,.12));
+      animation: heartPulse 1.4s ease-in-out infinite;
+    }
+    @keyframes heartPulse{
+      0%,100%{ transform: scale(1); }
+      50%{ transform: scale(1.12); }
     }
 
     #noWrap{
@@ -446,7 +563,6 @@
       z-index: 5;
       will-change: transform, opacity, filter;
     }
-
     #noBtn{
       padding: 9px 12px;
       font-size: clamp(12px, 3.6vw, 14px);
@@ -489,9 +605,8 @@
       pointer-events:none;
     }
 
-    /* ===== Screen 4: Final (more emotions) ===== */
+    /* ===== Screen 4: Final ===== */
     .finalWrap{ position: relative; margin-top: 14px; }
-
     .finalBox{
       border-radius: 22px;
       background: rgba(255,255,255,.46);
@@ -503,7 +618,6 @@
       overflow:hidden;
       isolation: isolate;
     }
-
     .finalBox::before{
       content:"";
       position:absolute;
@@ -535,7 +649,6 @@
       45%{ transform: translateX(160%) skewX(-18deg); }
       100%{ transform: translateX(160%) skewX(-18deg); }
     }
-
     .finalEmoji{
       font-size: clamp(68px, 18vw, 110px);
       line-height:1;
@@ -552,7 +665,6 @@
       55%{ transform: scale(1.06); }
       72%{ transform: scale(1.0); }
     }
-
     .finalLine{
       font-weight: 900;
       color: rgba(43,15,29,.82);
@@ -570,7 +682,6 @@
       0%,100%{ opacity:.92; transform: translateY(0); }
       50%{ opacity:1; transform: translateY(-1px); }
     }
-
     .cheesyGrid{
       margin-top: 14px;
       display:grid;
@@ -580,7 +691,6 @@
     @media (max-width: 720px){
       .cheesyGrid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
-
     .noteCard{
       border-radius: 18px;
       background: rgba(255,255,255,.72);
@@ -596,12 +706,10 @@
     .noteCard:nth-child(4){ animation-delay: 1.2s; }
     .noteCard:nth-child(5){ animation-delay: 1.6s; }
     .noteCard:nth-child(6){ animation-delay: 2.0s; }
-
     @keyframes cardFloat{
       0%,100%{ transform: translateY(0); }
       50%{ transform: translateY(-4px); }
     }
-
     .noteCard::after{
       content:"";
       position:absolute;
@@ -640,7 +748,6 @@
       0%,100%{ transform: scale(1); opacity:.92; }
       50%{ transform: scale(1.06); opacity:1; }
     }
-
     .heartLayer{
       position:absolute;
       inset:0;
@@ -664,6 +771,13 @@
   <div class="wrap">
     <div class="card">
       <div class="shine"></div>
+
+      <!-- Audio toggle -->
+      <div class="audioPill" id="audioPill">
+        <div class="dot" id="audioDot"></div>
+        <div class="label" id="audioLabel">Sound: ON</div>
+        <button id="audioToggle">Mute</button>
+      </div>
 
       <div class="screens">
 
@@ -711,16 +825,17 @@
         <section class="screen" id="s3">
           <h1>One more question…</h1>
           <div class="divider">💞</div>
+
           <h2 id="valQuestion" style="
-  margin-top: 6px;
-  font-family:'Playfair Display', serif;
-  font-weight:800;
-  text-align:center;
-  font-size: clamp(20px, 6vw, 38px);
-  color:#240a14;
-">
-  Will you be my Valentine, <span class="name" id="cutieNameInline"></span>? 💘
-</h2>
+            margin-top: 6px;
+            font-family:'Playfair Display', serif;
+            font-weight:800;
+            text-align:center;
+            font-size: clamp(20px, 6vw, 38px);
+            color:#240a14;
+          ">
+            Will you be my Valentine, <span class="name" id="cutieNameInline"></span>? 💘
+          </h2>
 
           <p class="sub" id="valSub">Since <span class="name">our day</span>, I’ve been smiling more.</p>
 
@@ -730,8 +845,19 @@
           </div>
 
           <div class="arena" id="arena">
-            <button class="btn primary" id="yesBtn" type="button">Yes 💘</button>
+            <!-- Catch the heart -->
+            <div class="catchHeart" id="catchHeart" title="Catch me!">
+              <span>💗</span>
+            </div>
 
+            <!-- YES hold to fill -->
+            <button class="btn primary chargeBtn" id="yesBtn" type="button" aria-label="Hold to say yes">
+              <span class="yesText" id="yesText">Hold to say YES 💘</span>
+              <span class="chargePct" id="chargePct">0%</span>
+              <span class="wave" id="wave"></span>
+            </button>
+
+            <!-- NO -->
             <div id="noWrap" aria-hidden="true">
               <button class="btn ghost" id="noBtn" type="button">No 🙈</button>
             </div>
@@ -739,7 +865,7 @@
             <div id="dustLayer" class="dustLayer"></div>
           </div>
 
-          <div class="hint">Tap “No” 😌 (excuse → dust snap → teleport)</div>
+          <div class="hint">Tap “No” for excuses 😌 • Catch the 💗 for boosts • Hold YES to fill 🌊</div>
         </section>
 
         <!-- SCREEN 4 -->
@@ -776,18 +902,147 @@
     // =======================
     // CONFIG (edit these)
     // =======================
-    const CUTIE_NAME = "CUTIE";
-    document.getElementById("cutieNameInline").textContent = CUTIE_NAME;
+    const CUTIE_NAME = "CUTIE_NAME";
 
-    const MONTH_NAME = "July";
+    const MONTH_NAME = "December";
     const YEAR = 2022;
     const DAYS_IN_MONTH = 31;
 
     // 0=Mon, 1=Tue, 2=Wed, 3=Thu, 4=Fri, 5=Sat, 6=Sun
-    const MONTH_START_DOW = 4; // Dec 1, 2022 was Wednesday ✅
+    const MONTH_START_DOW = 2; // Dec 1, 2022 was Wednesday ✅
 
     // Set correct day (1..DAYS_IN_MONTH) or null to disable
-    const CORRECT_DAY = 15;
+    const CORRECT_DAY = 18;
+
+    // =======================
+    // WebAudio (no external files) - sounds for all games
+    // =======================
+    const audioUI = {
+      enabled: true,
+      ctx: null,
+      master: null,
+      unlocked: false
+    };
+
+    const audioToggle = document.getElementById("audioToggle");
+    const audioLabel  = document.getElementById("audioLabel");
+    const audioDot    = document.getElementById("audioDot");
+
+    function updateAudioUI(){
+      audioLabel.textContent = `Sound: ${audioUI.enabled ? "ON" : "OFF"}`;
+      audioToggle.textContent = audioUI.enabled ? "Mute" : "Unmute";
+      audioToggle.classList.toggle("off", !audioUI.enabled);
+      audioDot.style.opacity = audioUI.enabled ? "1" : ".35";
+    }
+    updateAudioUI();
+
+    function ensureAudio(){
+      if(!audioUI.enabled) return false;
+      if(audioUI.ctx) return true;
+
+      try{
+        audioUI.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        audioUI.master = audioUI.ctx.createGain();
+        audioUI.master.gain.value = 0.28; // overall volume
+        audioUI.master.connect(audioUI.ctx.destination);
+        return true;
+      }catch(e){
+        return false;
+      }
+    }
+
+    async function unlockAudio(){
+      if(!audioUI.enabled) return;
+      if(!ensureAudio()) return;
+      if(audioUI.unlocked) return;
+      try{
+        if(audioUI.ctx.state !== "running") await audioUI.ctx.resume();
+        // tiny silent tick to "prime"
+        const o = audioUI.ctx.createOscillator();
+        const g = audioUI.ctx.createGain();
+        g.gain.value = 0.0001;
+        o.connect(g); g.connect(audioUI.master);
+        o.frequency.value = 440;
+        o.start();
+        o.stop(audioUI.ctx.currentTime + 0.01);
+        audioUI.unlocked = true;
+      }catch(e){}
+    }
+
+    audioToggle.addEventListener("click", async () => {
+      audioUI.enabled = !audioUI.enabled;
+      updateAudioUI();
+      if(audioUI.enabled) await unlockAudio();
+    });
+
+    // small helper building blocks
+    function now(){ return audioUI.ctx ? audioUI.ctx.currentTime : 0; }
+
+    function tone(freq=440, dur=0.08, type="sine", gain=0.06, slide=0){
+      if(!audioUI.enabled) return;
+      if(!ensureAudio()) return;
+      const t0 = now();
+
+      const o = audioUI.ctx.createOscillator();
+      const g = audioUI.ctx.createGain();
+      const f = Math.max(40, freq);
+
+      o.type = type;
+      o.frequency.setValueAtTime(f, t0);
+      if(slide) o.frequency.exponentialRampToValueAtTime(Math.max(40, f+slide), t0 + dur);
+
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(gain, t0 + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+
+      o.connect(g); g.connect(audioUI.master);
+      o.start(t0);
+      o.stop(t0 + dur + 0.02);
+    }
+
+    function noiseBurst(dur=0.08, gain=0.03){
+      if(!audioUI.enabled) return;
+      if(!ensureAudio()) return;
+      const t0 = now();
+      const bufferSize = Math.floor(audioUI.ctx.sampleRate * dur);
+      const buffer = audioUI.ctx.createBuffer(1, bufferSize, audioUI.ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for(let i=0;i<bufferSize;i++){
+        data[i] = (Math.random()*2 - 1) * (1 - i/bufferSize);
+      }
+
+      const src = audioUI.ctx.createBufferSource();
+      src.buffer = buffer;
+
+      const filt = audioUI.ctx.createBiquadFilter();
+      filt.type = "highpass";
+      filt.frequency.value = 1200;
+
+      const g = audioUI.ctx.createGain();
+      g.gain.setValueAtTime(gain, t0);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+
+      src.connect(filt); filt.connect(g); g.connect(audioUI.master);
+      src.start(t0);
+      src.stop(t0 + dur + 0.02);
+    }
+
+    // semantic sounds
+    const SFX = {
+      tap(){ tone(520, 0.06, "sine", 0.05, 80); },
+      soft(){ tone(320, 0.08, "triangle", 0.03, -20); },
+      wrong(){ tone(220, 0.12, "sawtooth", 0.04, -40); noiseBurst(0.06, 0.02); },
+      correct(){ tone(660, 0.06, "sine", 0.055, 90); setTimeout(()=>tone(880,0.07,"sine",0.045,120), 50); },
+      win(){ tone(740, 0.09, "triangle", 0.06, 90); setTimeout(()=>tone(980,0.10,"triangle",0.05,140), 80); setTimeout(()=>tone(1240,0.12,"sine",0.045,200), 160); },
+      boop(){ tone(420, 0.08, "square", 0.035, 30); },
+      snap(){ noiseBurst(0.13, 0.04); tone(180, 0.10, "sawtooth", 0.02, -60); },
+      bubble(){ tone(560, 0.04, "sine", 0.02, 60); },
+      sparkle(){ tone(900, 0.05, "sine", 0.035, 150); setTimeout(()=>tone(1250,0.06,"sine",0.03,200), 40); },
+      charge(){ tone(250, 0.06, "triangle", 0.02, 40); }
+    };
+
+    // unlock audio on first user interaction anywhere
+    window.addEventListener("pointerdown", unlockAudio, { once:false, passive:true });
 
     // =======================
     // Global state
@@ -803,7 +1058,6 @@
       window.scrollTo({top: 0, behavior: "smooth"});
       if(id === "s4") startFinalEffects();
     }
-
     function pick(arr){ return arr[(Math.random() * arr.length) | 0]; }
 
     function distanceBucket(diff){
@@ -817,7 +1071,6 @@
     function wrongDayMessage(day){
       const diff = Math.abs(day - CORRECT_DAY);
       const bucket = distanceBucket(diff);
-
       const msgs = {
         one: [
           "Oof… SO close 😭 Just one day away 💗",
@@ -850,7 +1103,6 @@
           `Correct 😌💗 (I knew you’d get it)`
         ]
       };
-
       return pick(msgs[bucket] || msgs.mid);
     }
 
@@ -890,7 +1142,6 @@
       const el = calendarGrid.querySelector(`.dateBtn[data-day="${CORRECT_DAY}"]`);
       if(!el) return;
 
-      // intensity based on distance if user selected something
       let intensity = 1;
       if(state.metDay && CORRECT_DAY){
         const diff = Math.abs(state.metDay - CORRECT_DAY);
@@ -906,6 +1157,8 @@
     }
 
     function selectDay(day, btn){
+      SFX.tap();
+
       state.metDay = day;
       document.querySelectorAll(".dateBtn").forEach(x => x.classList.remove("selected"));
       btn.classList.add("selected");
@@ -915,11 +1168,14 @@
         if(day !== CORRECT_DAY){
           dateNote.textContent = wrongDayMessage(day);
           suggestCorrectDay();
+          SFX.wrong();
         } else {
           dateNote.textContent = wrongDayMessage(day);
+          SFX.correct();
         }
       } else {
         dateNote.textContent = `So… ${MONTH_NAME} ${day}, ${YEAR} 💗`;
+        SFX.soft();
       }
 
       gsap.fromTo(btn, {scale:0.96}, {scale:1.03, duration:0.16, ease:"power2.out", yoyo:true, repeat:1});
@@ -927,10 +1183,10 @@
 
     buildCalendar();
 
-    toS2.addEventListener("click", () => { showScreen("s2"); initTTT(); });
+    toS2.addEventListener("click", () => { SFX.sparkle(); showScreen("s2"); initTTT(); });
 
     // =======================
-    // SCREEN 2: TicTacToe (user always wins) + messages
+    // SCREEN 2: TicTacToe (user always wins)
     // =======================
     const tttBoard = document.getElementById("tttBoard");
     const tttStatus = document.getElementById("tttStatus");
@@ -940,7 +1196,7 @@
     const resetTTT = document.getElementById("resetTTT");
 
     const USER = "💗";
-    const AI = "🖤"; // prettier than ✕ (or use 💔)
+    const AI = "🖤";
 
     const LINES = [
       [0,1,2],[3,4,5],[6,7,8],
@@ -1007,7 +1263,6 @@
 
     function aiMoveSoft(){
       if(winningLine(USER)) return;
-
       const line = bestLineForUser();
       const avoid = new Set(line);
 
@@ -1019,6 +1274,7 @@
       board[pickI] = AI;
       renderTTT();
       animateCell(pickI);
+      SFX.soft();
     }
 
     function forceUserWin(){
@@ -1028,6 +1284,7 @@
         board[empties[0]] = USER;
         renderTTT();
         animateCell(empties[0]);
+        SFX.tap();
       }
       if(winningLine(USER)) winTTT();
     }
@@ -1045,10 +1302,10 @@
       userMoves++;
       renderTTT();
       animateCell(i);
+      SFX.tap();
 
       if(winningLine(USER)){ winTTT(); return; }
 
-      // dynamic messages based on closeness to win
       if(userAlmostWinning()){
         tttStatus.textContent = pick(["OMG one more and you win 😳💞","Final move incoming… 😌💗","So close I can feel it 🥹💘"]);
       } else if(userCloseLines()){
@@ -1063,7 +1320,6 @@
         locked = false;
 
         if(winningLine(USER)){ winTTT(); return; }
-
         if(userMoves >= 4) forceUserWin();
         hintBestMove();
       }, 230);
@@ -1121,6 +1377,7 @@
       tttStatus.textContent = pick(["Okay okay… you win 😌💗","I surrender 🥹💞","Fine… take my heart 💘"]);
       toS3.disabled = false;
 
+      SFX.win();
       confetti({ particleCount: 90, spread: 70, startVelocity: 22, scalar: 0.9, origin: { y: 0.55 } });
     }
 
@@ -1138,18 +1395,10 @@
       hintBestMove();
     }
 
-    resetTTT.addEventListener("click", initTTT);
-
-    toS3.addEventListener("click", () => {
-      const valSub = document.getElementById("valSub");
-      const day = state.metDay ?? "that day";
-      valSub.innerHTML = `Since <span class="name">${MONTH_NAME} ${day}, ${YEAR}</span>, I’ve been smiling more.`;
-      showScreen("s3");
-      placeNoInitial();
-    });
+    resetTTT.addEventListener("click", () => { SFX.wrong(); initTTT(); });
 
     // =======================
-    // SCREEN 3: Valentine (Thanos dust + emoji wiggles)
+    // SCREEN 3: Valentine (Thanos dust + slosh + catch heart + bubbles + sound)
     // =======================
     const arena = document.getElementById("arena");
     const yesBtn = document.getElementById("yesBtn");
@@ -1158,6 +1407,12 @@
     const dustLayer = document.getElementById("dustLayer");
     const valEmoji = document.getElementById("valEmoji");
     const valMood = document.getElementById("valMood");
+    const wave = document.getElementById("wave");
+    const yesText = document.getElementById("yesText");
+    const chargePct = document.getElementById("chargePct");
+    const catchHeart = document.getElementById("catchHeart");
+
+    document.getElementById("cutieNameInline").textContent = CUTIE_NAME;
 
     const REASONS = [
       "I only accept YES 💗",
@@ -1171,6 +1426,55 @@
     ];
 
     let noBusy = false;
+
+    // YES charging
+    let charge = 0;
+    let charging = false;
+    let chargeRaf = null;
+    let lastTs = 0;
+    let noClicks = 0;
+    let loveBoost = 0;
+    let boostDecayTimer = null;
+
+    // Motion slosh
+    let motionEnabled = false;
+
+    function setSlosh(tx, ty){
+      const clampedX = Math.max(-1, Math.min(1, tx));
+      const clampedY = Math.max(-1, Math.min(1, ty));
+
+      gsap.to(wave, {
+        rotate: clampedX * 3.2,
+        x: clampedX * 10,
+        y: clampedY * 6,
+        transformOrigin: "50% 100%",
+        duration: 0.25,
+        ease: "power2.out"
+      });
+
+      gsap.to(yesBtn, {
+        rotation: clampedX * 0.8,
+        duration: 0.35,
+        ease: "power2.out"
+      });
+    }
+
+    function enableMotion(){
+      if(motionEnabled) return;
+      motionEnabled = true;
+
+      window.addEventListener("deviceorientation", (e) => {
+        const gx = (e.gamma ?? 0) / 25;
+        const by = (e.beta ?? 0) / 25;
+        setSlosh(gx, by);
+      }, { passive: true });
+
+      window.addEventListener("mousemove", (e) => {
+        const cx = (e.clientX / window.innerWidth) * 2 - 1;
+        const cy = (e.clientY / window.innerHeight) * 2 - 1;
+        setSlosh(cx, cy);
+      }, { passive: true });
+    }
 
     function arenaMetrics(){
       const r = arena.getBoundingClientRect();
@@ -1220,73 +1524,204 @@
       gsap.to(noWrap, { x: target.x, y: target.y, duration: 0.40, ease: "power3.out", overwrite: true });
     }
 
-    function placeNoInitial(){
-      moveNoTo(randomSpot(), true);
-      noBtn.textContent = "No 🙈";
-      noBusy = false;
-      valEmoji.textContent = "😊";
-      valMood.textContent = "Be honest… but be gentle 😌";
+    function randomHeartSpot(){
+      const r = arena.getBoundingClientRect();
+      const size = 52;
+      const pad = 10;
+      const minX = pad, minY = pad + 8;
+      const maxX = Math.max(minX, r.width - size - pad);
+      const maxY = Math.max(minY, r.height - size - pad - 72); // keep away from YES
+      return { x: minX + Math.random()*(maxX-minX), y: minY + Math.random()*(maxY-minY) };
     }
 
+    function moveCatchHeart(instant=false){
+      const t = randomHeartSpot();
+      if(instant){
+        gsap.set(catchHeart, { x: t.x, y: t.y, opacity: 1, scale: 1 });
+      }else{
+        gsap.to(catchHeart, { x: t.x, y: t.y, duration: 0.55, ease:"power3.out", overwrite:true });
+      }
+    }
+
+    // dynamic moods
     function setValMood(kind, text){
-  const moods = {
-    yes: [
-      { e:"😍", m:"YES?? 😭💗 My heart just did a backflip." },
-      { e:"🥹", m:"Stoppp—I'm melting 🥹💞" },
-      { e:"💓", m:"Okay… heart is beating FAST 💓" },
-      { e:"😘", m:"Come here you 😘💘" },
-      { e:"🤭", m:"Hehe… I knew you’d say yes 🤭💗" }
-    ],
-    no: [
-      { e:"🥺", m:"Ouch… my tiny heart 💔🥺" },
-      { e:"😤", m:"Hmph 😤 (I’m pretending I’m okay)" },
-      { e:"😶‍🌫️", m:"I’m disappearing… like your ‘No’ 😶‍🌫️✨" },
-      { e:"😭", m:"Why would you do that to me 😭💞" },
-      { e:"🙈", m:"No?? I didn’t hear that 🙈💗" }
-    ],
-    maybe: [
-      { e:"😊", m:"Your move 😌💗" },
-      { e:"😌", m:"Take your time… but choose wisely 😌✨" },
-      { e:"🫶", m:"I’m right here 🫶💞" },
-      { e:"🤍", m:"Softly waiting… 🤍🌙" },
-      { e:"😇", m:"I’ll be good… promise 😇💗" }
-    ]
-  };
+      const moods = {
+        yes: [
+          { e:"😍", m:"YES?? 😭💗 My heart just did a backflip." },
+          { e:"🥹", m:"Stoppp—I'm melting 🥹💞" },
+          { e:"💓", m:"Okay… heart is beating FAST 💓" },
+          { e:"😘", m:"Come here you 😘💘" },
+          { e:"🤭", m:"Hehe… I knew you’d say yes 🤭💗" }
+        ],
+        no: [
+          { e:"🥺", m:"Ouch… my tiny heart 💔🥺" },
+          { e:"😤", m:"Hmph 😤 (I’m pretending I’m okay)" },
+          { e:"😶‍🌫️", m:"I’m disappearing… like your ‘No’ 😶‍🌫️✨" },
+          { e:"😭", m:"Why would you do that to me 😭💞" },
+          { e:"🙈", m:"No?? I didn’t hear that 🙈💗" }
+        ],
+        maybe: [
+          { e:"😊", m:"Your move 😌💗" },
+          { e:"😌", m:"Take your time… but choose wisely 😌✨" },
+          { e:"🫶", m:"I’m right here 🫶💞" },
+          { e:"🤍", m:"Softly waiting… 🤍🌙" },
+          { e:"😇", m:"I’ll be good… promise 😇💗" }
+        ],
+        boost: [
+          { e:"✨", m:"Ooo bonus love! 💗" },
+          { e:"😚", m:"That was adorable 😚💞" },
+          { e:"🥰", m:"You caught it! More love incoming 🥰" }
+        ]
+      };
 
-  const pool = moods[kind] || moods.maybe;
-  const pick = pool[(Math.random() * pool.length) | 0];
+      const pool = moods[kind] || moods.maybe;
+      const p = pool[(Math.random() * pool.length) | 0];
 
-  // set emoji/message (use provided text if passed)
-  valEmoji.textContent = pick.e;
-  valMood.textContent = text || pick.m;
+      valEmoji.textContent = p.e;
+      valMood.textContent = text || p.m;
 
-  // interaction feels alive: emoji + message animation
-  gsap.killTweensOf([valEmoji, valMood]);
+      gsap.killTweensOf([valEmoji, valMood]);
 
-  // emoji: pop + tiny wobble
-  gsap.fromTo(valEmoji,
-    { scale: 0.92, rotation: -2 },
-    { scale: 1.08, rotation: 2, duration: 0.18, ease:"power2.out", yoyo:true, repeat:1 }
-  );
+      gsap.fromTo(valEmoji,
+        { scale: 0.92, rotation: -2 },
+        { scale: 1.08, rotation: 2, duration: 0.18, ease:"power2.out", yoyo:true, repeat:1 }
+      );
 
-  // message: fade/slide
-  gsap.fromTo(valMood,
-    { opacity: 0, y: 6 },
-    { opacity: 1, y: 0, duration: 0.22, ease:"power2.out" }
-  );
+      gsap.fromTo(valMood,
+        { opacity: 0, y: 6 },
+        { opacity: 1, y: 0, duration: 0.22, ease:"power2.out" }
+      );
 
-  // extra vibe depending on kind
-  if(kind === "yes"){
-    gsap.fromTo(valEmoji, { filter:"drop-shadow(0 0 0 rgba(240,143,177,0))" },
-      { filter:"drop-shadow(0 0 18px rgba(240,143,177,.55))", duration: 0.22, yoyo:true, repeat:1, ease:"power2.out" }
-    );
-  } else if(kind === "no"){
-    gsap.fromTo(valEmoji, { x: 0 },
-      { x: 6, duration: 0.06, yoyo:true, repeat: 5, ease:"power1.inOut" }
-    );
-  }
-}
+      if(kind === "yes"){
+        gsap.fromTo(valEmoji, { filter:"drop-shadow(0 0 0 rgba(240,143,177,0))" },
+          { filter:"drop-shadow(0 0 18px rgba(240,143,177,.55))", duration: 0.22, yoyo:true, repeat:1, ease:"power2.out" }
+        );
+      } else if(kind === "no"){
+        gsap.fromTo(valEmoji, { x: 0 },
+          { x: 6, duration: 0.06, yoyo:true, repeat: 5, ease:"power1.inOut" }
+        );
+      }
+    }
 
+    function setCharge(p){
+      charge = Math.max(0, Math.min(100, p));
+      wave.style.height = `${charge}%`;
+      wave.style.transform = `translateY(${8 - (charge*0.08)}px)`;
+      chargePct.textContent = `${Math.round(charge)}%`;
+
+      if(charge < 20) yesText.textContent = "Hold to say YES 💘";
+      else if(charge < 55) yesText.textContent = "Ooo it’s filling… 🌊";
+      else if(charge < 90) yesText.textContent = "Almost there… 🥹💗";
+      else yesText.textContent = "Release to seal it 💞";
+
+      if(charge >= 100){
+        yesBtn.classList.add("charged");
+        yesText.textContent = "YES locked 💗";
+        acceptYes(); // auto accept when full
+      } else {
+        yesBtn.classList.remove("charged");
+      }
+    }
+
+    // Bubble system
+    let bubbleTimer = null;
+    function spawnBubble(intensity=1){
+      if(charge <= 2) return;
+      const b = document.createElement("span");
+      b.className = "bubble";
+      const w = yesBtn.clientWidth;
+      const x = 12 + Math.random()*(w-24);
+      const s = 3 + Math.random()*7;
+      b.style.width = s + "px";
+      b.style.height = s + "px";
+      b.style.left = x + "px";
+      b.style.bottom = (6 + Math.random()*10) + "px";
+      wave.appendChild(b);
+
+      const rise = 14 + Math.random()*22 + intensity*8;
+      const drift = -10 + Math.random()*20;
+      gsap.fromTo(b,
+        { opacity: 0, y: 0, x: 0, scale: 0.8 },
+        { opacity: 0.8, duration: 0.10, ease:"power2.out", onComplete: () => {
+          gsap.to(b, {
+            y: -rise,
+            x: drift,
+            opacity: 0,
+            scale: 1.15,
+            duration: 0.65 + Math.random()*0.4,
+            ease:"power1.out",
+            onComplete: () => b.remove()
+          });
+        }}
+      );
+
+      // occasional bubble pop sound (soft)
+      if(Math.random() < 0.35) SFX.bubble();
+    }
+
+    function startBubbles(){
+      if(bubbleTimer) return;
+      bubbleTimer = setInterval(() => {
+        if(!charging) return;
+        const intensity = 1 + Math.min(2.2, (noClicks*0.03) + loveBoost);
+        // spawn 1-2 bubbles
+        spawnBubble(intensity);
+        if(Math.random() < 0.35) spawnBubble(intensity);
+      }, 180);
+    }
+
+    function stopBubbles(){
+      if(!bubbleTimer) return;
+      clearInterval(bubbleTimer);
+      bubbleTimer = null;
+    }
+
+    function startCharging(){
+      if(charging) return;
+      if(yesBtn.dataset.done === "1") return;
+
+      charging = true;
+      lastTs = 0;
+      startBubbles();
+      SFX.charge();
+
+      gsap.fromTo(yesBtn, {scale:0.99}, {scale:1.02, duration:0.18, ease:"power2.out", yoyo:true, repeat:1});
+
+      const speed = 22; // % per second
+      const tick = (ts) => {
+        if(!charging) return;
+        if(!lastTs) lastTs = ts;
+        const dt = (ts - lastTs) / 1000;
+        lastTs = ts;
+
+        // More NO interactions => faster YES fill
+        const boostFactor = 1 + Math.min(1.2, (noClicks * 0.05) + loveBoost);
+        setCharge(charge + speed * dt * boostFactor);
+
+        // add tiny slosh based on charging
+        setSlosh((Math.sin(ts/240) * 0.18), (Math.cos(ts/300) * 0.12));
+
+        if(charge < 100) chargeRaf = requestAnimationFrame(tick);
+      };
+
+      chargeRaf = requestAnimationFrame(tick);
+    }
+
+    function stopCharging(){
+      charging = false;
+      if(chargeRaf) cancelAnimationFrame(chargeRaf);
+      chargeRaf = null;
+      stopBubbles();
+
+      if(charge < 100){
+        gsap.to({p: charge}, {
+          p: Math.max(0, charge - 10),
+          duration: 0.35,
+          ease: "power2.out",
+          onUpdate: function(){ setCharge(this.targets()[0].p); }
+        });
+      }
+    }
 
     function thanosDustFrom(element){
       const ar = arena.getBoundingClientRect();
@@ -1383,15 +1818,17 @@
       if(noBusy) return;
       noBusy = true;
 
-      setValMood("no", `${reason}`);
+      setValMood("no", `Excuse: ${reason}`);
       noBtn.textContent = reason;
+
+      SFX.boop();
 
       // make it feel interactive
       gsap.fromTo(valEmoji, { rotation: -3 }, { rotation: 3, duration: 0.08, yoyo: true, repeat: 5, ease:"power1.inOut" });
-      gsap.fromTo(valMood, { opacity: 0.75 }, { opacity: 1, duration: 0.18, ease:"power2.out" });
 
       setTimeout(() => {
         thanosDustFrom(noBtn);
+        SFX.snap();
 
         gsap.to(noWrap, {
           opacity: 0,
@@ -1413,23 +1850,63 @@
 
           noBusy = false;
         }, 320);
-      }, 950);
+      }, 900);
     }
 
+    // NO click => boosts YES charge (the more they play, the faster it fills)
     noBtn.addEventListener("click", () => {
       const reason = pick(REASONS);
       noClickSequence(reason);
+
+      noClicks++;
+
+      // instant cute bump to YES fill
+      if(charge < 100){
+        setCharge(charge + 7 + Math.min(10, noClicks * 0.4));
+        gsap.fromTo(wave, {filter:"brightness(1)"}, {filter:"brightness(1.12)", duration:0.12, yoyo:true, repeat:1});
+        gsap.fromTo(yesBtn, {scale:0.995}, {scale:1.02, duration:0.16, yoyo:true, repeat:1, ease:"power2.out"});
+      }
+
+      // temporary boost that decays
+      loveBoost = Math.min(1.0, loveBoost + 0.12);
+
+      if(boostDecayTimer) clearInterval(boostDecayTimer);
+      boostDecayTimer = setInterval(() => {
+        loveBoost = Math.max(0, loveBoost - 0.04);
+        if(loveBoost <= 0){
+          clearInterval(boostDecayTimer);
+          boostDecayTimer = null;
+        }
+      }, 140);
     });
 
-    yesBtn.addEventListener("click", () => {
-      setValMood("yes", "Yesss… you just made my whole heart blush 💗");
+    // Catch-the-heart => big boost + sparkle + move
+    catchHeart.addEventListener("click", () => {
+      SFX.sparkle();
+      setValMood("boost", pick(["Caught! 💗 +love boost!", "Nice! That was adorable 🥰", "Okayyy you’re good 😚💞"]));
 
-      valEmoji.textContent = "💓";
-      gsap.timeline()
-        .to(valEmoji, { scale: 1.12, duration: 0.12, ease: "power2.out" })
-        .to(valEmoji, { scale: 1.02, duration: 0.10, ease: "power2.inOut" })
-        .to(valEmoji, { scale: 1.20, duration: 0.14, ease: "power2.out" })
-        .to(valEmoji, { scale: 1.00, duration: 0.18, ease: "power2.inOut" });
+      if(charge < 100){
+        setCharge(charge + 10 + Math.min(16, noClicks*0.5));
+      }
+      // micro confetti puff
+      confetti({ particleCount: 18, spread: 45, startVelocity: 18, scalar: 0.7, origin: { y: 0.72 } });
+
+      // bubble burst (visual)
+      for(let i=0;i<5;i++) spawnBubble(2.4);
+
+      gsap.fromTo(catchHeart, {scale:0.96}, {scale:1.12, duration:0.16, yoyo:true, repeat:1, ease:"power2.out"});
+      moveCatchHeart(false);
+    });
+
+    function acceptYes(){
+      if(yesBtn.dataset.done === "1") return;
+      yesBtn.dataset.done = "1";
+      charging = false;
+      if(chargeRaf) cancelAnimationFrame(chargeRaf);
+      stopBubbles();
+
+      setValMood("yes", "Yesss… you just made my whole heart blush 💗");
+      SFX.win();
 
       confetti({ particleCount: 170, spread: 75, startVelocity: 32, scalar: 0.95, origin: { y: 0.6 } });
       setTimeout(() => confetti({ particleCount: 120, spread: 110, startVelocity: 26, scalar: 0.85, origin: { y: 0.55 } }), 160);
@@ -1441,10 +1918,45 @@
 
       renderCheesyCards();
       setTimeout(() => showScreen("s4"), 520);
+    }
+
+    // Hold interactions for YES
+    yesBtn.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      if(yesBtn.dataset.done === "1") return;
+      startCharging();
     });
 
+    yesBtn.addEventListener("pointerup", (e) => {
+      e.preventDefault();
+      if(yesBtn.dataset.done === "1") return;
+      stopCharging();
+    });
+
+    yesBtn.addEventListener("pointercancel", stopCharging);
+    yesBtn.addEventListener("pointerleave", () => { if(charging) stopCharging(); });
+
+    // Disable normal click (so can't instantly yes)
+    yesBtn.addEventListener("click", (e) => { e.preventDefault(); });
+
+    function placeNoInitial(){
+      moveNoTo(randomSpot(), true);
+      moveCatchHeart(true);
+
+      noBtn.textContent = "No 🙈";
+      noBusy = false;
+      valEmoji.textContent = "😊";
+      valMood.textContent = "Be honest… but be gentle 😌";
+
+      yesBtn.dataset.done = "0";
+      setCharge(0);
+      noClicks = 0;
+      loveBoost = 0;
+      setSlosh(0,0);
+    }
+
     // =======================
-    // SCREEN 4: Final (floating hearts)
+    // SCREEN 4: Final
     // =======================
     const cheesyGrid = document.getElementById("cheesyGrid");
     const heartLayer = document.getElementById("heartLayer");
@@ -1457,7 +1969,7 @@
         { icon:"🌍", title:"Wherever You Are", text:"No distance can change this: I love you." },
         { icon:"📈", title:"My Love Graph", text:"It’s increasing… day by day. (No limit 😌)" },
         { icon:"📐", title:"If you were an angle…", text:"You’d be A-CUTE-ONE 💗" },
-        { icon:"💗", title:"Thank You", text:"For being you. For existing. For making me smile." },
+        { icon:"📝", title:"Thank You", text:"For being you. For existing. For making me smile." },
       ];
 
       cheesyGrid.innerHTML = cards.map(c => `
@@ -1510,6 +2022,7 @@
     }
 
     function startFinalEffects(){
+      SFX.win();
       confetti({ particleCount: 120, spread: 80, startVelocity: 28, scalar: 0.95, origin: { y: 0.55 } });
       setTimeout(() => confetti({ particleCount: 90, spread: 120, startVelocity: 22, scalar: 0.8, origin: { y: 0.5 } }), 180);
 
@@ -1524,13 +2037,33 @@
     }
 
     // =======================
-    // Nav buttons
+    // Navigation
     // =======================
-    document.getElementById("toS2").addEventListener("click", () => { showScreen("s2"); });
-    document.getElementById("toS3").addEventListener("click", () => { /* handled above */ });
+    toS3.addEventListener("click", async () => {
+      SFX.sparkle();
 
-    // Replay
+      const valSub = document.getElementById("valSub");
+      const day = state.metDay ?? "that day";
+      valSub.innerHTML = `Since <span class="name">${MONTH_NAME} ${day}, ${YEAR}</span>, I’ve been smiling more.`;
+
+      showScreen("s3");
+      placeNoInitial();
+
+      // enable motion (iOS permission)
+      try{
+        if (typeof DeviceMotionEvent !== "undefined" && typeof DeviceMotionEvent.requestPermission === "function") {
+          const res = await DeviceMotionEvent.requestPermission();
+          if(res === "granted") enableMotion();
+        } else {
+          enableMotion();
+        }
+      }catch(e){
+        enableMotion();
+      }
+    });
+
     document.getElementById("replay").addEventListener("click", () => {
+      SFX.wrong();
       state.metDay = null;
       state.tttWon = false;
 
@@ -1548,8 +2081,18 @@
       }
     });
 
-    // Init
+    // Start screen 2 from screen 1
+    toS2.addEventListener("click", () => { /* already handled above */ });
+
+    // Initialize
     initTTT();
+
+    // Screen 1 next enabled after date select
+    // (already in selectDay)
+
+    // When moving to screen 2 directly from screen 1 next:
+    // (handled in toS2 click above)
+
   </script>
 </body>
 </html>
