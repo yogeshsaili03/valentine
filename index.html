@@ -339,10 +339,7 @@
       max-width: 420px;
       margin: 0 auto;
       position:relative;
-      padding: 0 16px;
-    }
-    @media (max-width: 420px){
-      .tttBoardShell{ padding: 0 18px; }
+      padding: 0 18px; /* more padding so grid never cuts on phone */
     }
     .tttBoard{
       width: 100%;
@@ -433,7 +430,7 @@
     .arena{
       margin-top: 10px;
       position:relative;
-      height: clamp(340px, 50vh, 560px);
+      height: clamp(360px, 54vh, 590px);
       border-radius: 22px;
       border: 1px solid rgba(255,255,255,.55);
       background: rgba(255,255,255,.38);
@@ -503,14 +500,14 @@
       user-select:none;
     }
 
-    /* YES hold-to-fill water effect (smaller & premium) */
+    /* YES - FIXED to the bottom INSIDE the arena */
     .chargeBtn{
       position:absolute;
-      left:50%;
-      bottom: 14px;
+      left: 50%;
+      bottom: 12px;              /* ✅ inside bottom */
       transform: translateX(-50%);
-      width: min(280px, 76vw);
-      height: 50px;
+      width: min(290px, 78vw);
+      height: 52px;
       display:flex;
       align-items:center;
       justify-content:center;
@@ -519,8 +516,10 @@
       touch-action: none;
       user-select:none;
       -webkit-user-select:none;
+      z-index: 5;
     }
 
+    /* premium look */
     .premiumYes{
       border: 1px solid rgba(255,255,255,.42);
       background: radial-gradient(120px 70px at 30% 20%, rgba(255,255,255,.28), transparent 60%),
@@ -553,15 +552,17 @@
       pointer-events:none;
     }
 
-    .chargeBtn .yesText{ position:relative; z-index: 4; }
-    .chargeBtn .chargePct{ position:relative; z-index: 4; font-weight: 900; opacity: .95; }
+    .chargeBtn .yesText{ position:relative; z-index: 6; }
+    .chargeBtn .chargePct{ position:relative; z-index: 6; font-weight: 900; opacity: .95; }
+
+    /* water layer */
     .chargeBtn .wave{
       position:absolute;
       left:0; bottom:0;
       width:100%;
       height:0%;
       z-index:1;
-      opacity:.95;
+      opacity:.96;
       border-radius: 999px;
       background:
         radial-gradient(18px 12px at 18% 24%, rgba(255,255,255,.35), transparent 65%),
@@ -571,18 +572,21 @@
       transform: translateY(8px);
       will-change: transform, height, filter;
       box-shadow: inset 0 8px 18px rgba(255,255,255,.10);
+      overflow:hidden; /* keep fizz inside */
     }
+
+    /* surface sheen */
     .chargeBtn .wave::after{
       content:"";
       position:absolute;
       left:-30%;
-      top:7px;
+      top: 7px;
       width:160%;
       height:18px;
       border-radius: 999px;
       background: linear-gradient(90deg, transparent, rgba(255,255,255,.26), transparent);
       filter: blur(1px);
-      opacity:.75;
+      opacity:.8;
       animation: waveSweep 1.35s ease-in-out infinite;
     }
     @keyframes waveSweep{
@@ -590,21 +594,29 @@
       50%{ transform: translateX(18%); }
       100%{ transform: translateX(-25%); }
     }
-    .chargeBtn.charged{
-      box-shadow: 0 26px 56px rgba(181,22,82,.22), inset 0 1px 0 rgba(255,255,255,.35);
-    }
 
-    /* bubbles inside wave */
-    .bubble{
+    /* FIZZ LAYER: lots of tiny bubbles rising constantly while holding and on correct answer */
+    .fizz{
       position:absolute;
-      bottom: 8px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.55);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.65);
-      opacity: 0;
+      inset:0;
       pointer-events:none;
+      z-index:2;
+      border-radius: 999px;
+      overflow:hidden;
+    }
+    .fizzBubble{
+      position:absolute;
+      bottom:-10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.62);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
+      opacity: 0;
       filter: blur(.1px);
       will-change: transform, opacity;
+    }
+
+    .chargeBtn.charged{
+      box-shadow: 0 26px 56px rgba(181,22,82,.22), inset 0 1px 0 rgba(255,255,255,.35);
     }
 
     .hint{
@@ -778,7 +790,8 @@
     }
 
     /* Prevent selection while holding/tapping on mobile */
-    .arena, .qCard, .chargeBtn, .qOpt, .btn { -webkit-user-select:none; user-select:none; }
+    .arena, .qCard, .chargeBtn, .qOpt, .btn, .chargePct, .yesText { -webkit-user-select:none; user-select:none; }
+
   </style>
 </head>
 
@@ -859,17 +872,19 @@
               <div class="qHint" id="qHint"></div>
             </div>
 
-            <!-- YES hold to fill (premium) -->
+            <!-- YES (fixed bottom) -->
             <button class="btn primary chargeBtn premiumYes" id="yesBtn" type="button" aria-label="Hold to say yes">
               <span class="yesTopShine"></span>
               <span class="yesRing" id="yesRing"></span>
               <span class="yesText" id="yesText">Hold to say YES 💘</span>
               <span class="chargePct" id="chargePct">0%</span>
-              <span class="wave" id="wave"></span>
+              <span class="wave" id="wave">
+                <span class="fizz" id="fizz"></span>
+              </span>
             </button>
           </div>
 
-          <div class="hint">Tip: correct answers fill faster ✨ • Hold YES anytime, but it’s slow until you “earn” it 😉</div>
+          <div class="hint">Correct answers = faster fill + fizzy love bubbles ✨ • Hold YES anytime (but slow until you earn it 😌)</div>
         </section>
 
         <!-- SCREEN 4 -->
@@ -913,7 +928,7 @@
     const DAYS_IN_MONTH = 31;
 
     // 0=Mon, 1=Tue, 2=Wed, 3=Thu, 4=Fri, 5=Sat, 6=Sun
-    const MONTH_START_DOW = 2; // Dec 1, 2022 was Wednesday ✅
+    const MONTH_START_DOW = 2;
 
     // Set correct day (1..DAYS_IN_MONTH) or null to disable
     const CORRECT_DAY = 18;
@@ -933,7 +948,7 @@
       try{
         audioUI.ctx = new (window.AudioContext || window.webkitAudioContext)();
         audioUI.master = audioUI.ctx.createGain();
-        audioUI.master.gain.value = 0.38; // louder overall (TTT clicks feel better)
+        audioUI.master.gain.value = 0.38;
         audioUI.master.connect(audioUI.ctx.destination);
         return true;
       }catch(e){ return false; }
@@ -1019,8 +1034,7 @@
       wrong(){ tone(220, 0.12, "sawtooth", 0.05, -40); noiseBurst(0.06, 0.03); },
       correct(){ tone(660, 0.06, "sine", 0.06, 90); setTimeout(()=>tone(880,0.07,"sine",0.05,120), 50); },
       win(){ tone(740, 0.09, "triangle", 0.065, 90); setTimeout(()=>tone(980,0.10,"triangle",0.055,140), 80); setTimeout(()=>tone(1240,0.12,"sine",0.05,200), 160); },
-      boop(){ tone(420, 0.08, "square", 0.04, 30); },
-      bubble(){ tone(560, 0.04, "sine", 0.022, 60); },
+      bubble(){ tone(640, 0.04, "sine", 0.02, 70); },
       sparkle(){ tone(900, 0.05, "sine", 0.04, 150); setTimeout(()=>tone(1250,0.06,"sine",0.035,200), 40); },
       charge(){ tone(250, 0.06, "triangle", 0.025, 40); }
     };
@@ -1367,11 +1381,11 @@
     // =======================
     // SCREEN 3: Valentine (questions -> charge + hold to fill)
     // =======================
-    const arena = document.getElementById("arena");
     const yesBtn = document.getElementById("yesBtn");
     const valEmoji = document.getElementById("valEmoji");
     const valMood = document.getElementById("valMood");
     const wave = document.getElementById("wave");
+    const fizz = document.getElementById("fizz");
     const yesText = document.getElementById("yesText");
     const chargePct = document.getElementById("chargePct");
     const yesRing = document.getElementById("yesRing");
@@ -1422,7 +1436,6 @@
       }, { passive: true });
     }
 
-    // moods
     function setValMood(kind, text){
       const moods = {
         yes: [
@@ -1433,7 +1446,7 @@
           { e:"🤭", m:"Hehe… I knew you’d say yes 🤭💗" }
         ],
         good: [
-          { e:"✨", m:"Correct 😌💗 That’s a love boost!" },
+          { e:"✨", m:"Correct 😌💗 +love boost!" },
           { e:"🥰", m:"You’re too good at this 🥰💞" },
           { e:"😚", m:"Mhm… that’s my favorite answer 😚" }
         ],
@@ -1486,7 +1499,7 @@
       yesRing.style.transform = `rotate(${charge*3.2}deg)`;
 
       if(charge < 20) yesText.textContent = "Hold to say YES 💘";
-      else if(charge < 55) yesText.textContent = "Ooo it’s filling… 🌊";
+      else if(charge < 55) yesText.textContent = "It’s getting fizzy… 🫧";
       else if(charge < 90) yesText.textContent = "Almost there… 🥹💗";
       else yesText.textContent = "Release to seal it 💞";
 
@@ -1499,54 +1512,73 @@
       }
     }
 
-    // bubble system (only during hold)
-    let bubbleTimer = null;
-    function spawnBubble(intensity=1){
-      if(charge <= 2) return;
-      const b = document.createElement("span");
-      b.className = "bubble";
-      const w = yesBtn.clientWidth;
-      const x = 12 + Math.random()*(w-24);
-      const s = 3 + Math.random()*7;
-      b.style.width = s + "px";
-      b.style.height = s + "px";
-      b.style.left = x + "px";
-      b.style.bottom = (6 + Math.random()*10) + "px";
-      wave.appendChild(b);
+    // ---- FIZZ bubble engine (inside the wave) ----
+    let fizzTimer = null;
 
-      const rise = 14 + Math.random()*22 + intensity*10;
-      const drift = -10 + Math.random()*20;
+    function spawnFizzBurst(power=1){
+      // spawn multiple bubbles quickly (used on correct answer)
+      const n = 10 + Math.floor(power * 8);
+      for(let i=0;i<n;i++){
+        setTimeout(() => spawnFizzBubble(1 + power*0.6), i * 22);
+      }
+    }
+
+    function spawnFizzBubble(intensity=1){
+      if(charge <= 1) return;
+      const b = document.createElement("span");
+      b.className = "fizzBubble";
+
+      const w = yesBtn.clientWidth;
+      const x = 8 + Math.random()*(w - 16);
+      const size = 2 + Math.random()*6*intensity;
+      b.style.width = size + "px";
+      b.style.height = size + "px";
+      b.style.left = x + "px";
+
+      // bubble starts lower in the filled portion
+      const startY = 6 + Math.random()*14;
+      b.style.bottom = startY + "px";
+      fizz.appendChild(b);
+
+      const rise = 22 + Math.random()*28 + intensity*18;
+      const drift = (-12 + Math.random()*24) * intensity;
+      const dur = 0.6 + Math.random()*0.55;
+
       gsap.fromTo(b,
-        { opacity: 0, y: 0, x: 0, scale: 0.8 },
-        { opacity: 0.8, duration: 0.10, ease:"power2.out", onComplete: () => {
+        { opacity: 0, y: 0, x: 0, scale: 0.85 },
+        { opacity: 0.9, duration: 0.10, ease:"power2.out", onComplete: () => {
           gsap.to(b, {
             y: -rise,
             x: drift,
             opacity: 0,
-            scale: 1.15,
-            duration: 0.65 + Math.random()*0.4,
-            ease:"power1.out",
+            scale: 1.25,
+            duration: dur,
+            ease: "power1.out",
             onComplete: () => b.remove()
           });
         }}
       );
-      if(Math.random() < 0.35) SFX.bubble();
+
+      if(Math.random() < 0.25) SFX.bubble();
     }
 
-    function startBubbles(){
-      if(bubbleTimer) return;
-      bubbleTimer = setInterval(() => {
+    function startFizz(){
+      if(fizzTimer) return;
+      fizzTimer = setInterval(() => {
         if(!charging) return;
-        const intensity = 1 + Math.min(2.5, loveEarned * 0.8);
-        spawnBubble(intensity);
-        if(Math.random() < 0.35) spawnBubble(intensity);
-        if(Math.random() < 0.18) SFX.bubble();
-      }, 180);
+
+        // continuous fizz while holding
+        const intensity = 0.9 + Math.min(2.2, loveEarned * 1.2);
+        spawnFizzBubble(intensity);
+        if(Math.random() < 0.55) spawnFizzBubble(intensity);
+
+      }, 140);
     }
-    function stopBubbles(){
-      if(!bubbleTimer) return;
-      clearInterval(bubbleTimer);
-      bubbleTimer = null;
+
+    function stopFizz(){
+      if(!fizzTimer) return;
+      clearInterval(fizzTimer);
+      fizzTimer = null;
     }
 
     function startCharging(){
@@ -1555,20 +1587,20 @@
 
       charging = true;
       lastTs = 0;
-      startBubbles();
+      startFizz();
       SFX.charge();
 
       gsap.fromTo(yesBtn, {scale:0.99}, {scale:1.02, duration:0.18, ease:"power2.out", yoyo:true, repeat:1});
 
-      const baseSpeed = 10; // slow by default
+      const baseSpeed = 9; // slow by default so they play questions
       const tick = (ts) => {
         if(!charging) return;
         if(!lastTs) lastTs = ts;
         const dt = (ts - lastTs) / 1000;
         lastTs = ts;
 
-        // Earned love makes holding faster (so they must interact with questions)
-        const boostFactor = 1 + Math.min(2.2, loveEarned * 1.2);
+        // Earned love makes holding faster
+        const boostFactor = 1 + Math.min(2.3, loveEarned * 1.25);
         setCharge(charge + baseSpeed * dt * boostFactor);
 
         // animated slosh
@@ -1584,7 +1616,7 @@
       charging = false;
       if(chargeRaf) cancelAnimationFrame(chargeRaf);
       chargeRaf = null;
-      stopBubbles();
+      stopFizz();
 
       if(charge < 100){
         gsap.to({p: charge}, {
@@ -1596,7 +1628,7 @@
       }
     }
 
-    // prevent selection/copy on hold (and iOS highlight)
+    // prevent selection/copy on hold
     yesBtn.addEventListener("pointerdown", (e) => {
       e.preventDefault();
       if(yesBtn.dataset.done === "1") return;
@@ -1613,22 +1645,58 @@
     yesBtn.addEventListener("pointerleave", () => { if(charging) stopCharging(); });
     yesBtn.addEventListener("click", (e) => e.preventDefault());
 
-    // Infinite-ish question pool (you can edit/add your own)
-    const QUESTIONS = [
+    // =======================
+    // Infinite question pool (lots, plus generator so it "never runs out")
+    // =======================
+    const FIXED_QUESTIONS = [
       { q:"Pick the cutest answer 😌", a:"You 💗", b:"Also you 💞", correct:"a" },
       { q:"What’s my favorite vibe?", a:"Us + soft playlist 🎶", b:"Cold email threads 🥶", correct:"a" },
       { q:"Best Valentine plan?", a:"Food + laughs + long walk 🌙", b:"Excel reconciliation 📊", correct:"a" },
-      { q:"What do I want from you today?", a:"A YES 💘", b:"A ‘maybe’ 😭", correct:"a" },
       { q:"Which one is romance?", a:"Forehead kiss 😚", b:"404 Not Found 😵", correct:"a" },
       { q:"Choose the correct spell:", a:"Abra-ka-YES 💗", b:"No-no-no 🙈", correct:"a" },
       { q:"What makes me blush?", a:"Your smile 😳", b:"Server reboot 🧯", correct:"a" },
       { q:"Pick one:", a:"Hold my hand 🫶", b:"Hold my bugs 🐛", correct:"a" },
-      { q:"What’s the correct choice?", a:"YES 💞", b:"Try again 😌", correct:"a" },
+      { q:"This page wants…", a:"A YES 💞", b:"A ‘maybe’ 😭", correct:"a" },
       { q:"Be honest:", a:"We’re a cute story ✨", b:"We’re a CSV file 🧾", correct:"a" },
+      { q:"What’s the correct choice?", a:"YES 💘", b:"Try again 😌", correct:"a" },
+      { q:"Love language?", a:"Time + cuddles 💗", b:"404 + silence 🫠", correct:"a" },
+      { q:"Pick the warmest thing:", a:"Your hug 🫂", b:"A broken AC 🥶", correct:"a" },
+      { q:"What should we do more?", a:"Make memories 🌸", b:"Make excuses 🙈", correct:"a" },
+      { q:"If I say 'valentine' you say…", a:"YES 💞", b:"Error 😭", correct:"a" },
+      { q:"What’s my weakness?", a:"You 😭💗", b:"Tax forms 🧾", correct:"a" },
+      { q:"Which is sweeter?", a:"You + me 😌", b:"A 500 error 😵", correct:"a" },
+      { q:"Pick a date vibe:", a:"Soft lights + laughs ✨", b:"Harsh neon + stress 😵‍💫", correct:"a" },
+      { q:"Where do I want to be?", a:"Next to you 💗", b:"In a meeting 🙃", correct:"a" },
     ];
 
-    let qIndex = 0;
-    let qOrder = [];
+    // generator templates to never end
+    const GEN_LEFT = [
+      "Choose the cutest:",
+      "Pick the romantic one:",
+      "My heart prefers:",
+      "This is a love test:",
+      "Quick! Which one:",
+      "Pick a vibe:",
+      "Select the right answer:",
+      "Which is the best plan:",
+      "My favorite thing:",
+      "What do you want today:"
+    ];
+    const GEN_GOOD = [
+      ["You 💗","Also you 💞"],
+      ["A YES 💘","A no 😭"],
+      ["Hand holding 🫶","Cold emails 🥶"],
+      ["Cute date 🌙","Tax forms 🧾"],
+      ["Forehead kiss 😚","404 😵"],
+      ["Hug 🫂","Busy schedule 😵‍💫"],
+      ["Us ✨","Stress 🙃"],
+      ["Coffee + walk ☕️","Status meeting 📊"],
+      ["Smile 😳","Server reboot 🧯"],
+      ["Romance 💗","Chaos 🫠"],
+    ];
+
+    let qQueue = [];
+    let currentQ = null;
 
     function shuffle(arr){
       const a = arr.slice();
@@ -1639,33 +1707,43 @@
       return a;
     }
 
-    function nextQuestion(){
-      if(qOrder.length === 0 || qIndex >= qOrder.length){
-        qOrder = shuffle(QUESTIONS.map((_,i)=>i));
-        qIndex = 0;
-      }
-      const idx = qOrder[qIndex++];
-      const item = QUESTIONS[idx];
+    function makeGeneratedQuestion(){
+      const title = pick(GEN_LEFT);
+      const pair = pick(GEN_GOOD);
+      // always A is the "correct" (romantic) one; keep the pattern consistent
+      return { q: title, a: pair[0], b: pair[1], correct:"a" };
+    }
 
-      qTitle.textContent = item.q;
-      optA.textContent = item.a;
-      optB.textContent = item.b;
+    function refillQueue(){
+      const fixed = shuffle(FIXED_QUESTIONS);
+      const gens = Array.from({length: 40}, makeGeneratedQuestion); // plenty
+      qQueue = fixed.concat(gens);
+      qQueue = shuffle(qQueue);
+    }
+
+    function nextQuestion(){
+      if(qQueue.length === 0) refillQueue();
+      currentQ = qQueue.pop();
+
+      qTitle.textContent = currentQ.q;
+      optA.textContent = currentQ.a;
+      optB.textContent = currentQ.b;
 
       optA.classList.remove("correct","wrong");
       optB.classList.remove("correct","wrong");
       qHint.textContent = pick([
-        "Answer it… and I’ll add love to the meter 💗",
-        "Correct = faster YES 😌✨",
-        "Tiny quiz, big feelings 💞"
+        "Correct = fizzy boost 🫧💗",
+        "Earn love → YES fills faster 😌✨",
+        "Tiny quiz, big feelings 💞",
+        "Pick wisely… my heart is watching 👀💗"
       ]);
 
-      // store correct for handlers
-      optA.dataset.correct = (item.correct === "a") ? "1" : "0";
-      optB.dataset.correct = (item.correct === "b") ? "1" : "0";
+      optA.dataset.correct = (currentQ.correct === "a") ? "1" : "0";
+      optB.dataset.correct = (currentQ.correct === "b") ? "1" : "0";
     }
 
     function addLove(amount){
-      loveEarned = Math.min(2.0, loveEarned + amount); // cap
+      loveEarned = Math.min(2.2, loveEarned + amount);
       if(earnedDecayTimer) clearInterval(earnedDecayTimer);
       earnedDecayTimer = setInterval(() => {
         loveEarned = Math.max(0, loveEarned - 0.03);
@@ -1676,6 +1754,48 @@
       }, 220);
     }
 
+    function setValMood(kind, text){
+      const moods = {
+        yes: [
+          { e:"😍", m:"YES?? 😭💗 My heart just did a backflip." },
+          { e:"🥹", m:"Stoppp—I'm melting 🥹💞" },
+          { e:"💓", m:"Okay… heart is beating FAST 💓" },
+          { e:"😘", m:"Come here you 😘💘" },
+          { e:"🤭", m:"Hehe… I knew you’d say yes 🤭💗" }
+        ],
+        good: [
+          { e:"✨", m:"Correct 😌💗 +love boost!" },
+          { e:"🥰", m:"You’re too good at this 🥰💞" },
+          { e:"😚", m:"Mhm… that’s my favorite answer 😚" }
+        ],
+        bad: [
+          { e:"😤", m:"Wrong 😤 …but cute try." },
+          { e:"🙈", m:"Nope 🙈 try again (I’ll help)" },
+          { e:"🥺", m:"Aww no… but I still like you 🥺💗" }
+        ],
+        idle: [
+          { e:"😊", m:"Answer a question… or hold YES 😌💗" },
+          { e:"😌", m:"Play along… I’m enjoying this 😌✨" },
+          { e:"🫶", m:"I’m right here 🫶💞" }
+        ]
+      };
+      const pool = moods[kind] || moods.idle;
+      const p = pool[(Math.random() * pool.length) | 0];
+
+      valEmoji.textContent = p.e;
+      valMood.textContent = text || p.m;
+
+      gsap.killTweensOf([valEmoji, valMood]);
+      gsap.fromTo(valEmoji,
+        { scale: 0.92, rotation: -2 },
+        { scale: 1.08, rotation: 2, duration: 0.18, ease:"power2.out", yoyo:true, repeat:1 }
+      );
+      gsap.fromTo(valMood,
+        { opacity: 0, y: 6 },
+        { opacity: 1, y: 0, duration: 0.22, ease:"power2.out" }
+      );
+    }
+
     function answer(btn){
       const correct = btn.dataset.correct === "1";
       const other = (btn === optA) ? optB : optA;
@@ -1683,27 +1803,34 @@
       if(correct){
         btn.classList.add("correct");
         other.classList.add("wrong");
+
         SFX.correct();
-        setValMood("good", pick(["Correct 😌💗 +love boost!", "That’s the answer I wanted 🥰", "Perfect. My heart approves 💞"]));
+        setValMood("good", pick(["Correct 😌💗 +fizz boost!", "That’s the answer I wanted 🥰", "Perfect. My heart approves 💞"]));
 
         // Boost charge and holding speed
-        addLove(0.35);
-        setCharge(charge + 12 + Math.min(10, loveEarned*5));
+        addLove(0.42);
+
+        // Fill jump + heavy fizz burst
+        const boost = 14 + Math.min(14, loveEarned*7);
+        setCharge(charge + boost);
+
+        spawnFizzBurst(1.2 + Math.min(1.6, loveEarned)); // lots of bubbles
 
         // micro confetti
-        confetti({ particleCount: 14, spread: 40, startVelocity: 16, scalar: 0.7, origin: { y: 0.72 } });
-
-        // bubbles burst
-        for(let i=0;i<4;i++) spawnBubble(2.1);
+        confetti({ particleCount: 16, spread: 42, startVelocity: 16, scalar: 0.7, origin: { y: 0.72 } });
 
         setTimeout(() => { nextQuestion(); }, 520);
       } else {
         btn.classList.add("wrong");
         other.classList.add("correct");
+
         SFX.wrong();
         setValMood("bad", pick(["Nope 🙈 try again", "Wrong 😤 but still cute", "Not that one 😌✨"]));
+
         // tiny pity boost so it never feels stuck
         setCharge(charge + 3);
+        spawnFizzBurst(0.4);
+
         setTimeout(() => { nextQuestion(); }, 620);
       }
 
@@ -1718,7 +1845,7 @@
       yesBtn.dataset.done = "1";
       charging = false;
       if(chargeRaf) cancelAnimationFrame(chargeRaf);
-      stopBubbles();
+      stopFizz();
 
       setValMood("yes", "Yesss… you just made my whole heart blush 💗");
       SFX.win();
@@ -1741,6 +1868,7 @@
       loveEarned = 0;
       setSlosh(0,0);
       setValMood("idle", pick(["Answer a question… or hold YES 😌💗","I’m watching 👀💞","Let’s play… gently 😌✨"]));
+      qQueue = [];
       nextQuestion();
     }
 
@@ -1828,9 +1956,10 @@
     // =======================
     // Navigation
     // =======================
+    document.getElementById("toS2").addEventListener("click", () => { SFX.sparkle(); showScreen("s2"); initTTT(); });
+
     toS3.addEventListener("click", async () => {
       SFX.sparkle();
-
       const valSub = document.getElementById("valSub");
       const day = state.metDay ?? "that day";
       valSub.innerHTML = `Since <span class="name">${MONTH_NAME} ${day}, ${YEAR}</span>, I’ve been smiling more.`;
@@ -1838,7 +1967,6 @@
       showScreen("s3");
       placeValInitial();
 
-      // enable motion (iOS permission)
       try{
         if (typeof DeviceMotionEvent !== "undefined" && typeof DeviceMotionEvent.requestPermission === "function") {
           const res = await DeviceMotionEvent.requestPermission();
@@ -1846,9 +1974,7 @@
         } else {
           enableMotion();
         }
-      }catch(e){
-        enableMotion();
-      }
+      }catch(e){ enableMotion(); }
     });
 
     document.getElementById("replay").addEventListener("click", () => {
@@ -1856,7 +1982,7 @@
       state.metDay = null;
       state.tttWon = false;
 
-      toS2.disabled = true;
+      document.getElementById("toS2").disabled = true;
       dateNote.textContent = "Choose our day…";
       document.querySelectorAll(".dateBtn").forEach(x => x.classList.remove("selected"));
 
@@ -1864,14 +1990,47 @@
       showScreen("s1");
     });
 
-    window.addEventListener("resize", () => {
-      if(document.getElementById("s3").classList.contains("active")){
-        placeValInitial();
-      }
-    });
+    // =======================
+    // Calendar init
+    // =======================
+    buildCalendar();
 
-    // Initialize
+    // =======================
+    // Audio toggle init
+    // =======================
+    updateAudioUI();
+
+    // =======================
+    // TicTacToe init
+    // =======================
     initTTT();
+
+    // =======================
+    // Calendar click handler
+    // =======================
+    function selectDay(day, btn){
+      SFX.tap();
+      state.metDay = day;
+      document.querySelectorAll(".dateBtn").forEach(x => x.classList.remove("selected"));
+      btn.classList.add("selected");
+      document.getElementById("toS2").disabled = false;
+
+      if(CORRECT_DAY){
+        if(day !== CORRECT_DAY){
+          dateNote.textContent = wrongDayMessage(day);
+          suggestCorrectDay();
+          SFX.wrong();
+        } else {
+          dateNote.textContent = wrongDayMessage(day);
+          SFX.correct();
+        }
+      } else {
+        dateNote.textContent = `So… ${MONTH_NAME} ${day}, ${YEAR} 💗`;
+        SFX.soft();
+      }
+      gsap.fromTo(btn, {scale:0.96}, {scale:1.03, duration:0.16, ease:"power2.out", yoyo:true, repeat:1});
+    }
+
   </script>
 </body>
 </html>
