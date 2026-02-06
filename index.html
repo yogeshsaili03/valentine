@@ -804,6 +804,37 @@
 
     /* prevent selection */
     .arena, .btn, .chargeBtn, .calendarGrid, .tttBoard, .paperBlock{ -webkit-user-select:none; user-select:none; }
+    /* --- iOS/mobile: allow natural top flow so page can scroll --- */
+@media (max-width: 520px){
+  .wrap{
+    display:block;                /* disable grid centering */
+    min-height: 100dvh;           /* better than svh on iOS */
+    padding-top: max(10px, env(safe-area-inset-top));
+    padding-bottom: max(18px, env(safe-area-inset-bottom));
+  }
+}
+
+/* Make screen container not force a tall minimum on mobile */
+@media (max-width: 520px){
+  .screens{ min-height: auto; }
+}
+
+/* Arena height: don’t take too much vertical space on phones */
+@media (max-width: 520px){
+  .arena{
+    height: min(52dvh, 420px);    /* keeps button visible */
+  }
+}
+
+/* In case anything locks scrolling */
+html, body{
+  height: auto;
+}
+body{
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
   </style>
 </head>
 
