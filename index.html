@@ -828,7 +828,7 @@
 
 /* Footer inside .wrap, but outside the card */
 .loveFooter{
-  margin-top: 12px;
+  margin: 12px auto 0;              /* ✅ centers horizontally */
   padding: 8px 12px;
   border-radius: 999px;
   background: rgba(255,255,255,.68);
@@ -842,14 +842,13 @@
   user-select: none;
   text-align: center;
 
-  /* ✅ key changes */
-  display: inline-block;                 /* don’t stretch */
-  width: fit-content;                    /* shrink to content */
-  max-width: calc(100% - 28px);          /* still wrap on small screens */
-  white-space: normal;                   /* allow wrapping */
+  display: block;                   /* ✅ so margin auto works */
+  width: fit-content;               /* ✅ shrink to text */
+  max-width: calc(100% - 28px);     /* ✅ wraps on small screens */
+  white-space: normal;
   line-height: 1.25;
-  justify-self: center;                  /* grid: center this item */
 }
+
 
 
 
