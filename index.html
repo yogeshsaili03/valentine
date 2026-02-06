@@ -12,7 +12,6 @@
 
   <style>
     :root{
-      /* matte / premium tones */
       --bg1:#eeb7c6;
       --bg2:#f3d2db;
       --bg3:#fbf2f5;
@@ -47,7 +46,6 @@
       overflow-y:auto;
     }
 
-    /* subtle matte texture */
     .noise{
       position:fixed; inset:0;
       pointer-events:none;
@@ -84,53 +82,31 @@
       pointer-events:none;
     }
 
-    /* Audio toggle pill */
-    .audioPill{
-      position:absolute;
-      top: 12px;
-      right: 12px;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      padding: 8px 12px;
+    /* Tiny mute toggle */
+    .audioFab{
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      width: 38px;
+      height: 38px;
       border-radius: 999px;
+      border: 1px solid rgba(43,15,29,.12);
       background: rgba(255,255,255,.78);
-      border: 1px solid rgba(43,15,29,.10);
-      box-shadow: 0 12px 26px rgba(36,10,20,.08);
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-      z-index: 50;
       backdrop-filter: blur(10px);
-    }
-    .audioPill .dot{
-      width: 9px;
-      height: 9px;
-      border-radius: 999px;
-      background: rgba(181,22,82,.85);
-      box-shadow: 0 0 14px rgba(240,143,177,.35);
-    }
-    .audioPill .label{
-      font-weight: 900;
-      font-size: 12px;
-      color: rgba(43,15,29,.80);
-    }
-    .audioPill button{
-      border:0;
-      border-radius: 999px;
-      font-weight: 900;
-      padding: 7px 10px;
-      font-size: 12px;
+      box-shadow: 0 12px 26px rgba(36,10,20,.10);
       cursor:pointer;
-      background: linear-gradient(135deg, rgba(181,22,82,.92), rgba(240,143,177,.92));
-      color:#fff;
-      box-shadow: 0 12px 26px rgba(181,22,82,.14);
+      z-index: 999;
+      display:grid;
+      place-items:center;
+      -webkit-tap-highlight-color: transparent;
+      user-select:none;
     }
-    .audioPill button.off{
-      background: rgba(255,255,255,.86);
-      color: rgba(43,15,29,.82);
-      border: 1px solid rgba(43,15,29,.10);
-      box-shadow: 0 10px 22px rgba(36,10,20,.07);
+    .audioFab::before{
+      content:"🔊";
+      font-size: 16px;
+      filter: drop-shadow(0 6px 10px rgba(181,22,82,.10));
     }
+    .audioFab.off::before{ content:"🔇"; }
 
     .screens{ position: relative; min-height: 72svh; }
     .screen{ display:none; animation: fadeIn .25s ease-out; }
@@ -224,8 +200,6 @@
       color: rgba(43,15,29,.86);
       box-shadow: 0 10px 24px rgba(36,10,20,.08);
     }
-
-    .btn:disabled{ opacity: .55; cursor:not-allowed; }
 
     /* ===== Screen 1: Calendar ===== */
     .paperBlock{
@@ -335,6 +309,7 @@
       color: rgba(43,15,29,.78);
       font-size: clamp(12px, 3.6vw, 15px);
       min-height: 1.7em;
+      user-select:none;
     }
 
     /* ===== Screen 2: TicTacToe ===== */
@@ -347,6 +322,7 @@
       color: rgba(43,15,29,.92);
       margin-top: 6px;
       min-height: 1.6em;
+      user-select:none;
     }
     .tttTopWin.glow{
       text-shadow:
@@ -421,6 +397,7 @@
       font-size: clamp(13px, 3.8vw, 16px);
       color: rgba(43,15,29,.82);
       min-height: 1.6em;
+      user-select:none;
     }
     .winSvg{
       position:absolute;
@@ -441,6 +418,7 @@
       font-size: clamp(52px, 15vw, 92px);
       line-height: 1;
       will-change: transform;
+      user-select:none;
     }
     .mood{
       text-align:center;
@@ -449,36 +427,134 @@
       color: rgba(43,15,29,.84);
       min-height: 2.0em;
       padding: 0 8px;
+      user-select:none;
     }
 
     .arena{
       margin-top: 10px;
       position:relative;
-      height: clamp(310px, 46vh, 520px);
+      height: clamp(340px, 50vh, 560px);
       border-radius: 22px;
       border: 1px solid rgba(255,255,255,.55);
       background: rgba(255,255,255,.38);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.45);
       overflow:hidden;
+      padding: 12px;
     }
 
-    /* YES hold-to-fill water effect */
+    /* Question card */
+    .qCard{
+      position:absolute;
+      left: 50%;
+      top: 14px;
+      transform: translateX(-50%);
+      width: min(560px, 92%);
+      border-radius: 20px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(43,15,29,.10);
+      box-shadow: 0 18px 50px rgba(36,10,20,.08);
+      padding: 12px 12px 10px;
+      backdrop-filter: blur(10px);
+      user-select:none;
+    }
+    .qTitle{
+      font-weight: 900;
+      font-size: clamp(13px, 3.8vw, 15px);
+      color: rgba(43,15,29,.86);
+      text-align:center;
+      margin-bottom: 10px;
+    }
+    .qOpts{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .qOpt{
+      border-radius: 16px;
+      padding: 11px 10px;
+      border: 1px solid rgba(43,15,29,.10);
+      background: rgba(255,255,255,.88);
+      box-shadow: 0 12px 30px rgba(36,10,20,.06);
+      font-weight: 900;
+      font-size: clamp(12px, 3.6vw, 14px);
+      cursor:pointer;
+      -webkit-tap-highlight-color: transparent;
+      user-select:none;
+      line-height: 1.18;
+      text-align:center;
+    }
+    .qOpt.correct{
+      border-color: rgba(181,22,82,.22);
+      box-shadow: 0 18px 44px rgba(181,22,82,.14);
+      background: linear-gradient(135deg, rgba(181,22,82,.08), rgba(240,143,177,.10));
+    }
+    .qOpt.wrong{
+      border-color: rgba(43,15,29,.16);
+      background: rgba(255,255,255,.82);
+      filter: grayscale(.05);
+    }
+    .qHint{
+      text-align:center;
+      margin-top: 8px;
+      font-weight: 800;
+      font-size: 12px;
+      color: rgba(43,15,29,.70);
+      min-height: 1.4em;
+      user-select:none;
+    }
+
+    /* YES hold-to-fill water effect (smaller & premium) */
     .chargeBtn{
       position:absolute;
       left:50%;
       bottom: 14px;
       transform: translateX(-50%);
-      width: min(360px, 86vw);
-      height: 56px;
+      width: min(280px, 76vw);
+      height: 50px;
       display:flex;
       align-items:center;
       justify-content:center;
       gap: 10px;
       overflow:hidden;
       touch-action: none;
+      user-select:none;
+      -webkit-user-select:none;
     }
-    .chargeBtn .yesText{ position:relative; z-index: 2; }
-    .chargeBtn .chargePct{ position:relative; z-index: 2; font-weight: 900; opacity: .92; }
+
+    .premiumYes{
+      border: 1px solid rgba(255,255,255,.42);
+      background: radial-gradient(120px 70px at 30% 20%, rgba(255,255,255,.28), transparent 60%),
+                  linear-gradient(135deg, rgba(181,22,82,.92), rgba(240,143,177,.92));
+      box-shadow: 0 20px 46px rgba(181,22,82,.16), inset 0 1px 0 rgba(255,255,255,.35);
+    }
+    .premiumYes .yesTopShine{
+      position:absolute;
+      inset:-30px -20px auto -20px;
+      height: 70px;
+      background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0));
+      transform: rotate(-6deg);
+      z-index: 3;
+      pointer-events:none;
+    }
+    .premiumYes .yesRing{
+      position:absolute;
+      inset: -2px;
+      border-radius: 999px;
+      background: conic-gradient(from 270deg,
+        rgba(255,255,255,.0) 0%,
+        rgba(255,255,255,.0) 30%,
+        rgba(255,255,255,.85) 35%,
+        rgba(255,255,255,.0) 40%,
+        rgba(255,255,255,.0) 100%
+      );
+      opacity: .20;
+      filter: blur(.2px);
+      z-index: 2;
+      pointer-events:none;
+    }
+
+    .chargeBtn .yesText{ position:relative; z-index: 4; }
+    .chargeBtn .chargePct{ position:relative; z-index: 4; font-weight: 900; opacity: .95; }
     .chargeBtn .wave{
       position:absolute;
       left:0; bottom:0;
@@ -494,18 +570,19 @@
         linear-gradient(135deg, rgba(181,22,82,.95), rgba(240,143,177,.95));
       transform: translateY(8px);
       will-change: transform, height, filter;
+      box-shadow: inset 0 8px 18px rgba(255,255,255,.10);
     }
     .chargeBtn .wave::after{
       content:"";
       position:absolute;
       left:-30%;
-      top:8px;
+      top:7px;
       width:160%;
-      height:22px;
+      height:18px;
       border-radius: 999px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.26), transparent);
       filter: blur(1px);
-      opacity:.7;
+      opacity:.75;
       animation: waveSweep 1.35s ease-in-out infinite;
     }
     @keyframes waveSweep{
@@ -514,7 +591,7 @@
       100%{ transform: translateX(-25%); }
     }
     .chargeBtn.charged{
-      box-shadow: 0 22px 50px rgba(181,22,82,.24);
+      box-shadow: 0 26px 56px rgba(181,22,82,.22), inset 0 1px 0 rgba(255,255,255,.35);
     }
 
     /* bubbles inside wave */
@@ -530,79 +607,12 @@
       will-change: transform, opacity;
     }
 
-    /* Catch-the-heart */
-    .catchHeart{
-      position:absolute;
-      width: 52px;
-      height: 52px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.82);
-      border: 1px solid rgba(43,15,29,.10);
-      box-shadow: 0 16px 34px rgba(181,22,82,.12);
-      display:grid;
-      place-items:center;
-      cursor:pointer;
-      user-select:none;
-      -webkit-tap-highlight-color: transparent;
-      z-index: 7;
-      touch-action: manipulation;
-    }
-    .catchHeart span{
-      font-size: 26px;
-      filter: drop-shadow(0 10px 14px rgba(181,22,82,.12));
-      animation: heartPulse 1.4s ease-in-out infinite;
-    }
-    @keyframes heartPulse{
-      0%,100%{ transform: scale(1); }
-      50%{ transform: scale(1.12); }
-    }
-
-    #noWrap{
-      position:absolute;
-      left:0; top:0;
-      z-index: 5;
-      will-change: transform, opacity, filter;
-    }
-    #noBtn{
-      padding: 9px 12px;
-      font-size: clamp(12px, 3.6vw, 14px);
-      width: auto;
-      max-width: 70vw;
-      white-space: normal;
-      line-height: 1.15;
-    }
-
     .hint{
       text-align:center;
       font-size: 12.5px;
       color: rgba(43,15,29,.66);
       margin-top: 10px;
-    }
-
-    /* dust layer for thanos effect */
-    .dustLayer{
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      overflow:hidden;
-      z-index: 6;
-    }
-    .dust{
-      position:absolute;
-      opacity: 0;
-      will-change: transform, opacity, filter;
-      mix-blend-mode: multiply;
-      border-radius: 999px;
-    }
-    .spark{
-      position:absolute;
-      width: 2px;
-      height: 2px;
-      border-radius: 50%;
-      background: rgba(255,255,255,.85);
-      filter: drop-shadow(0 0 10px rgba(240,143,177,.9));
-      opacity: 0;
-      pointer-events:none;
+      user-select:none;
     }
 
     /* ===== Screen 4: Final ===== */
@@ -657,6 +667,7 @@
       z-index: 1;
       filter: drop-shadow(0 18px 22px rgba(181,22,82,.12));
       animation: heartbeat 1.6s ease-in-out infinite;
+      user-select:none;
     }
     @keyframes heartbeat{
       0%,100%{ transform: scale(1); }
@@ -671,6 +682,7 @@
       font-size: clamp(13px, 3.9vw, 16px);
       position: relative;
       z-index: 1;
+      user-select:none;
     }
     .finalLine.glowy{
       text-shadow:
@@ -700,6 +712,7 @@
       position:relative;
       overflow:hidden;
       animation: cardFloat 4.2s ease-in-out infinite;
+      user-select:none;
     }
     .noteCard:nth-child(2){ animation-delay: .4s; }
     .noteCard:nth-child(3){ animation-delay: .8s; }
@@ -761,23 +774,21 @@
       opacity: 0;
       filter: drop-shadow(0 10px 14px rgba(181,22,82,.10));
       will-change: transform, opacity;
+      user-select:none;
     }
+
+    /* Prevent selection while holding/tapping on mobile */
+    .arena, .qCard, .chargeBtn, .qOpt, .btn { -webkit-user-select:none; user-select:none; }
   </style>
 </head>
 
 <body>
   <div class="noise"></div>
+  <button class="audioFab" id="audioToggle" aria-label="Toggle sound" title="Sound"></button>
 
   <div class="wrap">
     <div class="card">
       <div class="shine"></div>
-
-      <!-- Audio toggle -->
-      <div class="audioPill" id="audioPill">
-        <div class="dot" id="audioDot"></div>
-        <div class="label" id="audioLabel">Sound: ON</div>
-        <button id="audioToggle">Mute</button>
-      </div>
 
       <div class="screens">
 
@@ -826,46 +837,39 @@
           <h1>One more question…</h1>
           <div class="divider">💞</div>
 
-          <h2 id="valQuestion" style="
-            margin-top: 6px;
-            font-family:'Playfair Display', serif;
-            font-weight:800;
-            text-align:center;
-            font-size: clamp(20px, 6vw, 38px);
-            color:#240a14;
-          ">
+          <h2 style="margin-top:6px;">
             Will you be my Valentine, <span class="name" id="cutieNameInline"></span>? 💘
           </h2>
 
-          <p class="sub" id="valSub">Since <span class="name">our day</span>, I’ve been smiling more.</p>
+          <p class="sub" id="valSub">I’ll make it easy… just play along 😌💗</p>
 
           <div class="emojiRow">
             <div class="emoji" id="valEmoji">😊</div>
-            <div class="mood" id="valMood">Be honest… but be gentle 😌</div>
+            <div class="mood" id="valMood">Answer the mini questions to “unlock” love… 💞</div>
           </div>
 
           <div class="arena" id="arena">
-            <!-- Catch the heart -->
-            <div class="catchHeart" id="catchHeart" title="Catch me!">
-              <span>💗</span>
+            <!-- Question card -->
+            <div class="qCard" id="qCard">
+              <div class="qTitle" id="qTitle">Loading…</div>
+              <div class="qOpts">
+                <button class="qOpt" id="optA" type="button"></button>
+                <button class="qOpt" id="optB" type="button"></button>
+              </div>
+              <div class="qHint" id="qHint"></div>
             </div>
 
-            <!-- YES hold to fill -->
-            <button class="btn primary chargeBtn" id="yesBtn" type="button" aria-label="Hold to say yes">
+            <!-- YES hold to fill (premium) -->
+            <button class="btn primary chargeBtn premiumYes" id="yesBtn" type="button" aria-label="Hold to say yes">
+              <span class="yesTopShine"></span>
+              <span class="yesRing" id="yesRing"></span>
               <span class="yesText" id="yesText">Hold to say YES 💘</span>
               <span class="chargePct" id="chargePct">0%</span>
               <span class="wave" id="wave"></span>
             </button>
-
-            <!-- NO -->
-            <div id="noWrap" aria-hidden="true">
-              <button class="btn ghost" id="noBtn" type="button">No 🙈</button>
-            </div>
-
-            <div id="dustLayer" class="dustLayer"></div>
           </div>
 
-          <div class="hint">Tap “No” for excuses 😌 • Catch the 💗 for boosts • Hold YES to fill 🌊</div>
+          <div class="hint">Tip: correct answers fill faster ✨ • Hold YES anytime, but it’s slow until you “earn” it 😉</div>
         </section>
 
         <!-- SCREEN 4 -->
@@ -915,40 +919,24 @@
     const CORRECT_DAY = 18;
 
     // =======================
-    // WebAudio (no external files) - sounds for all games
+    // WebAudio (no external files)
     // =======================
-    const audioUI = {
-      enabled: true,
-      ctx: null,
-      master: null,
-      unlocked: false
-    };
-
+    const audioUI = { enabled: true, ctx: null, master: null, unlocked: false };
     const audioToggle = document.getElementById("audioToggle");
-    const audioLabel  = document.getElementById("audioLabel");
-    const audioDot    = document.getElementById("audioDot");
 
-    function updateAudioUI(){
-      audioLabel.textContent = `Sound: ${audioUI.enabled ? "ON" : "OFF"}`;
-      audioToggle.textContent = audioUI.enabled ? "Mute" : "Unmute";
-      audioToggle.classList.toggle("off", !audioUI.enabled);
-      audioDot.style.opacity = audioUI.enabled ? "1" : ".35";
-    }
+    function updateAudioUI(){ audioToggle.classList.toggle("off", !audioUI.enabled); }
     updateAudioUI();
 
     function ensureAudio(){
       if(!audioUI.enabled) return false;
       if(audioUI.ctx) return true;
-
       try{
         audioUI.ctx = new (window.AudioContext || window.webkitAudioContext)();
         audioUI.master = audioUI.ctx.createGain();
-        audioUI.master.gain.value = 0.28; // overall volume
+        audioUI.master.gain.value = 0.38; // louder overall (TTT clicks feel better)
         audioUI.master.connect(audioUI.ctx.destination);
         return true;
-      }catch(e){
-        return false;
-      }
+      }catch(e){ return false; }
     }
 
     async function unlockAudio(){
@@ -957,7 +945,6 @@
       if(audioUI.unlocked) return;
       try{
         if(audioUI.ctx.state !== "running") await audioUI.ctx.resume();
-        // tiny silent tick to "prime"
         const o = audioUI.ctx.createOscillator();
         const g = audioUI.ctx.createGain();
         g.gain.value = 0.0001;
@@ -974,8 +961,8 @@
       updateAudioUI();
       if(audioUI.enabled) await unlockAudio();
     });
+    window.addEventListener("pointerdown", unlockAudio, { once:false, passive:true });
 
-    // small helper building blocks
     function now(){ return audioUI.ctx ? audioUI.ctx.currentTime : 0; }
 
     function tone(freq=440, dur=0.08, type="sine", gain=0.06, slide=0){
@@ -1010,7 +997,6 @@
       for(let i=0;i<bufferSize;i++){
         data[i] = (Math.random()*2 - 1) * (1 - i/bufferSize);
       }
-
       const src = audioUI.ctx.createBufferSource();
       src.buffer = buffer;
 
@@ -1027,22 +1013,17 @@
       src.stop(t0 + dur + 0.02);
     }
 
-    // semantic sounds
     const SFX = {
-      tap(){ tone(520, 0.06, "sine", 0.05, 80); },
-      soft(){ tone(320, 0.08, "triangle", 0.03, -20); },
-      wrong(){ tone(220, 0.12, "sawtooth", 0.04, -40); noiseBurst(0.06, 0.02); },
-      correct(){ tone(660, 0.06, "sine", 0.055, 90); setTimeout(()=>tone(880,0.07,"sine",0.045,120), 50); },
-      win(){ tone(740, 0.09, "triangle", 0.06, 90); setTimeout(()=>tone(980,0.10,"triangle",0.05,140), 80); setTimeout(()=>tone(1240,0.12,"sine",0.045,200), 160); },
-      boop(){ tone(420, 0.08, "square", 0.035, 30); },
-      snap(){ noiseBurst(0.13, 0.04); tone(180, 0.10, "sawtooth", 0.02, -60); },
-      bubble(){ tone(560, 0.04, "sine", 0.02, 60); },
-      sparkle(){ tone(900, 0.05, "sine", 0.035, 150); setTimeout(()=>tone(1250,0.06,"sine",0.03,200), 40); },
-      charge(){ tone(250, 0.06, "triangle", 0.02, 40); }
+      tap(){ tone(560, 0.07, "sine", 0.075, 120); },
+      soft(){ tone(320, 0.08, "triangle", 0.035, -20); },
+      wrong(){ tone(220, 0.12, "sawtooth", 0.05, -40); noiseBurst(0.06, 0.03); },
+      correct(){ tone(660, 0.06, "sine", 0.06, 90); setTimeout(()=>tone(880,0.07,"sine",0.05,120), 50); },
+      win(){ tone(740, 0.09, "triangle", 0.065, 90); setTimeout(()=>tone(980,0.10,"triangle",0.055,140), 80); setTimeout(()=>tone(1240,0.12,"sine",0.05,200), 160); },
+      boop(){ tone(420, 0.08, "square", 0.04, 30); },
+      bubble(){ tone(560, 0.04, "sine", 0.022, 60); },
+      sparkle(){ tone(900, 0.05, "sine", 0.04, 150); setTimeout(()=>tone(1250,0.06,"sine",0.035,200), 40); },
+      charge(){ tone(250, 0.06, "triangle", 0.025, 40); }
     };
-
-    // unlock audio on first user interaction anywhere
-    window.addEventListener("pointerdown", unlockAudio, { once:false, passive:true });
 
     // =======================
     // Global state
@@ -1067,7 +1048,6 @@
       if(diff <= 7) return "mid";
       return "far";
     }
-
     function wrongDayMessage(day){
       const diff = Math.abs(day - CORRECT_DAY);
       const bucket = distanceBucket(diff);
@@ -1141,24 +1121,12 @@
       if(!CORRECT_DAY) return;
       const el = calendarGrid.querySelector(`.dateBtn[data-day="${CORRECT_DAY}"]`);
       if(!el) return;
-
-      let intensity = 1;
-      if(state.metDay && CORRECT_DAY){
-        const diff = Math.abs(state.metDay - CORRECT_DAY);
-        intensity = diff <= 1 ? 1.2 : diff <= 3 ? 1.1 : diff <= 7 ? 1.0 : 0.92;
-      }
-
       el.classList.add("suggest");
-      el.style.transform = `scale(${intensity})`;
-      setTimeout(() => {
-        el.classList.remove("suggest");
-        el.style.transform = "";
-      }, 1200);
+      setTimeout(() => el.classList.remove("suggest"), 1200);
     }
 
     function selectDay(day, btn){
       SFX.tap();
-
       state.metDay = day;
       document.querySelectorAll(".dateBtn").forEach(x => x.classList.remove("selected"));
       btn.classList.add("selected");
@@ -1197,7 +1165,6 @@
 
     const USER = "💗";
     const AI = "🖤";
-
     const LINES = [
       [0,1,2],[3,4,5],[6,7,8],
       [0,3,6],[1,4,7],[2,5,8],
@@ -1398,47 +1365,26 @@
     resetTTT.addEventListener("click", () => { SFX.wrong(); initTTT(); });
 
     // =======================
-    // SCREEN 3: Valentine (Thanos dust + slosh + catch heart + bubbles + sound)
+    // SCREEN 3: Valentine (questions -> charge + hold to fill)
     // =======================
     const arena = document.getElementById("arena");
     const yesBtn = document.getElementById("yesBtn");
-    const noWrap = document.getElementById("noWrap");
-    const noBtn = document.getElementById("noBtn");
-    const dustLayer = document.getElementById("dustLayer");
     const valEmoji = document.getElementById("valEmoji");
     const valMood = document.getElementById("valMood");
     const wave = document.getElementById("wave");
     const yesText = document.getElementById("yesText");
     const chargePct = document.getElementById("chargePct");
-    const catchHeart = document.getElementById("catchHeart");
+    const yesRing = document.getElementById("yesRing");
+
+    const qTitle = document.getElementById("qTitle");
+    const optA = document.getElementById("optA");
+    const optB = document.getElementById("optB");
+    const qHint = document.getElementById("qHint");
 
     document.getElementById("cutieNameInline").textContent = CUTIE_NAME;
 
-    const REASONS = [
-      "I only accept YES 💗",
-      "No is on vacation 🌙",
-      "Not today 🙈",
-      "Ask me nicely 😌",
-      "My heart says NO… to NO 💞",
-      "Try YES, it’s cute 🌹",
-      "System error: NO blocked ✨",
-      "I’m shy… choose YES 🥺"
-    ];
-
-    let noBusy = false;
-
-    // YES charging
-    let charge = 0;
-    let charging = false;
-    let chargeRaf = null;
-    let lastTs = 0;
-    let noClicks = 0;
-    let loveBoost = 0;
-    let boostDecayTimer = null;
-
     // Motion slosh
     let motionEnabled = false;
-
     function setSlosh(tx, ty){
       const clampedX = Math.max(-1, Math.min(1, tx));
       const clampedY = Math.max(-1, Math.min(1, ty));
@@ -1476,74 +1422,7 @@
       }, { passive: true });
     }
 
-    function arenaMetrics(){
-      const r = arena.getBoundingClientRect();
-      const bw = noBtn.offsetWidth;
-      const bh = noBtn.offsetHeight;
-      return { r, bw, bh };
-    }
-
-    function yesRectInArena(){
-      const ar = arena.getBoundingClientRect();
-      const yr = yesBtn.getBoundingClientRect();
-      return {
-        left: yr.left - ar.left,
-        top: yr.top - ar.top,
-        right: yr.right - ar.left,
-        bottom: yr.bottom - ar.top
-      };
-    }
-
-    function overlapsYes(x, y){
-      const pad = 16;
-      const { bw, bh } = arenaMetrics();
-      const a = { left:x-pad, top:y-pad, right:x+bw+pad, bottom:y+bh+pad };
-      const b = yesRectInArena();
-      return !(a.right < b.left || a.left > b.right || a.bottom < b.top || a.top > b.bottom);
-    }
-
-    function randomSpot(){
-      const { r, bw, bh } = arenaMetrics();
-      const minX = 10, minY = 10;
-      const maxX = Math.max(minX, r.width - bw - 10);
-      const maxY = Math.max(minY, r.height - bh - 10);
-
-      for(let i=0;i<120;i++){
-        const x = minX + Math.random()*(maxX - minX);
-        const y = minY + Math.random()*(maxY - minY);
-        if(!overlapsYes(x,y)) return {x,y};
-      }
-      return {x: minX, y: minY};
-    }
-
-    function moveNoTo(target, instant=false){
-      if(instant){
-        gsap.set(noWrap, { x: target.x, y: target.y, opacity: 1, scale: 1, filter:"blur(0px)" });
-        return;
-      }
-      gsap.to(noWrap, { x: target.x, y: target.y, duration: 0.40, ease: "power3.out", overwrite: true });
-    }
-
-    function randomHeartSpot(){
-      const r = arena.getBoundingClientRect();
-      const size = 52;
-      const pad = 10;
-      const minX = pad, minY = pad + 8;
-      const maxX = Math.max(minX, r.width - size - pad);
-      const maxY = Math.max(minY, r.height - size - pad - 72); // keep away from YES
-      return { x: minX + Math.random()*(maxX-minX), y: minY + Math.random()*(maxY-minY) };
-    }
-
-    function moveCatchHeart(instant=false){
-      const t = randomHeartSpot();
-      if(instant){
-        gsap.set(catchHeart, { x: t.x, y: t.y, opacity: 1, scale: 1 });
-      }else{
-        gsap.to(catchHeart, { x: t.x, y: t.y, duration: 0.55, ease:"power3.out", overwrite:true });
-      }
-    }
-
-    // dynamic moods
+    // moods
     function setValMood(kind, text){
       const moods = {
         yes: [
@@ -1553,61 +1432,58 @@
           { e:"😘", m:"Come here you 😘💘" },
           { e:"🤭", m:"Hehe… I knew you’d say yes 🤭💗" }
         ],
-        no: [
-          { e:"🥺", m:"Ouch… my tiny heart 💔🥺" },
-          { e:"😤", m:"Hmph 😤 (I’m pretending I’m okay)" },
-          { e:"😶‍🌫️", m:"I’m disappearing… like your ‘No’ 😶‍🌫️✨" },
-          { e:"😭", m:"Why would you do that to me 😭💞" },
-          { e:"🙈", m:"No?? I didn’t hear that 🙈💗" }
+        good: [
+          { e:"✨", m:"Correct 😌💗 That’s a love boost!" },
+          { e:"🥰", m:"You’re too good at this 🥰💞" },
+          { e:"😚", m:"Mhm… that’s my favorite answer 😚" }
         ],
-        maybe: [
-          { e:"😊", m:"Your move 😌💗" },
-          { e:"😌", m:"Take your time… but choose wisely 😌✨" },
-          { e:"🫶", m:"I’m right here 🫶💞" },
-          { e:"🤍", m:"Softly waiting… 🤍🌙" },
-          { e:"😇", m:"I’ll be good… promise 😇💗" }
+        bad: [
+          { e:"😤", m:"Wrong 😤 …but cute try." },
+          { e:"🙈", m:"Nope 🙈 try again (I’ll help)" },
+          { e:"🥺", m:"Aww no… but I still like you 🥺💗" }
         ],
-        boost: [
-          { e:"✨", m:"Ooo bonus love! 💗" },
-          { e:"😚", m:"That was adorable 😚💞" },
-          { e:"🥰", m:"You caught it! More love incoming 🥰" }
+        idle: [
+          { e:"😊", m:"Answer a question… or hold YES 😌💗" },
+          { e:"😌", m:"Play along… I’m enjoying this 😌✨" },
+          { e:"🫶", m:"I’m right here 🫶💞" }
         ]
       };
-
-      const pool = moods[kind] || moods.maybe;
+      const pool = moods[kind] || moods.idle;
       const p = pool[(Math.random() * pool.length) | 0];
 
       valEmoji.textContent = p.e;
       valMood.textContent = text || p.m;
 
       gsap.killTweensOf([valEmoji, valMood]);
-
       gsap.fromTo(valEmoji,
         { scale: 0.92, rotation: -2 },
         { scale: 1.08, rotation: 2, duration: 0.18, ease:"power2.out", yoyo:true, repeat:1 }
       );
-
       gsap.fromTo(valMood,
         { opacity: 0, y: 6 },
         { opacity: 1, y: 0, duration: 0.22, ease:"power2.out" }
       );
-
-      if(kind === "yes"){
-        gsap.fromTo(valEmoji, { filter:"drop-shadow(0 0 0 rgba(240,143,177,0))" },
-          { filter:"drop-shadow(0 0 18px rgba(240,143,177,.55))", duration: 0.22, yoyo:true, repeat:1, ease:"power2.out" }
-        );
-      } else if(kind === "no"){
-        gsap.fromTo(valEmoji, { x: 0 },
-          { x: 6, duration: 0.06, yoyo:true, repeat: 5, ease:"power1.inOut" }
-        );
-      }
     }
+
+    // YES charging state
+    let charge = 0;
+    let charging = false;
+    let chargeRaf = null;
+    let lastTs = 0;
+
+    // “earned love” makes hold faster
+    let loveEarned = 0; // grows with correct answers, decays slowly
+    let earnedDecayTimer = null;
 
     function setCharge(p){
       charge = Math.max(0, Math.min(100, p));
       wave.style.height = `${charge}%`;
       wave.style.transform = `translateY(${8 - (charge*0.08)}px)`;
       chargePct.textContent = `${Math.round(charge)}%`;
+
+      // ring: more alive as charge grows
+      yesRing.style.opacity = (0.18 + (charge/100)*0.35).toFixed(2);
+      yesRing.style.transform = `rotate(${charge*3.2}deg)`;
 
       if(charge < 20) yesText.textContent = "Hold to say YES 💘";
       else if(charge < 55) yesText.textContent = "Ooo it’s filling… 🌊";
@@ -1617,13 +1493,13 @@
       if(charge >= 100){
         yesBtn.classList.add("charged");
         yesText.textContent = "YES locked 💗";
-        acceptYes(); // auto accept when full
+        acceptYes();
       } else {
         yesBtn.classList.remove("charged");
       }
     }
 
-    // Bubble system
+    // bubble system (only during hold)
     let bubbleTimer = null;
     function spawnBubble(intensity=1){
       if(charge <= 2) return;
@@ -1638,7 +1514,7 @@
       b.style.bottom = (6 + Math.random()*10) + "px";
       wave.appendChild(b);
 
-      const rise = 14 + Math.random()*22 + intensity*8;
+      const rise = 14 + Math.random()*22 + intensity*10;
       const drift = -10 + Math.random()*20;
       gsap.fromTo(b,
         { opacity: 0, y: 0, x: 0, scale: 0.8 },
@@ -1654,8 +1530,6 @@
           });
         }}
       );
-
-      // occasional bubble pop sound (soft)
       if(Math.random() < 0.35) SFX.bubble();
     }
 
@@ -1663,13 +1537,12 @@
       if(bubbleTimer) return;
       bubbleTimer = setInterval(() => {
         if(!charging) return;
-        const intensity = 1 + Math.min(2.2, (noClicks*0.03) + loveBoost);
-        // spawn 1-2 bubbles
+        const intensity = 1 + Math.min(2.5, loveEarned * 0.8);
         spawnBubble(intensity);
         if(Math.random() < 0.35) spawnBubble(intensity);
+        if(Math.random() < 0.18) SFX.bubble();
       }, 180);
     }
-
     function stopBubbles(){
       if(!bubbleTimer) return;
       clearInterval(bubbleTimer);
@@ -1687,18 +1560,18 @@
 
       gsap.fromTo(yesBtn, {scale:0.99}, {scale:1.02, duration:0.18, ease:"power2.out", yoyo:true, repeat:1});
 
-      const speed = 22; // % per second
+      const baseSpeed = 10; // slow by default
       const tick = (ts) => {
         if(!charging) return;
         if(!lastTs) lastTs = ts;
         const dt = (ts - lastTs) / 1000;
         lastTs = ts;
 
-        // More NO interactions => faster YES fill
-        const boostFactor = 1 + Math.min(1.2, (noClicks * 0.05) + loveBoost);
-        setCharge(charge + speed * dt * boostFactor);
+        // Earned love makes holding faster (so they must interact with questions)
+        const boostFactor = 1 + Math.min(2.2, loveEarned * 1.2);
+        setCharge(charge + baseSpeed * dt * boostFactor);
 
-        // add tiny slosh based on charging
+        // animated slosh
         setSlosh((Math.sin(ts/240) * 0.18), (Math.cos(ts/300) * 0.12));
 
         if(charge < 100) chargeRaf = requestAnimationFrame(tick);
@@ -1715,7 +1588,7 @@
 
       if(charge < 100){
         gsap.to({p: charge}, {
-          p: Math.max(0, charge - 10),
+          p: Math.max(0, charge - 8),
           duration: 0.35,
           ease: "power2.out",
           onUpdate: function(){ setCharge(this.targets()[0].p); }
@@ -1723,180 +1596,122 @@
       }
     }
 
-    function thanosDustFrom(element){
-      const ar = arena.getBoundingClientRect();
-      const r  = element.getBoundingClientRect();
+    // prevent selection/copy on hold (and iOS highlight)
+    yesBtn.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      if(yesBtn.dataset.done === "1") return;
+      startCharging();
+    }, { passive:false });
 
-      const left = r.left - ar.left;
-      const top  = r.top  - ar.top;
-      const w = r.width, h = r.height;
+    yesBtn.addEventListener("pointerup", (e) => {
+      e.preventDefault();
+      if(yesBtn.dataset.done === "1") return;
+      stopCharging();
+    }, { passive:false });
 
-      const count = Math.max(120, Math.min(260, Math.floor((w*h)/140)));
-      const colors = [
-        "rgba(181,22,82,.60)",
-        "rgba(240,143,177,.60)",
-        "rgba(43,15,29,.22)",
-        "rgba(255,255,255,.38)",
-        "rgba(255,224,235,.48)"
-      ];
+    yesBtn.addEventListener("pointercancel", stopCharging);
+    yesBtn.addEventListener("pointerleave", () => { if(charging) stopCharging(); });
+    yesBtn.addEventListener("click", (e) => e.preventDefault());
 
-      for(let s=0;s<10;s++){
-        const sp = document.createElement("span");
-        sp.className = "spark";
-        const sx = left + Math.random()*w;
-        const sy = top  + Math.random()*h;
-        sp.style.left = sx + "px";
-        sp.style.top  = sy + "px";
-        dustLayer.appendChild(sp);
+    // Infinite-ish question pool (you can edit/add your own)
+    const QUESTIONS = [
+      { q:"Pick the cutest answer 😌", a:"You 💗", b:"Also you 💞", correct:"a" },
+      { q:"What’s my favorite vibe?", a:"Us + soft playlist 🎶", b:"Cold email threads 🥶", correct:"a" },
+      { q:"Best Valentine plan?", a:"Food + laughs + long walk 🌙", b:"Excel reconciliation 📊", correct:"a" },
+      { q:"What do I want from you today?", a:"A YES 💘", b:"A ‘maybe’ 😭", correct:"a" },
+      { q:"Which one is romance?", a:"Forehead kiss 😚", b:"404 Not Found 😵", correct:"a" },
+      { q:"Choose the correct spell:", a:"Abra-ka-YES 💗", b:"No-no-no 🙈", correct:"a" },
+      { q:"What makes me blush?", a:"Your smile 😳", b:"Server reboot 🧯", correct:"a" },
+      { q:"Pick one:", a:"Hold my hand 🫶", b:"Hold my bugs 🐛", correct:"a" },
+      { q:"What’s the correct choice?", a:"YES 💞", b:"Try again 😌", correct:"a" },
+      { q:"Be honest:", a:"We’re a cute story ✨", b:"We’re a CSV file 🧾", correct:"a" },
+    ];
 
-        gsap.fromTo(sp,
-          { opacity: 0, scale: 0.6 },
-          {
-            opacity: 1,
-            scale: 1.8,
-            duration: 0.12,
-            ease: "power2.out",
-            yoyo: true,
-            repeat: 1,
-            onComplete: () => sp.remove()
-          }
-        );
+    let qIndex = 0;
+    let qOrder = [];
+
+    function shuffle(arr){
+      const a = arr.slice();
+      for(let i=a.length-1;i>0;i--){
+        const j = (Math.random()*(i+1))|0;
+        [a[i],a[j]] = [a[j],a[i]];
       }
-
-      for(let i=0;i<count;i++){
-        const p = document.createElement("span");
-        p.className = "dust";
-
-        const size = 1.6 + Math.random()*7.2;
-        p.style.width = size + "px";
-        p.style.height = size + "px";
-        p.style.background = colors[(Math.random()*colors.length)|0];
-
-        const shape = Math.random();
-        if(shape < 0.22){
-          p.style.borderRadius = "3px";
-        } else if(shape < 0.38){
-          p.style.borderRadius = "10px 2px 10px 2px";
-        }
-
-        const x = left + Math.random()*w;
-        const y = top  + Math.random()*h;
-        p.style.left = x + "px";
-        p.style.top  = y + "px";
-
-        dustLayer.appendChild(p);
-
-        const driftX = 120 + Math.random()*260;
-        const driftY = -110 + Math.random()*220;
-        const rot = -120 + Math.random()*240;
-
-        gsap.fromTo(p,
-          { opacity: 0, x: 0, y: 0, scale: 1, filter: "blur(0px)" },
-          {
-            opacity: 1,
-            duration: 0.03,
-            ease: "power1.out",
-            onComplete: () => {
-              gsap.to(p, {
-                x: driftX,
-                y: driftY,
-                rotation: rot,
-                scale: 0.10 + Math.random()*0.95,
-                opacity: 0,
-                filter: "blur(2.6px)",
-                duration: 0.55 + Math.random()*0.95,
-                ease: "power2.out",
-                onComplete: () => p.remove()
-              });
-            }
-          }
-        );
-      }
+      return a;
     }
 
-    function noClickSequence(reason){
-      if(noBusy) return;
-      noBusy = true;
+    function nextQuestion(){
+      if(qOrder.length === 0 || qIndex >= qOrder.length){
+        qOrder = shuffle(QUESTIONS.map((_,i)=>i));
+        qIndex = 0;
+      }
+      const idx = qOrder[qIndex++];
+      const item = QUESTIONS[idx];
 
-      setValMood("no", `Excuse: ${reason}`);
-      noBtn.textContent = reason;
+      qTitle.textContent = item.q;
+      optA.textContent = item.a;
+      optB.textContent = item.b;
 
-      SFX.boop();
+      optA.classList.remove("correct","wrong");
+      optB.classList.remove("correct","wrong");
+      qHint.textContent = pick([
+        "Answer it… and I’ll add love to the meter 💗",
+        "Correct = faster YES 😌✨",
+        "Tiny quiz, big feelings 💞"
+      ]);
 
-      // make it feel interactive
-      gsap.fromTo(valEmoji, { rotation: -3 }, { rotation: 3, duration: 0.08, yoyo: true, repeat: 5, ease:"power1.inOut" });
-
-      setTimeout(() => {
-        thanosDustFrom(noBtn);
-        SFX.snap();
-
-        gsap.to(noWrap, {
-          opacity: 0,
-          scale: 0.82,
-          filter: "blur(3px)",
-          duration: 0.28,
-          ease: "power2.in"
-        });
-
-        setTimeout(() => {
-          moveNoTo(randomSpot(), true);
-          noBtn.textContent = "No 🙈";
-          setValMood("maybe", pick(["Try YES 😌💗","Still no? 🙈","I’m waiting… 🥺","Okay okay… your move 💞"]));
-
-          gsap.fromTo(noWrap,
-            { opacity: 0, scale: 0.92, filter:"blur(0px)" },
-            { opacity: 1, scale: 1, duration: 0.26, ease: "power2.out" }
-          );
-
-          noBusy = false;
-        }, 320);
-      }, 900);
+      // store correct for handlers
+      optA.dataset.correct = (item.correct === "a") ? "1" : "0";
+      optB.dataset.correct = (item.correct === "b") ? "1" : "0";
     }
 
-    // NO click => boosts YES charge (the more they play, the faster it fills)
-    noBtn.addEventListener("click", () => {
-      const reason = pick(REASONS);
-      noClickSequence(reason);
-
-      noClicks++;
-
-      // instant cute bump to YES fill
-      if(charge < 100){
-        setCharge(charge + 7 + Math.min(10, noClicks * 0.4));
-        gsap.fromTo(wave, {filter:"brightness(1)"}, {filter:"brightness(1.12)", duration:0.12, yoyo:true, repeat:1});
-        gsap.fromTo(yesBtn, {scale:0.995}, {scale:1.02, duration:0.16, yoyo:true, repeat:1, ease:"power2.out"});
-      }
-
-      // temporary boost that decays
-      loveBoost = Math.min(1.0, loveBoost + 0.12);
-
-      if(boostDecayTimer) clearInterval(boostDecayTimer);
-      boostDecayTimer = setInterval(() => {
-        loveBoost = Math.max(0, loveBoost - 0.04);
-        if(loveBoost <= 0){
-          clearInterval(boostDecayTimer);
-          boostDecayTimer = null;
+    function addLove(amount){
+      loveEarned = Math.min(2.0, loveEarned + amount); // cap
+      if(earnedDecayTimer) clearInterval(earnedDecayTimer);
+      earnedDecayTimer = setInterval(() => {
+        loveEarned = Math.max(0, loveEarned - 0.03);
+        if(loveEarned <= 0){
+          clearInterval(earnedDecayTimer);
+          earnedDecayTimer = null;
         }
-      }, 140);
-    });
+      }, 220);
+    }
 
-    // Catch-the-heart => big boost + sparkle + move
-    catchHeart.addEventListener("click", () => {
-      SFX.sparkle();
-      setValMood("boost", pick(["Caught! 💗 +love boost!", "Nice! That was adorable 🥰", "Okayyy you’re good 😚💞"]));
+    function answer(btn){
+      const correct = btn.dataset.correct === "1";
+      const other = (btn === optA) ? optB : optA;
 
-      if(charge < 100){
-        setCharge(charge + 10 + Math.min(16, noClicks*0.5));
+      if(correct){
+        btn.classList.add("correct");
+        other.classList.add("wrong");
+        SFX.correct();
+        setValMood("good", pick(["Correct 😌💗 +love boost!", "That’s the answer I wanted 🥰", "Perfect. My heart approves 💞"]));
+
+        // Boost charge and holding speed
+        addLove(0.35);
+        setCharge(charge + 12 + Math.min(10, loveEarned*5));
+
+        // micro confetti
+        confetti({ particleCount: 14, spread: 40, startVelocity: 16, scalar: 0.7, origin: { y: 0.72 } });
+
+        // bubbles burst
+        for(let i=0;i<4;i++) spawnBubble(2.1);
+
+        setTimeout(() => { nextQuestion(); }, 520);
+      } else {
+        btn.classList.add("wrong");
+        other.classList.add("correct");
+        SFX.wrong();
+        setValMood("bad", pick(["Nope 🙈 try again", "Wrong 😤 but still cute", "Not that one 😌✨"]));
+        // tiny pity boost so it never feels stuck
+        setCharge(charge + 3);
+        setTimeout(() => { nextQuestion(); }, 620);
       }
-      // micro confetti puff
-      confetti({ particleCount: 18, spread: 45, startVelocity: 18, scalar: 0.7, origin: { y: 0.72 } });
 
-      // bubble burst (visual)
-      for(let i=0;i<5;i++) spawnBubble(2.4);
+      gsap.fromTo(btn, {scale:0.98}, {scale:1.06, duration:0.16, yoyo:true, repeat:1, ease:"power2.out"});
+    }
 
-      gsap.fromTo(catchHeart, {scale:0.96}, {scale:1.12, duration:0.16, yoyo:true, repeat:1, ease:"power2.out"});
-      moveCatchHeart(false);
-    });
+    optA.addEventListener("click", () => answer(optA));
+    optB.addEventListener("click", () => answer(optB));
 
     function acceptYes(){
       if(yesBtn.dataset.done === "1") return;
@@ -1920,39 +1735,13 @@
       setTimeout(() => showScreen("s4"), 520);
     }
 
-    // Hold interactions for YES
-    yesBtn.addEventListener("pointerdown", (e) => {
-      e.preventDefault();
-      if(yesBtn.dataset.done === "1") return;
-      startCharging();
-    });
-
-    yesBtn.addEventListener("pointerup", (e) => {
-      e.preventDefault();
-      if(yesBtn.dataset.done === "1") return;
-      stopCharging();
-    });
-
-    yesBtn.addEventListener("pointercancel", stopCharging);
-    yesBtn.addEventListener("pointerleave", () => { if(charging) stopCharging(); });
-
-    // Disable normal click (so can't instantly yes)
-    yesBtn.addEventListener("click", (e) => { e.preventDefault(); });
-
-    function placeNoInitial(){
-      moveNoTo(randomSpot(), true);
-      moveCatchHeart(true);
-
-      noBtn.textContent = "No 🙈";
-      noBusy = false;
-      valEmoji.textContent = "😊";
-      valMood.textContent = "Be honest… but be gentle 😌";
-
+    function placeValInitial(){
       yesBtn.dataset.done = "0";
       setCharge(0);
-      noClicks = 0;
-      loveBoost = 0;
+      loveEarned = 0;
       setSlosh(0,0);
+      setValMood("idle", pick(["Answer a question… or hold YES 😌💗","I’m watching 👀💞","Let’s play… gently 😌✨"]));
+      nextQuestion();
     }
 
     // =======================
@@ -2047,7 +1836,7 @@
       valSub.innerHTML = `Since <span class="name">${MONTH_NAME} ${day}, ${YEAR}</span>, I’ve been smiling more.`;
 
       showScreen("s3");
-      placeNoInitial();
+      placeValInitial();
 
       // enable motion (iOS permission)
       try{
@@ -2077,22 +1866,12 @@
 
     window.addEventListener("resize", () => {
       if(document.getElementById("s3").classList.contains("active")){
-        placeNoInitial();
+        placeValInitial();
       }
     });
 
-    // Start screen 2 from screen 1
-    toS2.addEventListener("click", () => { /* already handled above */ });
-
     // Initialize
     initTTT();
-
-    // Screen 1 next enabled after date select
-    // (already in selectDay)
-
-    // When moving to screen 2 directly from screen 1 next:
-    // (handled in toS2 click above)
-
   </script>
 </body>
 </html>
