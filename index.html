@@ -841,7 +841,16 @@
   color: rgba(43,15,29,.70);
   user-select: none;
   text-align: center;
+
+  /* ✅ key changes */
+  display: inline-block;                 /* don’t stretch */
+  width: fit-content;                    /* shrink to content */
+  max-width: calc(100% - 28px);          /* still wrap on small screens */
+  white-space: normal;                   /* allow wrapping */
+  line-height: 1.25;
+  justify-self: center;                  /* grid: center this item */
 }
+
 
 
 /* In case anything locks scrolling */
