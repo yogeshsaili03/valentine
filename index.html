@@ -1740,7 +1740,12 @@ body{
       el.textContent = isBomb ? "💣" : pick(["💗","💞","💘","💕","💓"]);
       catchField.appendChild(el);
 
-      const x = 0.07 + Math.random()*0.86; // 0..1
+const DROP_SIZE = 42; // .drop width/height
+const w = (fieldRect ? fieldRect.width : catchField.clientWidth) || 1;
+
+// pad so the drop stays fully inside (center-safe)
+const pad = (DROP_SIZE / 2) / w;
+const x = pad + Math.random() * (1 - 2 * pad);
       const baseV = (90 + Math.random()*140) * FALL_SPEED_MULT; // px/s
       const rot = -25 + Math.random()*50;
 
@@ -1750,10 +1755,12 @@ body{
     }
 
     function positionDrop(d){
-      const w = fieldRect ? fieldRect.width : catchField.clientWidth;
-      const xpx = d.x * w;
-      d.el.style.transform = "translate(" + xpx + "px, " + d.y + "px) rotate(" + d.rot + "deg)";
-    }
+  const w = fieldRect ? fieldRect.width : catchField.clientWidth;
+  const DROP_SIZE = 42;
+  const xpx = d.x * w - (DROP_SIZE / 2); // center align
+  d.el.style.transform = "translate(" + xpx + "px, " + d.y + "px) rotate(" + d.rot + "deg)";
+}
+
 
     function basketBounds(){
       const br = basketEl.getBoundingClientRect();
