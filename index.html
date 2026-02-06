@@ -1683,10 +1683,10 @@
       if(d.isBomb){
         miss++;
         missEl.textContent = String(miss);
-        setCharge(charge - 12);
+        setCharge(charge - 3);
         setValMood("bad", pick(["Bomb?! 😭💣", "Nooo… avoid that 🙈", "Ouch 😤 careful!"]));
         SFX.wrong();
-        showToast(pick(["Bomb! -love 💣", "Ouch! -12% 😭", "That one hurts 💣😤"]));
+        showToast(pick(["Bomb! -love 💣", "Ouch! -3% 😭", "That one hurts 💣😤"]));
         confetti({ particleCount: 10, spread: 40, startVelocity: 16, scalar: 0.6, origin: { y: 0.72 } });
       } else {
         score++;
@@ -1739,7 +1739,7 @@
           if(!d.isBomb){
             miss++;
             missEl.textContent = String(miss);
-            setCharge(charge - 4);
+            setCharge(charge - 0);
             SFX.soft();
           }
           d.el.remove();
