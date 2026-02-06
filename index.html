@@ -54,11 +54,13 @@
     }
 
     .wrap{
-      min-height: 100svh;
-      display:grid;
-      place-items:center;
-      padding: max(14px, env(safe-area-inset-top)) 14px max(18px, env(safe-area-inset-bottom));
-    }
+  min-height: 100svh;
+  display:grid;
+  grid-template-rows: 1fr auto;   /* NEW */
+  place-items:center;
+  padding: max(14px, env(safe-area-inset-top)) 14px max(18px, env(safe-area-inset-bottom));
+}
+
 
     .card{
       width: min(920px, 100%);
@@ -824,6 +826,25 @@
   }
 }
 
+/* Footer inside .wrap, but outside the card */
+.loveFooter{
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.68);
+  border: 1px solid rgba(43,15,29,.10);
+  box-shadow: 0 12px 26px rgba(36,10,20,.08);
+  backdrop-filter: blur(10px);
+
+  font-size: 12px;
+  font-weight: 800;
+  color: rgba(43,15,29,.70);
+  user-select: none;
+  text-align: center;
+  max-width: min(920px, 100%);
+}
+
+
 /* In case anything locks scrolling */
 html, body{
   height: auto;
@@ -953,6 +974,9 @@ body{
 
       </div>
     </div>
+    <footer class="loveFooter">
+      Made with 💗 for <span class="name" id="footerName"></span> ✨
+    </footer>
   </div>
 
   <!-- libs -->
@@ -963,7 +987,7 @@ body{
     // =======================
     // CONFIG (edit these)
     // =======================
-    const CUTIE_NAME = "Kavita";
+    const CUTIE_NAME = "CUTIE_NAME";
 
     // Calendar:
     // JULY 2022, correct date 16
@@ -1421,6 +1445,7 @@ body{
     // SCREEN 3: Catch Hearts -> fill YES
     // =======================
     document.getElementById("cutieNameInline").textContent = CUTIE_NAME;
+    document.getElementById("footerName").textContent = CUTIE_NAME;
 
     const valEmoji = document.getElementById("valEmoji");
     const valMood  = document.getElementById("valMood");
