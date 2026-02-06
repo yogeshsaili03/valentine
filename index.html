@@ -54,11 +54,12 @@
       background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.30'/%3E%3C/svg%3E");
     }
 
+    /* phone-friendly wrapper */
     .wrap{
       min-height: 100svh;
       display:grid;
       place-items:center;
-      padding: max(14px, env(safe-area-inset-top)) 14px max(18px, env(safe-area-inset-bottom));
+      padding: max(10px, env(safe-area-inset-top)) 12px max(14px, env(safe-area-inset-bottom));
     }
 
     .card{
@@ -68,7 +69,7 @@
       border: 1px solid var(--stroke);
       box-shadow: var(--shadow);
       backdrop-filter: blur(14px);
-      padding: clamp(16px, 4.2vw, 30px);
+      padding: clamp(14px, 4vw, 28px);
       position:relative;
       overflow:hidden;
     }
@@ -82,10 +83,10 @@
       pointer-events:none;
     }
 
-    /* Tiny mute toggle */
+    /* Tiny mute toggle (non-overlapping) */
     .audioFab{
       position: fixed;
-      top: 10px;
+      top: max(10px, env(safe-area-inset-top));
       right: 10px;
       width: 38px;
       height: 38px;
@@ -108,7 +109,7 @@
     }
     .audioFab.off::before{ content:"🔇"; }
 
-    .screens{ position: relative; min-height: 72svh; }
+    .screens{ position: relative; }
     .screen{ display:none; animation: fadeIn .25s ease-out; }
     .screen.active{ display:block; }
 
@@ -126,8 +127,8 @@
       line-height: 1.12;
       color: #240a14;
     }
-    h1{ font-size: clamp(22px, 6.2vw, 44px); }
-    h2{ font-size: clamp(20px, 6vw, 40px); }
+    h1{ font-size: clamp(20px, 6vw, 44px); }
+    h2{ font-size: clamp(18px, 5.6vw, 40px); }
 
     .sub{
       margin: 10px 0 0;
@@ -171,6 +172,12 @@
       user-select:none;
       -webkit-tap-highlight-color: transparent;
       cursor:pointer;
+      touch-action: manipulation;
+    }
+    .btn:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+      filter: grayscale(.15);
     }
     .btn.primary{
       color:#fff;
@@ -255,6 +262,7 @@
       position:relative;
       cursor:pointer;
       user-select:none;
+      touch-action: manipulation;
     }
     .blank{
       width: 100%;
@@ -336,10 +344,10 @@
     }
     .tttBoardShell{
       width: 100%;
-      max-width: 420px;
+      max-width: 440px;
       margin: 0 auto;
       position:relative;
-      padding: 0 18px; /* more padding so grid never cuts on phone */
+      padding: 0 18px; /* prevents cut on phone */
     }
     .tttBoard{
       width: 100%;
@@ -363,13 +371,13 @@
       font-weight: 900;
       font-size: clamp(22px, 7vw, 34px);
       font-family:"Playfair Display", serif;
-      letter-spacing:.2px;
       display:grid;
       place-items:center;
       cursor:pointer;
       user-select:none;
       position:relative;
       overflow:hidden;
+      touch-action: manipulation;
     }
     .cell.pop{ animation: popIn .22s ease-out; }
     @keyframes popIn{
@@ -427,10 +435,11 @@
       user-select:none;
     }
 
+    /* arena tuned for phone (no huge empty space) */
     .arena{
       margin-top: 10px;
       position:relative;
-      height: clamp(360px, 54vh, 590px);
+      height: min(540px, 54svh);
       border-radius: 22px;
       border: 1px solid rgba(255,255,255,.55);
       background: rgba(255,255,255,.38);
@@ -438,12 +447,14 @@
       overflow:hidden;
       padding: 12px;
     }
+    @media (max-width: 420px){
+      .arena{ height: min(500px, 56svh); }
+    }
 
-    /* Question card */
     .qCard{
       position:absolute;
       left: 50%;
-      top: 100px;
+      top: 90px;
       transform: translateX(-50%);
       width: min(560px, 92%);
       border-radius: 20px;
@@ -479,6 +490,7 @@
       user-select:none;
       line-height: 1.18;
       text-align:center;
+      touch-action: manipulation;
     }
     .qOpt.correct{
       border-color: rgba(181,22,82,.22);
@@ -500,11 +512,13 @@
       user-select:none;
     }
 
-    /* YES - FIXED to the bottom INSIDE the arena */
+    /* YES fixed to bottom inside arena */
     .chargeBtn{
       position:absolute;
       left: 50%;
       transform: translateX(-50%);
+      bottom: 12px;
+      width: min(520px, 92%);
       height: 52px;
       display:flex;
       align-items:center;
@@ -515,9 +529,9 @@
       user-select:none;
       -webkit-user-select:none;
       z-index: 5;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    /* premium look */
     .premiumYes{
       border: 1px solid rgba(255,255,255,.42);
       background: radial-gradient(120px 70px at 30% 20%, rgba(255,255,255,.28), transparent 60%),
@@ -553,7 +567,6 @@
     .chargeBtn .yesText{ position:relative; z-index: 6; }
     .chargeBtn .chargePct{ position:relative; z-index: 6; font-weight: 900; opacity: .95; }
 
-    /* water layer */
     .chargeBtn .wave{
       position:absolute;
       left:0; bottom:0;
@@ -568,12 +581,10 @@
         linear-gradient(180deg, rgba(255,255,255,.18), rgba(0,0,0,.05)),
         linear-gradient(135deg, rgba(181,22,82,.95), rgba(240,143,177,.95));
       transform: translateY(8px);
-      will-change: transform, height, filter;
+      will-change: transform, height;
       box-shadow: inset 0 8px 18px rgba(255,255,255,.10);
-      overflow:hidden; /* keep fizz inside */
+      overflow:hidden;
     }
-
-    /* surface sheen */
     .chargeBtn .wave::after{
       content:"";
       position:absolute;
@@ -593,7 +604,6 @@
       100%{ transform: translateX(-25%); }
     }
 
-    /* FIZZ LAYER: lots of tiny bubbles rising constantly while holding and on correct answer */
     .fizz{
       position:absolute;
       inset:0;
@@ -609,7 +619,6 @@
       background: rgba(255,255,255,.62);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
       opacity: 0;
-      filter: blur(.1px);
       will-change: transform, opacity;
     }
 
@@ -704,6 +713,7 @@
       0%,100%{ opacity:.92; transform: translateY(0); }
       50%{ opacity:1; transform: translateY(-1px); }
     }
+
     .cheesyGrid{
       margin-top: 14px;
       display:grid;
@@ -713,6 +723,7 @@
     @media (max-width: 720px){
       .cheesyGrid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
+
     .noteCard{
       border-radius: 18px;
       background: rgba(255,255,255,.72);
@@ -729,10 +740,12 @@
     .noteCard:nth-child(4){ animation-delay: 1.2s; }
     .noteCard:nth-child(5){ animation-delay: 1.6s; }
     .noteCard:nth-child(6){ animation-delay: 2.0s; }
+
     @keyframes cardFloat{
       0%,100%{ transform: translateY(0); }
       50%{ transform: translateY(-4px); }
     }
+
     .noteCard::after{
       content:"";
       position:absolute;
@@ -744,7 +757,6 @@
       font-family:"Playfair Display", serif;
       font-weight: 800;
       font-size: 14px;
-      letter-spacing:.15px;
       color: rgba(43,15,29,.92);
       margin-bottom: 6px;
       position: relative;
@@ -771,6 +783,7 @@
       0%,100%{ transform: scale(1); opacity:.92; }
       50%{ transform: scale(1.06); opacity:1; }
     }
+
     .heartLayer{
       position:absolute;
       inset:0;
@@ -787,9 +800,8 @@
       user-select:none;
     }
 
-    /* Prevent selection while holding/tapping on mobile */
+    /* prevent selection on mobile long-press */
     .arena, .qCard, .chargeBtn, .qOpt, .btn, .chargePct, .yesText { -webkit-user-select:none; user-select:none; }
-
   </style>
 </head>
 
@@ -802,7 +814,6 @@
       <div class="shine"></div>
 
       <div class="screens">
-
         <!-- SCREEN 1 -->
         <section class="screen active" id="s1">
           <h1>Let’s start with a memory ✨</h1>
@@ -860,7 +871,6 @@
           </div>
 
           <div class="arena" id="arena">
-            <!-- Question card -->
             <div class="qCard" id="qCard">
               <div class="qTitle" id="qTitle">Loading…</div>
               <div class="qOpts">
@@ -870,7 +880,6 @@
               <div class="qHint" id="qHint"></div>
             </div>
 
-            <!-- YES (fixed bottom) -->
             <button class="btn primary chargeBtn premiumYes" id="yesBtn" type="button" aria-label="Hold to say yes">
               <span class="yesTopShine"></span>
               <span class="yesRing" id="yesRing"></span>
@@ -882,7 +891,7 @@
             </button>
           </div>
 
-          <div class="hint">Correct answers = faster fill + fizzy love bubbles ✨ • Hold YES anytime (but slow until you earn it 😌)</div>
+          <div class="hint">Correct answers = faster fill + fizzy love bubbles ✨ • Hold YES anytime (slow until you earn it 😌)</div>
         </section>
 
         <!-- SCREEN 4 -->
@@ -916,1118 +925,1018 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
   <script>
-    // =======================
-    // CONFIG (edit these)
-    // =======================
-    const CUTIE_NAME = "CUTIE_NAME";
+  "use strict";
 
-    const MONTH_NAME = "December";
-    const YEAR = 2022;
-    const DAYS_IN_MONTH = 31;
+  // =======================
+  // CONFIG (edit these)
+  // =======================
+  const CUTIE_NAME = "CUTIE_NAME";
 
-    // 0=Mon, 1=Tue, 2=Wed, 3=Thu, 4=Fri, 5=Sat, 6=Sun
-    const MONTH_START_DOW = 2;
+  const MONTH_NAME = "December";
+  const YEAR = 2022;
+  const DAYS_IN_MONTH = 31;
 
-    // Set correct day (1..DAYS_IN_MONTH) or null to disable
-    const CORRECT_DAY = 18;
+  // 0=Mon,1=Tue,2=Wed,3=Thu,4=Fri,5=Sat,6=Sun
+  const MONTH_START_DOW = 2;
 
-    // =======================
-    // WebAudio (no external files)
-    // =======================
-    const audioUI = { enabled: true, ctx: null, master: null, unlocked: false };
-    const audioToggle = document.getElementById("audioToggle");
+  // Set correct day (1..DAYS_IN_MONTH) or null to disable
+  const CORRECT_DAY = 18;
 
-    function updateAudioUI(){ audioToggle.classList.toggle("off", !audioUI.enabled); }
-    updateAudioUI();
+  // =======================
+  // WebAudio (no external files)
+  // =======================
+  const audioUI = { enabled: true, ctx: null, master: null, unlocked: false };
+  const audioToggle = document.getElementById("audioToggle");
 
-    function ensureAudio(){
-      if(!audioUI.enabled) return false;
-      if(audioUI.ctx) return true;
-      try{
-        audioUI.ctx = new (window.AudioContext || window.webkitAudioContext)();
-        audioUI.master = audioUI.ctx.createGain();
-        audioUI.master.gain.value = 0.38;
-        audioUI.master.connect(audioUI.ctx.destination);
-        return true;
-      }catch(e){ return false; }
-    }
+  function updateAudioUI(){ audioToggle.classList.toggle("off", !audioUI.enabled); }
+  updateAudioUI();
 
-    async function unlockAudio(){
-      if(!audioUI.enabled) return;
-      if(!ensureAudio()) return;
-      if(audioUI.unlocked) return;
-      try{
-        if(audioUI.ctx.state !== "running") await audioUI.ctx.resume();
-        const o = audioUI.ctx.createOscillator();
-        const g = audioUI.ctx.createGain();
-        g.gain.value = 0.0001;
-        o.connect(g); g.connect(audioUI.master);
-        o.frequency.value = 440;
-        o.start();
-        o.stop(audioUI.ctx.currentTime + 0.01);
-        audioUI.unlocked = true;
-      }catch(e){}
-    }
+  function ensureAudio(){
+    if(!audioUI.enabled) return false;
+    if(audioUI.ctx) return true;
+    try{
+      audioUI.ctx = new (window.AudioContext || window.webkitAudioContext)();
+      audioUI.master = audioUI.ctx.createGain();
+      audioUI.master.gain.value = 0.42;
+      audioUI.master.connect(audioUI.ctx.destination);
+      return true;
+    }catch(e){ return false; }
+  }
 
-    audioToggle.addEventListener("click", async () => {
-      audioUI.enabled = !audioUI.enabled;
-      updateAudioUI();
-      if(audioUI.enabled) await unlockAudio();
-    });
-    window.addEventListener("pointerdown", unlockAudio, { once:false, passive:true });
-
-    function now(){ return audioUI.ctx ? audioUI.ctx.currentTime : 0; }
-
-    function tone(freq=440, dur=0.08, type="sine", gain=0.06, slide=0){
-      if(!audioUI.enabled) return;
-      if(!ensureAudio()) return;
-      const t0 = now();
-
+  async function unlockAudio(){
+    if(!audioUI.enabled) return;
+    if(!ensureAudio()) return;
+    if(audioUI.unlocked) return;
+    try{
+      if(audioUI.ctx.state !== "running") await audioUI.ctx.resume();
       const o = audioUI.ctx.createOscillator();
       const g = audioUI.ctx.createGain();
-      const f = Math.max(40, freq);
-
-      o.type = type;
-      o.frequency.setValueAtTime(f, t0);
-      if(slide) o.frequency.exponentialRampToValueAtTime(Math.max(40, f+slide), t0 + dur);
-
-      g.gain.setValueAtTime(0.0001, t0);
-      g.gain.exponentialRampToValueAtTime(gain, t0 + 0.01);
-      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-
+      g.gain.value = 0.0001;
       o.connect(g); g.connect(audioUI.master);
-      o.start(t0);
-      o.stop(t0 + dur + 0.02);
+      o.frequency.value = 440;
+      o.start();
+      o.stop(audioUI.ctx.currentTime + 0.01);
+      audioUI.unlocked = true;
+    }catch(e){}
+  }
+
+  audioToggle.addEventListener("click", async () => {
+    audioUI.enabled = !audioUI.enabled;
+    updateAudioUI();
+    if(audioUI.enabled) await unlockAudio();
+  });
+  window.addEventListener("pointerdown", unlockAudio, { passive:true });
+
+  function now(){ return audioUI.ctx ? audioUI.ctx.currentTime : 0; }
+
+  function tone(freq=440, dur=0.08, type="sine", gain=0.06, slide=0){
+    if(!audioUI.enabled) return;
+    if(!ensureAudio()) return;
+    const t0 = now();
+
+    const o = audioUI.ctx.createOscillator();
+    const g = audioUI.ctx.createGain();
+    const f = Math.max(40, freq);
+
+    o.type = type;
+    o.frequency.setValueAtTime(f, t0);
+    if(slide) o.frequency.exponentialRampToValueAtTime(Math.max(40, f+slide), t0 + dur);
+
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(gain, t0 + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+
+    o.connect(g); g.connect(audioUI.master);
+    o.start(t0);
+    o.stop(t0 + dur + 0.02);
+  }
+
+  function noiseBurst(dur=0.08, gain=0.03){
+    if(!audioUI.enabled) return;
+    if(!ensureAudio()) return;
+    const t0 = now();
+    const bufferSize = Math.floor(audioUI.ctx.sampleRate * dur);
+    const buffer = audioUI.ctx.createBuffer(1, bufferSize, audioUI.ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for(let i=0;i<bufferSize;i++){
+      data[i] = (Math.random()*2 - 1) * (1 - i/bufferSize);
     }
+    const src = audioUI.ctx.createBufferSource();
+    src.buffer = buffer;
 
-    function noiseBurst(dur=0.08, gain=0.03){
-      if(!audioUI.enabled) return;
-      if(!ensureAudio()) return;
-      const t0 = now();
-      const bufferSize = Math.floor(audioUI.ctx.sampleRate * dur);
-      const buffer = audioUI.ctx.createBuffer(1, bufferSize, audioUI.ctx.sampleRate);
-      const data = buffer.getChannelData(0);
-      for(let i=0;i<bufferSize;i++){
-        data[i] = (Math.random()*2 - 1) * (1 - i/bufferSize);
-      }
-      const src = audioUI.ctx.createBufferSource();
-      src.buffer = buffer;
+    const filt = audioUI.ctx.createBiquadFilter();
+    filt.type = "highpass";
+    filt.frequency.value = 1200;
 
-      const filt = audioUI.ctx.createBiquadFilter();
-      filt.type = "highpass";
-      filt.frequency.value = 1200;
+    const g = audioUI.ctx.createGain();
+    g.gain.setValueAtTime(gain, t0);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
 
-      const g = audioUI.ctx.createGain();
-      g.gain.setValueAtTime(gain, t0);
-      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    src.connect(filt); filt.connect(g); g.connect(audioUI.master);
+    src.start(t0);
+    src.stop(t0 + dur + 0.02);
+  }
 
-      src.connect(filt); filt.connect(g); g.connect(audioUI.master);
-      src.start(t0);
-      src.stop(t0 + dur + 0.02);
-    }
+  const SFX = {
+    tap(){ tone(560, 0.07, "sine", 0.075, 120); },
+    soft(){ tone(320, 0.08, "triangle", 0.04, -20); },
+    wrong(){ tone(220, 0.12, "sawtooth", 0.06, -40); noiseBurst(0.06, 0.03); },
+    correct(){ tone(660, 0.06, "sine", 0.06, 90); setTimeout(()=>tone(880,0.07,"sine",0.05,120), 50); },
+    win(){
+      tone(740, 0.09, "triangle", 0.07, 90);
+      setTimeout(()=>tone(980,0.10,"triangle",0.06,140), 80);
+      setTimeout(()=>tone(1240,0.12,"sine",0.055,200), 160);
+    },
+    bubble(){ tone(640, 0.04, "sine", 0.02, 70); },
+    sparkle(){ tone(900, 0.05, "sine", 0.04, 150); setTimeout(()=>tone(1250,0.06,"sine",0.035,200), 40); },
+    charge(){ tone(250, 0.06, "triangle", 0.03, 40); }
+  };
 
-    const SFX = {
-      tap(){ tone(560, 0.07, "sine", 0.075, 120); },
-      soft(){ tone(320, 0.08, "triangle", 0.035, -20); },
-      wrong(){ tone(220, 0.12, "sawtooth", 0.05, -40); noiseBurst(0.06, 0.03); },
-      correct(){ tone(660, 0.06, "sine", 0.06, 90); setTimeout(()=>tone(880,0.07,"sine",0.05,120), 50); },
-      win(){ tone(740, 0.09, "triangle", 0.065, 90); setTimeout(()=>tone(980,0.10,"triangle",0.055,140), 80); setTimeout(()=>tone(1240,0.12,"sine",0.05,200), 160); },
-      bubble(){ tone(640, 0.04, "sine", 0.02, 70); },
-      sparkle(){ tone(900, 0.05, "sine", 0.04, 150); setTimeout(()=>tone(1250,0.06,"sine",0.035,200), 40); },
-      charge(){ tone(250, 0.06, "triangle", 0.025, 40); }
+  // =======================
+  // Global state
+  // =======================
+  const state = { metDay: null, tttWon: false };
+
+  // =======================
+  // Helpers
+  // =======================
+  function showScreen(id){
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+    window.scrollTo({top: 0, behavior: "smooth"});
+    if(id === "s4") startFinalEffects();
+  }
+  function pick(arr){ return arr[(Math.random() * arr.length) | 0]; }
+
+  function distanceBucket(diff){
+    if(diff === 0) return "exact";
+    if(diff === 1) return "one";
+    if(diff <= 3) return "near";
+    if(diff <= 7) return "mid";
+    return "far";
+  }
+  function wrongDayMessage(day){
+    const diff = Math.abs(day - CORRECT_DAY);
+    const bucket = distanceBucket(diff);
+    const msgs = {
+      one: [
+        "Oof… SO close 😭 Just one day away 💗",
+        "Almost! You’re literally 1 day off 😌✨",
+        "My heart says… ‘one tiny step’ 💞",
+        "You nearly nailed it 🥺 (just 1 day!)"
+      ],
+      near: [
+        "Closeee 😌 Try the glowing date 💗",
+        "You’re in the neighborhood 🏡✨ (look for the ring)",
+        "Warm warm warm 🔥💗 The glow will guide you",
+        "Not perfect… but cute attempt 🥺💞"
+      ],
+      mid: [
+        "Hmm… not quite 😌 Follow the glowing ring 💗",
+        "A little off… but I like the confidence 😏✨",
+        "We’re drifting 😭 Find the shining date 💞",
+        "Nope 🙈 but I’ll help—watch the glow 💗"
+      ],
+      far: [
+        "That’s… very wrong 😭😂 The glow will save you 💗",
+        "Aww nooo 🙈 That’s far… look for the shining ring ✨",
+        "We weren’t even close 🥺💞 Try the glowing date",
+        "My calendar just blushed and panicked 😂💗 Follow the glow"
+      ],
+      exact: [
+        `YESSS 😍 ${MONTH_NAME} ${CORRECT_DAY}, ${YEAR} 💗`,
+        `Perfect! You remembered 🥹💞 ${MONTH_NAME} ${CORRECT_DAY}, ${YEAR}`,
+        `That’s the one! My heart approves 💘`,
+        `Correct 😌💗 (I knew you’d get it)`
+      ]
     };
+    return pick(msgs[bucket] || msgs.mid);
+  }
 
-    // =======================
-    // Global state
-    // =======================
-    const state = { metDay: null, tttWon: false };
+  // =======================
+  // SCREEN 1: Calendar
+  // =======================
+  const monthTitle = document.getElementById("monthTitle");
+  const calendarGrid = document.getElementById("calendarGrid");
+  const dowRow = document.getElementById("dowRow");
+  const dateNote = document.getElementById("dateNote");
+  const toS2 = document.getElementById("toS2");
 
-    // =======================
-    // Helpers
-    // =======================
-    function showScreen(id){
-      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-      window.scrollTo({top: 0, behavior: "smooth"});
-      if(id === "s4") startFinalEffects();
-    }
-    function pick(arr){ return arr[(Math.random() * arr.length) | 0]; }
+  monthTitle.textContent = `${MONTH_NAME} ${YEAR}`;
+  dowRow.innerHTML = ["M","T","W","T","F","S","S"].map(d => `<div class="dow">${d}</div>`).join("");
 
-    function distanceBucket(diff){
-      if(diff === 0) return "exact";
-      if(diff === 1) return "one";
-      if(diff <= 3) return "near";
-      if(diff <= 7) return "mid";
-      return "far";
-    }
-    function wrongDayMessage(day){
-      const diff = Math.abs(day - CORRECT_DAY);
-      const bucket = distanceBucket(diff);
-      const msgs = {
-        one: [
-          "Oof… SO close 😭 Just one day away 💗",
-          "Almost! You’re literally 1 day off 😌✨",
-          "My heart says… ‘one tiny step’ 💞",
-          "You nearly nailed it 🥺 (just 1 day!)"
-        ],
-        near: [
-          "Closeee 😌 Try the glowing date 💗",
-          "You’re in the neighborhood 🏡✨ (look for the ring)",
-          "Warm warm warm 🔥💗 The glow will guide you",
-          "Not perfect… but cute attempt 🥺💞"
-        ],
-        mid: [
-          "Hmm… not quite 😌 Follow the glowing ring 💗",
-          "A little off… but I like the confidence 😏✨",
-          "We’re drifting 😭 Find the shining date 💞",
-          "Nope 🙈 but I’ll help—watch the glow 💗"
-        ],
-        far: [
-          "That’s… very wrong 😭😂 The glow will save you 💗",
-          "Aww nooo 🙈 That’s far… look for the shining ring ✨",
-          "We weren’t even close 🥺💞 Try the glowing date",
-          "My calendar just blushed and panicked 😂💗 Follow the glow"
-        ],
-        exact: [
-          `YESSS 😍 ${MONTH_NAME} ${CORRECT_DAY}, ${YEAR} 💗`,
-          `Perfect! You remembered 🥹💞 ${MONTH_NAME} ${CORRECT_DAY}, ${YEAR}`,
-          `That’s the one! My heart approves 💘`,
-          `Correct 😌💗 (I knew you’d get it)`
-        ]
-      };
-      return pick(msgs[bucket] || msgs.mid);
-    }
+  function suggestCorrectDay(){
+    if(!CORRECT_DAY) return;
+    const el = calendarGrid.querySelector(`.dateBtn[data-day="${CORRECT_DAY}"]`);
+    if(!el) return;
+    el.classList.add("suggest");
+    setTimeout(() => el.classList.remove("suggest"), 1200);
+  }
 
-    // =======================
-    // SCREEN 1: Calendar
-    // =======================
-    const monthTitle = document.getElementById("monthTitle");
-    const calendarGrid = document.getElementById("calendarGrid");
-    const dowRow = document.getElementById("dowRow");
-    const dateNote = document.getElementById("dateNote");
-    const toS2 = document.getElementById("toS2");
+  function selectDay(day, btn){
+    SFX.tap();
+    state.metDay = day;
 
-    monthTitle.textContent = `${MONTH_NAME} ${YEAR}`;
-    const DOW = ["M","T","W","T","F","S","S"];
-    dowRow.innerHTML = DOW.map(d => `<div class="dow">${d}</div>`).join("");
+    document.querySelectorAll(".dateBtn").forEach(x => x.classList.remove("selected"));
+    btn.classList.add("selected");
+    toS2.disabled = false;
 
-    function buildCalendar(){
-      calendarGrid.innerHTML = "";
-      for(let i=0;i<MONTH_START_DOW;i++){
-        const b = document.createElement("div");
-        b.className = "blank";
-        calendarGrid.appendChild(b);
-      }
-      for(let d=1; d<=DAYS_IN_MONTH; d++){
-        const btn = document.createElement("button");
-        btn.className = "dateBtn";
-        btn.type = "button";
-        btn.textContent = d;
-        btn.dataset.day = String(d);
-        btn.addEventListener("click", () => selectDay(d, btn));
-        calendarGrid.appendChild(btn);
-      }
-    }
-
-    function suggestCorrectDay(){
-      if(!CORRECT_DAY) return;
-      const el = calendarGrid.querySelector(`.dateBtn[data-day="${CORRECT_DAY}"]`);
-      if(!el) return;
-      el.classList.add("suggest");
-      setTimeout(() => el.classList.remove("suggest"), 1200);
-    }
-
-    function selectDay(day, btn){
-      SFX.tap();
-      state.metDay = day;
-      document.querySelectorAll(".dateBtn").forEach(x => x.classList.remove("selected"));
-      btn.classList.add("selected");
-      toS2.disabled = false;
-
-      if(CORRECT_DAY){
-        if(day !== CORRECT_DAY){
-          dateNote.textContent = wrongDayMessage(day);
-          suggestCorrectDay();
-          SFX.wrong();
-        } else {
-          dateNote.textContent = wrongDayMessage(day);
-          SFX.correct();
-        }
+    if(CORRECT_DAY){
+      if(day !== CORRECT_DAY){
+        dateNote.textContent = wrongDayMessage(day);
+        suggestCorrectDay();
+        SFX.wrong();
       } else {
-        dateNote.textContent = `So… ${MONTH_NAME} ${day}, ${YEAR} 💗`;
-        SFX.soft();
+        dateNote.textContent = wrongDayMessage(day);
+        SFX.correct();
       }
-
-      gsap.fromTo(btn, {scale:0.96}, {scale:1.03, duration:0.16, ease:"power2.out", yoyo:true, repeat:1});
-    }
-
-    buildCalendar();
-
-    toS2.addEventListener("click", () => { SFX.sparkle(); showScreen("s2"); initTTT(); });
-
-    // =======================
-    // SCREEN 2: TicTacToe (user always wins)
-    // =======================
-    const tttBoard = document.getElementById("tttBoard");
-    const tttStatus = document.getElementById("tttStatus");
-    const tttTopWin = document.getElementById("tttTopWin");
-    const winSvg = document.getElementById("winSvg");
-    const toS3 = document.getElementById("toS3");
-    const resetTTT = document.getElementById("resetTTT");
-
-    const USER = "💗";
-    const AI = "🖤";
-    const LINES = [
-      [0,1,2],[3,4,5],[6,7,8],
-      [0,3,6],[1,4,7],[2,5,8],
-      [0,4,8],[2,4,6]
-    ];
-
-    let board = Array(9).fill(null);
-    let userMoves = 0;
-    let locked = false;
-
-    function renderTTT(){
-      tttBoard.innerHTML = "";
-      board.forEach((v, i) => {
-        const c = document.createElement("div");
-        c.className = "cell";
-        c.dataset.i = String(i);
-        c.textContent = v ? v : "";
-        if(v) c.classList.add("pop");
-        c.addEventListener("click", () => onUserMove(i));
-        if(v) c.style.cursor = "default";
-        tttBoard.appendChild(c);
-      });
-    }
-
-    function animateCell(i){
-      const el = tttBoard.querySelector(`.cell[data-i="${i}"]`);
-      if(!el) return;
-      gsap.fromTo(el, {scale:0.88}, {scale:1.04, duration:0.18, ease:"power2.out", yoyo:true, repeat:1});
-    }
-
-    function winningLine(sym){
-      for(const line of LINES){
-        if(line.every(idx => board[idx] === sym)) return line;
-      }
-      return null;
-    }
-
-    function bestLineForUser(){
-      let best = null;
-      let bestCount = -1;
-      for(const line of LINES){
-        const aiCount = line.filter(i => board[i] === AI).length;
-        if(aiCount > 0) continue;
-        const uCount = line.filter(i => board[i] === USER).length;
-        if(uCount > bestCount){
-          bestCount = uCount;
-          best = line;
-        }
-      }
-      return best || LINES[0];
-    }
-
-    function hintBestMove(){
-      const cells = [...tttBoard.querySelectorAll(".cell")];
-      cells.forEach(c => c.classList.remove("hint"));
-      const line = bestLineForUser();
-      const empty = line.find(i => !board[i]);
-      if(empty != null){
-        const el = tttBoard.querySelector(`.cell[data-i="${empty}"]`);
-        if(el) el.classList.add("hint");
-      }
-    }
-
-    function aiMoveSoft(){
-      if(winningLine(USER)) return;
-      const line = bestLineForUser();
-      const avoid = new Set(line);
-
-      const empties = board.map((v,i)=>v?null:i).filter(v=>v!==null);
-      let choices = empties.filter(i => !avoid.has(i));
-      if(choices.length === 0) choices = empties;
-
-      const pickI = choices[Math.floor(Math.random()*choices.length)];
-      board[pickI] = AI;
-      renderTTT();
-      animateCell(pickI);
+    } else {
+      dateNote.textContent = `So… ${MONTH_NAME} ${day}, ${YEAR} 💗`;
       SFX.soft();
     }
 
-    function forceUserWin(){
-      const line = bestLineForUser();
-      const empties = line.filter(i => !board[i]);
-      if(empties.length){
-        board[empties[0]] = USER;
-        renderTTT();
-        animateCell(empties[0]);
-        SFX.tap();
+    gsap.fromTo(btn, {scale:0.96}, {scale:1.03, duration:0.16, ease:"power2.out", yoyo:true, repeat:1});
+  }
+
+  function buildCalendar(){
+    calendarGrid.innerHTML = "";
+    for(let i=0;i<MONTH_START_DOW;i++){
+      const b = document.createElement("div");
+      b.className = "blank";
+      calendarGrid.appendChild(b);
+    }
+    for(let d=1; d<=DAYS_IN_MONTH; d++){
+      const btn = document.createElement("button");
+      btn.className = "dateBtn";
+      btn.type = "button";
+      btn.textContent = d;
+      btn.dataset.day = String(d);
+      btn.addEventListener("click", () => selectDay(d, btn));
+      calendarGrid.appendChild(btn);
+    }
+  }
+  buildCalendar();
+
+  toS2.addEventListener("click", () => {
+    SFX.sparkle();
+    showScreen("s2");
+    initTTT();
+  });
+
+  // =======================
+  // SCREEN 2: TicTacToe (user always wins)
+  // =======================
+  const tttBoard = document.getElementById("tttBoard");
+  const tttStatus = document.getElementById("tttStatus");
+  const tttTopWin = document.getElementById("tttTopWin");
+  const winSvg = document.getElementById("winSvg");
+  const toS3 = document.getElementById("toS3");
+  const resetTTT = document.getElementById("resetTTT");
+
+  const USER = "💗";
+  const AI = "🖤";
+  const LINES = [
+    [0,1,2],[3,4,5],[6,7,8],
+    [0,3,6],[1,4,7],[2,5,8],
+    [0,4,8],[2,4,6]
+  ];
+
+  let board = Array(9).fill(null);
+  let userMoves = 0;
+  let locked = false;
+
+  function renderTTT(){
+    tttBoard.innerHTML = "";
+    board.forEach((v, i) => {
+      const c = document.createElement("div");
+      c.className = "cell";
+      c.dataset.i = String(i);
+      c.textContent = v ? v : "";
+      if(v) c.classList.add("pop");
+      c.addEventListener("click", () => onUserMove(i));
+      if(v) c.style.cursor = "default";
+      tttBoard.appendChild(c);
+    });
+  }
+
+  function animateCell(i){
+    // ✅ this is the correct template literal (no backslash)
+    const el = tttBoard.querySelector(`.cell[data-i="${i}"]`);
+    if(!el) return;
+    gsap.fromTo(el, {scale:0.88}, {scale:1.04, duration:0.18, ease:"power2.out", yoyo:true, repeat:1});
+  }
+
+  function winningLine(sym){
+    for(const line of LINES){
+      if(line.every(idx => board[idx] === sym)) return line;
+    }
+    return null;
+  }
+
+  function bestLineForUser(){
+    let best = null;
+    let bestCount = -1;
+    for(const line of LINES){
+      const aiCount = line.filter(i => board[i] === AI).length;
+      if(aiCount > 0) continue;
+      const uCount = line.filter(i => board[i] === USER).length;
+      if(uCount > bestCount){
+        bestCount = uCount;
+        best = line;
       }
-      if(winningLine(USER)) winTTT();
+    }
+    return best || LINES[0];
+  }
+
+  function hintBestMove(){
+    const cells = [...tttBoard.querySelectorAll(".cell")];
+    cells.forEach(c => c.classList.remove("hint"));
+    const line = bestLineForUser();
+    const empty = line.find(i => !board[i]);
+    if(empty != null){
+      const el = tttBoard.querySelector(`.cell[data-i="${empty}"]`);
+      if(el) el.classList.add("hint");
+    }
+  }
+
+  function aiMoveSoft(){
+    if(winningLine(USER)) return;
+    const line = bestLineForUser();
+    const avoid = new Set(line);
+
+    const empties = board.map((v,i)=>v?null:i).filter(v=>v!==null);
+    let choices = empties.filter(i => !avoid.has(i));
+    if(choices.length === 0) choices = empties;
+
+    const pickI = choices[Math.floor(Math.random()*choices.length)];
+    board[pickI] = AI;
+    renderTTT();
+    animateCell(pickI);
+    SFX.soft();
+  }
+
+  function forceUserWin(){
+    const line = bestLineForUser();
+    const empties = line.filter(i => !board[i]);
+    if(empties.length){
+      board[empties[0]] = USER;
+      renderTTT();
+      animateCell(empties[0]);
+      SFX.tap();
+    }
+    if(winningLine(USER)) winTTT();
+  }
+
+  function countInLine(sym, line){ return line.filter(i => board[i] === sym).length; }
+  function emptyInLine(line){ return line.filter(i => !board[i]).length; }
+  function userAlmostWinning(){ return LINES.some(line => countInLine(USER, line) === 2 && emptyInLine(line) === 1); }
+  function userCloseLines(){ return LINES.some(line => countInLine(USER, line) === 1 && emptyInLine(line) === 2); }
+
+  function onUserMove(i){
+    if(locked) return;
+    if(board[i]) return;
+
+    board[i] = USER;
+    userMoves++;
+    renderTTT();
+    animateCell(i);
+    SFX.tap();
+
+    if(winningLine(USER)){ winTTT(); return; }
+
+    if(userAlmostWinning()){
+      tttStatus.textContent = pick(["OMG one more and you win 😳💞","Final move incoming… 😌💗","So close I can feel it 🥹💘"]);
+    } else if(userCloseLines()){
+      tttStatus.textContent = pick(["That was cute 😌💗","Okayyy I see you 👀💞","Ooo this is getting serious 💘"]);
+    } else {
+      tttStatus.textContent = pick(["Your turn 💗","Go on 😌","Make it count 💘"]);
     }
 
-    function countInLine(sym, line){ return line.filter(i => board[i] === sym).length; }
-    function emptyInLine(line){ return line.filter(i => !board[i]).length; }
-    function userAlmostWinning(){ return LINES.some(line => countInLine(USER, line) === 2 && emptyInLine(line) === 1); }
-    function userCloseLines(){ return LINES.some(line => countInLine(USER, line) === 1 && emptyInLine(line) === 2); }
-
-    function onUserMove(i){
-      if(locked) return;
-      if(board[i]) return;
-
-      board[i] = USER;
-      userMoves++;
-      renderTTT();
-      animateCell(i);
-      SFX.tap();
+    locked = true;
+    setTimeout(() => {
+      aiMoveSoft();
+      locked = false;
 
       if(winningLine(USER)){ winTTT(); return; }
-
-      if(userAlmostWinning()){
-        tttStatus.textContent = pick(["OMG one more and you win 😳💞","Final move incoming… 😌💗","So close I can feel it 🥹💘"]);
-      } else if(userCloseLines()){
-        tttStatus.textContent = pick(["That was cute 😌💗","Okayyy I see you 👀💞","Ooo this is getting serious 💘"]);
-      } else {
-        tttStatus.textContent = pick(["Your turn 💗","Go on 😌","Make it count 💘"]);
-      }
-
-      locked = true;
-      setTimeout(() => {
-        aiMoveSoft();
-        locked = false;
-
-        if(winningLine(USER)){ winTTT(); return; }
-        if(userMoves >= 4) forceUserWin();
-        hintBestMove();
-      }, 230);
-    }
-
-    function drawWinLine(line){
-      const a = tttBoard.querySelector(`.cell[data-i="${line[0]}"]`);
-      const c = tttBoard.querySelector(`.cell[data-i="${line[2]}"]`);
-      if(!a || !c) return;
-
-      const br = tttBoard.getBoundingClientRect();
-      const ar = a.getBoundingClientRect();
-      const cr = c.getBoundingClientRect();
-
-      const x1 = (ar.left + ar.width/2) - br.left;
-      const y1 = (ar.top + ar.height/2) - br.top;
-      const x2 = (cr.left + cr.width/2) - br.left;
-      const y2 = (cr.top + cr.height/2) - br.top;
-
-      winSvg.setAttribute("viewBox", `0 0 ${br.width} ${br.height}`);
-      winSvg.innerHTML = `
-        <path id="p" d="M ${x1} ${y1} L ${x2} ${y2}"
-              stroke="rgba(181,22,82,.85)"
-              stroke-width="8"
-              stroke-linecap="round"
-              fill="none"
-              opacity="0.95"/>
-        <text id="heartEnd" x="${x2}" y="${y2}" text-anchor="middle" dominant-baseline="middle"
-              style="font-size:22px; filter: drop-shadow(0 12px 16px rgba(181,22,82,.18));">💗</text>
-      `;
-
-      const path = winSvg.querySelector("#p");
-      const heart = winSvg.querySelector("#heartEnd");
-      const len = path.getTotalLength();
-
-      path.style.strokeDasharray = `${len}`;
-      path.style.strokeDashoffset = `${len}`;
-
-      gsap.to(path, { strokeDashoffset: 0, duration: 0.45, ease: "power2.out" });
-      gsap.fromTo(path, { opacity: 0.65 }, { opacity: 1, duration: 0.18, yoyo: true, repeat: 3, ease: "power2.inOut" });
-      gsap.fromTo(heart, { scale: 0.9 }, { scale: 1.22, duration: 0.18, yoyo: true, repeat: 3, ease: "power2.inOut",
-        transformOrigin: "50% 50%"
-      });
-    }
-
-    function winTTT(){
-      state.tttWon = true;
-      const line = winningLine(USER);
-      if(line) drawWinLine(line);
-
-      tttTopWin.textContent = "YOU HAVE WON MY HEART 💞";
-      tttTopWin.classList.add("glow");
-      setTimeout(() => tttTopWin.classList.remove("glow"), 1300);
-
-      tttStatus.textContent = pick(["Okay okay… you win 😌💗","I surrender 🥹💞","Fine… take my heart 💘"]);
-      toS3.disabled = false;
-
-      SFX.win();
-      confetti({ particleCount: 90, spread: 70, startVelocity: 22, scalar: 0.9, origin: { y: 0.55 } });
-    }
-
-    function initTTT(){
-      state.tttWon = false;
-      toS3.disabled = true;
-      tttTopWin.textContent = "";
-      tttTopWin.classList.remove("glow");
-      winSvg.innerHTML = "";
-      board = Array(9).fill(null);
-      userMoves = 0;
-      locked = false;
-      tttStatus.textContent = "Your turn 💗";
-      renderTTT();
+      if(userMoves >= 4) forceUserWin();
       hintBestMove();
+    }, 230);
+  }
+
+  function drawWinLine(line){
+    const a = tttBoard.querySelector(`.cell[data-i="${line[0]}"]`);
+    const c = tttBoard.querySelector(`.cell[data-i="${line[2]}"]`);
+    if(!a || !c) return;
+
+    const br = tttBoard.getBoundingClientRect();
+    const ar = a.getBoundingClientRect();
+    const cr = c.getBoundingClientRect();
+
+    const x1 = (ar.left + ar.width/2) - br.left;
+    const y1 = (ar.top + ar.height/2) - br.top;
+    const x2 = (cr.left + cr.width/2) - br.left;
+    const y2 = (cr.top + cr.height/2) - br.top;
+
+    winSvg.setAttribute("viewBox", `0 0 ${br.width} ${br.height}`);
+    winSvg.innerHTML = `
+      <path id="p" d="M ${x1} ${y1} L ${x2} ${y2}"
+            stroke="rgba(181,22,82,.85)"
+            stroke-width="8"
+            stroke-linecap="round"
+            fill="none"
+            opacity="0.95"/>
+      <text id="heartEnd" x="${x2}" y="${y2}" text-anchor="middle" dominant-baseline="middle"
+            style="font-size:22px; filter: drop-shadow(0 12px 16px rgba(181,22,82,.18));">💗</text>
+    `;
+
+    const path = winSvg.querySelector("#p");
+    const heart = winSvg.querySelector("#heartEnd");
+    const len = path.getTotalLength();
+
+    path.style.strokeDasharray = `${len}`;
+    path.style.strokeDashoffset = `${len}`;
+
+    gsap.to(path, { strokeDashoffset: 0, duration: 0.45, ease: "power2.out" });
+    gsap.fromTo(heart, { scale: 0.9 }, { scale: 1.22, duration: 0.18, yoyo: true, repeat: 3, ease: "power2.inOut",
+      transformOrigin: "50% 50%"
+    });
+  }
+
+  function winTTT(){
+    state.tttWon = true;
+    const line = winningLine(USER);
+    if(line) drawWinLine(line);
+
+    tttTopWin.textContent = "YOU HAVE WON MY HEART 💞";
+    tttTopWin.classList.add("glow");
+    setTimeout(() => tttTopWin.classList.remove("glow"), 1300);
+
+    tttStatus.textContent = pick(["Okay okay… you win 😌💗","I surrender 🥹💞","Fine… take my heart 💘"]);
+    toS3.disabled = false;
+
+    SFX.win();
+    confetti({ particleCount: 90, spread: 70, startVelocity: 22, scalar: 0.9, origin: { y: 0.55 } });
+  }
+
+  function initTTT(){
+    state.tttWon = false;
+    toS3.disabled = true;
+    tttTopWin.textContent = "";
+    tttTopWin.classList.remove("glow");
+    winSvg.innerHTML = "";
+    board = Array(9).fill(null);
+    userMoves = 0;
+    locked = false;
+    tttStatus.textContent = "Your turn 💗";
+    renderTTT();
+    hintBestMove();
+  }
+
+  resetTTT.addEventListener("click", () => { SFX.wrong(); initTTT(); });
+
+  // =======================
+  // SCREEN 3: Valentine
+  // =======================
+  const yesBtn = document.getElementById("yesBtn");
+  const valEmoji = document.getElementById("valEmoji");
+  const valMood = document.getElementById("valMood");
+  const wave = document.getElementById("wave");
+  const fizz = document.getElementById("fizz");
+  const yesText = document.getElementById("yesText");
+  const chargePct = document.getElementById("chargePct");
+  const yesRing = document.getElementById("yesRing");
+
+  const qTitle = document.getElementById("qTitle");
+  const optA = document.getElementById("optA");
+  const optB = document.getElementById("optB");
+  const qHint = document.getElementById("qHint");
+
+  document.getElementById("cutieNameInline").textContent = CUTIE_NAME;
+
+  let motionEnabled = false;
+  function setSlosh(tx, ty){
+    const clampedX = Math.max(-1, Math.min(1, tx));
+    const clampedY = Math.max(-1, Math.min(1, ty));
+
+    gsap.to(wave, {
+      rotate: clampedX * 3.2,
+      x: clampedX * 10,
+      y: clampedY * 6,
+      transformOrigin: "50% 100%",
+      duration: 0.25,
+      ease: "power2.out"
+    });
+
+    gsap.to(yesBtn, {
+      rotation: clampedX * 0.8,
+      duration: 0.35,
+      ease: "power2.out"
+    });
+  }
+
+  function enableMotion(){
+    if(motionEnabled) return;
+    motionEnabled = true;
+
+    window.addEventListener("deviceorientation", (e) => {
+      const gx = (e.gamma ?? 0) / 25;
+      const by = (e.beta ?? 0) / 25;
+      setSlosh(gx, by);
+    }, { passive: true });
+
+    window.addEventListener("mousemove", (e) => {
+      const cx = (e.clientX / window.innerWidth) * 2 - 1;
+      const cy = (e.clientY / window.innerHeight) * 2 - 1;
+      setSlosh(cx, cy);
+    }, { passive: true });
+  }
+
+  function setValMood(kind, text){
+    const moods = {
+      yes: [
+        { e:"😍", m:"YES?? 😭💗 My heart just did a backflip." },
+        { e:"🥹", m:"Stoppp—I'm melting 🥹💞" },
+        { e:"💓", m:"Okay… heart is beating FAST 💓" },
+        { e:"😘", m:"Come here you 😘💘" },
+        { e:"🤭", m:"Hehe… I knew you’d say yes 🤭💗" }
+      ],
+      good: [
+        { e:"✨", m:"Correct 😌💗 +love boost!" },
+        { e:"🥰", m:"You’re too good at this 🥰💞" },
+        { e:"😚", m:"Mhm… that’s my favorite answer 😚" }
+      ],
+      bad: [
+        { e:"😤", m:"Wrong 😤 …but cute try." },
+        { e:"🙈", m:"Nope 🙈 try again (I’ll help)" },
+        { e:"🥺", m:"Aww no… but I still like you 🥺💗" }
+      ],
+      idle: [
+        { e:"😊", m:"Answer a question… or hold YES 😌💗" },
+        { e:"😌", m:"Play along… I’m enjoying this 😌✨" },
+        { e:"🫶", m:"I’m right here 🫶💞" }
+      ]
+    };
+    const pool = moods[kind] || moods.idle;
+    const p = pool[(Math.random() * pool.length) | 0];
+
+    valEmoji.textContent = p.e;
+    valMood.textContent = text || p.m;
+
+    gsap.killTweensOf([valEmoji, valMood]);
+    gsap.fromTo(valEmoji,
+      { scale: 0.92, rotation: -2 },
+      { scale: 1.08, rotation: 2, duration: 0.18, ease:"power2.out", yoyo:true, repeat:1 }
+    );
+    gsap.fromTo(valMood,
+      { opacity: 0, y: 6 },
+      { opacity: 1, y: 0, duration: 0.22, ease:"power2.out" }
+    );
+  }
+
+  let charge = 0;
+  let charging = false;
+  let chargeRaf = null;
+  let lastTs = 0;
+  let loveEarned = 0;
+  let earnedDecayTimer = null;
+
+  function setCharge(p){
+    charge = Math.max(0, Math.min(100, p));
+    wave.style.height = `${charge}%`;
+    wave.style.transform = `translateY(${8 - (charge*0.08)}px)`;
+    chargePct.textContent = `${Math.round(charge)}%`;
+
+    yesRing.style.opacity = (0.18 + (charge/100)*0.35).toFixed(2);
+    yesRing.style.transform = `rotate(${charge*3.2}deg)`;
+
+    if(charge < 20) yesText.textContent = "Hold to say YES 💘";
+    else if(charge < 55) yesText.textContent = "It’s getting fizzy… 🫧";
+    else if(charge < 90) yesText.textContent = "Almost there… 🥹💗";
+    else yesText.textContent = "Release to seal it 💞";
+
+    if(charge >= 100){
+      yesBtn.classList.add("charged");
+      yesText.textContent = "YES locked 💗";
+      acceptYes();
+    } else {
+      yesBtn.classList.remove("charged");
     }
+  }
 
-    resetTTT.addEventListener("click", () => { SFX.wrong(); initTTT(); });
+  let fizzTimer = null;
 
-    // =======================
-    // SCREEN 3: Valentine (questions -> charge + hold to fill)
-    // =======================
-    const yesBtn = document.getElementById("yesBtn");
-    const valEmoji = document.getElementById("valEmoji");
-    const valMood = document.getElementById("valMood");
-    const wave = document.getElementById("wave");
-    const fizz = document.getElementById("fizz");
-    const yesText = document.getElementById("yesText");
-    const chargePct = document.getElementById("chargePct");
-    const yesRing = document.getElementById("yesRing");
+  function spawnFizzBubble(intensity=1){
+    if(charge <= 1) return;
+    const b = document.createElement("span");
+    b.className = "fizzBubble";
 
-    const qTitle = document.getElementById("qTitle");
-    const optA = document.getElementById("optA");
-    const optB = document.getElementById("optB");
-    const qHint = document.getElementById("qHint");
+    const w = yesBtn.clientWidth;
+    const x = 8 + Math.random()*(w - 16);
+    const size = 2 + Math.random()*6*intensity;
+    b.style.width = size + "px";
+    b.style.height = size + "px";
+    b.style.left = x + "px";
 
-    document.getElementById("cutieNameInline").textContent = CUTIE_NAME;
+    const startY = 6 + Math.random()*14;
+    b.style.bottom = startY + "px";
+    fizz.appendChild(b);
 
-    // Motion slosh
-    let motionEnabled = false;
-    function setSlosh(tx, ty){
-      const clampedX = Math.max(-1, Math.min(1, tx));
-      const clampedY = Math.max(-1, Math.min(1, ty));
+    const rise = 22 + Math.random()*28 + intensity*18;
+    const drift = (-12 + Math.random()*24) * intensity;
+    const dur = 0.6 + Math.random()*0.55;
 
-      gsap.to(wave, {
-        rotate: clampedX * 3.2,
-        x: clampedX * 10,
-        y: clampedY * 6,
-        transformOrigin: "50% 100%",
-        duration: 0.25,
-        ease: "power2.out"
-      });
-
-      gsap.to(yesBtn, {
-        rotation: clampedX * 0.8,
-        duration: 0.35,
-        ease: "power2.out"
-      });
-    }
-
-    function enableMotion(){
-      if(motionEnabled) return;
-      motionEnabled = true;
-
-      window.addEventListener("deviceorientation", (e) => {
-        const gx = (e.gamma ?? 0) / 25;
-        const by = (e.beta ?? 0) / 25;
-        setSlosh(gx, by);
-      }, { passive: true });
-
-      window.addEventListener("mousemove", (e) => {
-        const cx = (e.clientX / window.innerWidth) * 2 - 1;
-        const cy = (e.clientY / window.innerHeight) * 2 - 1;
-        setSlosh(cx, cy);
-      }, { passive: true });
-    }
-
-    function setValMood(kind, text){
-      const moods = {
-        yes: [
-          { e:"😍", m:"YES?? 😭💗 My heart just did a backflip." },
-          { e:"🥹", m:"Stoppp—I'm melting 🥹💞" },
-          { e:"💓", m:"Okay… heart is beating FAST 💓" },
-          { e:"😘", m:"Come here you 😘💘" },
-          { e:"🤭", m:"Hehe… I knew you’d say yes 🤭💗" }
-        ],
-        good: [
-          { e:"✨", m:"Correct 😌💗 +love boost!" },
-          { e:"🥰", m:"You’re too good at this 🥰💞" },
-          { e:"😚", m:"Mhm… that’s my favorite answer 😚" }
-        ],
-        bad: [
-          { e:"😤", m:"Wrong 😤 …but cute try." },
-          { e:"🙈", m:"Nope 🙈 try again (I’ll help)" },
-          { e:"🥺", m:"Aww no… but I still like you 🥺💗" }
-        ],
-        idle: [
-          { e:"😊", m:"Answer a question… or hold YES 😌💗" },
-          { e:"😌", m:"Play along… I’m enjoying this 😌✨" },
-          { e:"🫶", m:"I’m right here 🫶💞" }
-        ]
-      };
-      const pool = moods[kind] || moods.idle;
-      const p = pool[(Math.random() * pool.length) | 0];
-
-      valEmoji.textContent = p.e;
-      valMood.textContent = text || p.m;
-
-      gsap.killTweensOf([valEmoji, valMood]);
-      gsap.fromTo(valEmoji,
-        { scale: 0.92, rotation: -2 },
-        { scale: 1.08, rotation: 2, duration: 0.18, ease:"power2.out", yoyo:true, repeat:1 }
-      );
-      gsap.fromTo(valMood,
-        { opacity: 0, y: 6 },
-        { opacity: 1, y: 0, duration: 0.22, ease:"power2.out" }
-      );
-    }
-
-    // YES charging state
-    let charge = 0;
-    let charging = false;
-    let chargeRaf = null;
-    let lastTs = 0;
-
-    // “earned love” makes hold faster
-    let loveEarned = 0; // grows with correct answers, decays slowly
-    let earnedDecayTimer = null;
-
-    function setCharge(p){
-      charge = Math.max(0, Math.min(100, p));
-      wave.style.height = `${charge}%`;
-      wave.style.transform = `translateY(${8 - (charge*0.08)}px)`;
-      chargePct.textContent = `${Math.round(charge)}%`;
-
-      // ring: more alive as charge grows
-      yesRing.style.opacity = (0.18 + (charge/100)*0.35).toFixed(2);
-      yesRing.style.transform = `rotate(${charge*3.2}deg)`;
-
-      if(charge < 20) yesText.textContent = "Hold to say YES 💘";
-      else if(charge < 55) yesText.textContent = "It’s getting fizzy… 🫧";
-      else if(charge < 90) yesText.textContent = "Almost there… 🥹💗";
-      else yesText.textContent = "Release to seal it 💞";
-
-      if(charge >= 100){
-        yesBtn.classList.add("charged");
-        yesText.textContent = "YES locked 💗";
-        acceptYes();
-      } else {
-        yesBtn.classList.remove("charged");
-      }
-    }
-
-    // ---- FIZZ bubble engine (inside the wave) ----
-    let fizzTimer = null;
-
-    function spawnFizzBurst(power=1){
-      // spawn multiple bubbles quickly (used on correct answer)
-      const n = 10 + Math.floor(power * 8);
-      for(let i=0;i<n;i++){
-        setTimeout(() => spawnFizzBubble(1 + power*0.6), i * 22);
-      }
-    }
-
-    function spawnFizzBubble(intensity=1){
-      if(charge <= 1) return;
-      const b = document.createElement("span");
-      b.className = "fizzBubble";
-
-      const w = yesBtn.clientWidth;
-      const x = 8 + Math.random()*(w - 16);
-      const size = 2 + Math.random()*6*intensity;
-      b.style.width = size + "px";
-      b.style.height = size + "px";
-      b.style.left = x + "px";
-
-      // bubble starts lower in the filled portion
-      const startY = 6 + Math.random()*14;
-      b.style.bottom = startY + "px";
-      fizz.appendChild(b);
-
-      const rise = 22 + Math.random()*28 + intensity*18;
-      const drift = (-12 + Math.random()*24) * intensity;
-      const dur = 0.6 + Math.random()*0.55;
-
-      gsap.fromTo(b,
-        { opacity: 0, y: 0, x: 0, scale: 0.85 },
-        { opacity: 0.9, duration: 0.10, ease:"power2.out", onComplete: () => {
-          gsap.to(b, {
-            y: -rise,
-            x: drift,
-            opacity: 0,
-            scale: 1.25,
-            duration: dur,
-            ease: "power1.out",
-            onComplete: () => b.remove()
-          });
-        }}
-      );
-
-      if(Math.random() < 0.25) SFX.bubble();
-    }
-
-    function startFizz(){
-      if(fizzTimer) return;
-      fizzTimer = setInterval(() => {
-        if(!charging) return;
-
-        // continuous fizz while holding
-        const intensity = 0.9 + Math.min(2.2, loveEarned * 1.2);
-        spawnFizzBubble(intensity);
-        if(Math.random() < 0.55) spawnFizzBubble(intensity);
-
-      }, 140);
-    }
-
-    function stopFizz(){
-      if(!fizzTimer) return;
-      clearInterval(fizzTimer);
-      fizzTimer = null;
-    }
-
-    function startCharging(){
-      if(charging) return;
-      if(yesBtn.dataset.done === "1") return;
-
-      charging = true;
-      lastTs = 0;
-      startFizz();
-      SFX.charge();
-
-      gsap.fromTo(yesBtn, {scale:0.99}, {scale:1.02, duration:0.18, ease:"power2.out", yoyo:true, repeat:1});
-
-      const baseSpeed = 9; // slow by default so they play questions
-      const tick = (ts) => {
-        if(!charging) return;
-        if(!lastTs) lastTs = ts;
-        const dt = (ts - lastTs) / 1000;
-        lastTs = ts;
-
-        // Earned love makes holding faster
-        const boostFactor = 1 + Math.min(2.3, loveEarned * 1.25);
-        setCharge(charge + baseSpeed * dt * boostFactor);
-
-        // animated slosh
-        setSlosh((Math.sin(ts/240) * 0.18), (Math.cos(ts/300) * 0.12));
-
-        if(charge < 100) chargeRaf = requestAnimationFrame(tick);
-      };
-
-      chargeRaf = requestAnimationFrame(tick);
-    }
-
-    function stopCharging(){
-      charging = false;
-      if(chargeRaf) cancelAnimationFrame(chargeRaf);
-      chargeRaf = null;
-      stopFizz();
-
-      if(charge < 100){
-        gsap.to({p: charge}, {
-          p: Math.max(0, charge - 8),
-          duration: 0.35,
-          ease: "power2.out",
-          onUpdate: function(){ setCharge(this.targets()[0].p); }
+    gsap.fromTo(b,
+      { opacity: 0, y: 0, x: 0, scale: 0.85 },
+      { opacity: 0.9, duration: 0.10, ease:"power2.out", onComplete: () => {
+        gsap.to(b, {
+          y: -rise,
+          x: drift,
+          opacity: 0,
+          scale: 1.25,
+          duration: dur,
+          ease: "power1.out",
+          onComplete: () => b.remove()
         });
+      }}
+    );
+
+    if(Math.random() < 0.25) SFX.bubble();
+  }
+
+  function spawnFizzBurst(power=1){
+    const n = 10 + Math.floor(power * 8);
+    for(let i=0;i<n;i++){
+      setTimeout(() => spawnFizzBubble(1 + power*0.6), i * 22);
+    }
+  }
+
+  function startFizz(){
+    if(fizzTimer) return;
+    fizzTimer = setInterval(() => {
+      if(!charging) return;
+      const intensity = 0.9 + Math.min(2.2, loveEarned * 1.2);
+      spawnFizzBubble(intensity);
+      if(Math.random() < 0.55) spawnFizzBubble(intensity);
+    }, 140);
+  }
+
+  function stopFizz(){
+    if(!fizzTimer) return;
+    clearInterval(fizzTimer);
+    fizzTimer = null;
+  }
+
+  function startCharging(){
+    if(charging) return;
+    if(yesBtn.dataset.done === "1") return;
+
+    charging = true;
+    lastTs = 0;
+    startFizz();
+    SFX.charge();
+
+    gsap.fromTo(yesBtn, {scale:0.99}, {scale:1.02, duration:0.18, ease:"power2.out", yoyo:true, repeat:1});
+
+    const baseSpeed = 9; // slow by default
+    const tick = (ts) => {
+      if(!charging) return;
+      if(!lastTs) lastTs = ts;
+      const dt = (ts - lastTs) / 1000;
+      lastTs = ts;
+
+      const boostFactor = 1 + Math.min(2.3, loveEarned * 1.25);
+      setCharge(charge + baseSpeed * dt * boostFactor);
+
+      setSlosh((Math.sin(ts/240) * 0.18), (Math.cos(ts/300) * 0.12));
+
+      if(charge < 100) chargeRaf = requestAnimationFrame(tick);
+    };
+
+    chargeRaf = requestAnimationFrame(tick);
+  }
+
+  function stopCharging(){
+    charging = false;
+    if(chargeRaf) cancelAnimationFrame(chargeRaf);
+    chargeRaf = null;
+    stopFizz();
+
+    if(charge < 100){
+      gsap.to({p: charge}, {
+        p: Math.max(0, charge - 8),
+        duration: 0.35,
+        ease: "power2.out",
+        onUpdate: function(){ setCharge(this.targets()[0].p); }
+      });
+    }
+  }
+
+  yesBtn.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
+    startCharging();
+  }, { passive:false });
+
+  yesBtn.addEventListener("pointerup", (e) => {
+    e.preventDefault();
+    stopCharging();
+  }, { passive:false });
+
+  yesBtn.addEventListener("pointercancel", stopCharging);
+  yesBtn.addEventListener("pointerleave", () => { if(charging) stopCharging(); });
+  yesBtn.addEventListener("click", (e) => e.preventDefault());
+
+  const FIXED_QUESTIONS = [
+    { q:"Pick the cutest answer 😌", a:"You 💗", b:"Also you 💞", correct:"a" },
+    { q:"What’s my favorite vibe?", a:"Us + soft playlist 🎶", b:"Cold email threads 🥶", correct:"a" },
+    { q:"Best Valentine plan?", a:"Food + laughs + long walk 🌙", b:"Excel reconciliation 📊", correct:"a" },
+    { q:"Which one is romance?", a:"Forehead kiss 😚", b:"404 Not Found 😵", correct:"a" },
+    { q:"Choose the correct spell:", a:"Abra-ka-YES 💗", b:"No-no-no 🙈", correct:"a" },
+    { q:"What makes me blush?", a:"Your smile 😳", b:"Server reboot 🧯", correct:"a" },
+    { q:"Pick one:", a:"Hold my hand 🫶", b:"Hold my bugs 🐛", correct:"a" },
+    { q:"This page wants…", a:"A YES 💞", b:"A ‘maybe’ 😭", correct:"a" },
+    { q:"Be honest:", a:"We’re a cute story ✨", b:"We’re a CSV file 🧾", correct:"a" },
+    { q:"What’s the correct choice?", a:"YES 💘", b:"Try again 😌", correct:"a" },
+    { q:"Love language?", a:"Time + cuddles 💗", b:"404 + silence 🫠", correct:"a" },
+    { q:"Pick the warmest thing:", a:"Your hug 🫂", b:"A broken AC 🥶", correct:"a" },
+    { q:"What should we do more?", a:"Make memories 🌸", b:"Make excuses 🙈", correct:"a" },
+    { q:"If I say 'valentine' you say…", a:"YES 💞", b:"Error 😭", correct:"a" },
+    { q:"What’s my weakness?", a:"You 😭💗", b:"Tax forms 🧾", correct:"a" },
+    { q:"Which is sweeter?", a:"You + me 😌", b:"A 500 error 😵", correct:"a" },
+    { q:"Pick a date vibe:", a:"Soft lights + laughs ✨", b:"Harsh neon + stress 😵‍💫", correct:"a" },
+    { q:"Where do I want to be?", a:"Next to you 💗", b:"In a meeting 🙃", correct:"a" },
+  ];
+
+  const GEN_LEFT = [
+    "Choose the cutest:",
+    "Pick the romantic one:",
+    "My heart prefers:",
+    "This is a love test:",
+    "Quick! Which one:",
+    "Pick a vibe:",
+    "Select the right answer:",
+    "Which is the best plan:",
+    "My favorite thing:",
+    "What do you want today:"
+  ];
+  const GEN_GOOD = [
+    ["You 💗","Also you 💞"],
+    ["A YES 💘","A no 😭"],
+    ["Hand holding 🫶","Cold emails 🥶"],
+    ["Cute date 🌙","Tax forms 🧾"],
+    ["Forehead kiss 😚","404 😵"],
+    ["Hug 🫂","Busy schedule 😵‍💫"],
+    ["Us ✨","Stress 🙃"],
+    ["Coffee + walk ☕️","Status meeting 📊"],
+    ["Smile 😳","Server reboot 🧯"],
+    ["Romance 💗","Chaos 🫠"],
+  ];
+
+  let qQueue = [];
+  let currentQ = null;
+
+  function shuffle(arr){
+    const a = arr.slice();
+    for(let i=a.length-1;i>0;i--){
+      const j = (Math.random()*(i+1))|0;
+      [a[i],a[j]] = [a[j],a[i]];
+    }
+    return a;
+  }
+
+  function makeGeneratedQuestion(){
+    const title = pick(GEN_LEFT);
+    const pair = pick(GEN_GOOD);
+    return { q: title, a: pair[0], b: pair[1], correct:"a" };
+  }
+
+  function refillQueue(){
+    const fixed = shuffle(FIXED_QUESTIONS);
+    const gens = Array.from({length: 40}, makeGeneratedQuestion);
+    qQueue = shuffle(fixed.concat(gens));
+  }
+
+  function nextQuestion(){
+    if(qQueue.length === 0) refillQueue();
+    currentQ = qQueue.pop();
+
+    qTitle.textContent = currentQ.q;
+    optA.textContent = currentQ.a;
+    optB.textContent = currentQ.b;
+
+    optA.classList.remove("correct","wrong");
+    optB.classList.remove("correct","wrong");
+    qHint.textContent = pick([
+      "Correct = fizzy boost 🫧💗",
+      "Earn love → YES fills faster 😌✨",
+      "Tiny quiz, big feelings 💞",
+      "Pick wisely… my heart is watching 👀💗"
+    ]);
+
+    optA.dataset.correct = (currentQ.correct === "a") ? "1" : "0";
+    optB.dataset.correct = (currentQ.correct === "b") ? "1" : "0";
+  }
+
+  function addLove(amount){
+    loveEarned = Math.min(2.2, loveEarned + amount);
+    if(earnedDecayTimer) clearInterval(earnedDecayTimer);
+    earnedDecayTimer = setInterval(() => {
+      loveEarned = Math.max(0, loveEarned - 0.03);
+      if(loveEarned <= 0){
+        clearInterval(earnedDecayTimer);
+        earnedDecayTimer = null;
       }
-    }
+    }, 220);
+  }
 
-    // prevent selection/copy on hold
-    yesBtn.addEventListener("pointerdown", (e) => {
-      e.preventDefault();
-      if(yesBtn.dataset.done === "1") return;
-      startCharging();
-    }, { passive:false });
+  function answer(btn){
+    const correct = btn.dataset.correct === "1";
+    const other = (btn === optA) ? optB : optA;
 
-    yesBtn.addEventListener("pointerup", (e) => {
-      e.preventDefault();
-      if(yesBtn.dataset.done === "1") return;
-      stopCharging();
-    }, { passive:false });
+    if(correct){
+      btn.classList.add("correct");
+      other.classList.add("wrong");
 
-    yesBtn.addEventListener("pointercancel", stopCharging);
-    yesBtn.addEventListener("pointerleave", () => { if(charging) stopCharging(); });
-    yesBtn.addEventListener("click", (e) => e.preventDefault());
+      SFX.correct();
+      setValMood("good", pick(["Correct 😌💗 +fizz boost!", "That’s the answer I wanted 🥰", "Perfect. My heart approves 💞"]));
 
-    // =======================
-    // Infinite question pool (lots, plus generator so it "never runs out")
-    // =======================
-    const FIXED_QUESTIONS = [
-      { q:"Pick the cutest answer 😌", a:"You 💗", b:"Also you 💞", correct:"a" },
-      { q:"What’s my favorite vibe?", a:"Us + soft playlist 🎶", b:"Cold email threads 🥶", correct:"a" },
-      { q:"Best Valentine plan?", a:"Food + laughs + long walk 🌙", b:"Excel reconciliation 📊", correct:"a" },
-      { q:"Which one is romance?", a:"Forehead kiss 😚", b:"404 Not Found 😵", correct:"a" },
-      { q:"Choose the correct spell:", a:"Abra-ka-YES 💗", b:"No-no-no 🙈", correct:"a" },
-      { q:"What makes me blush?", a:"Your smile 😳", b:"Server reboot 🧯", correct:"a" },
-      { q:"Pick one:", a:"Hold my hand 🫶", b:"Hold my bugs 🐛", correct:"a" },
-      { q:"This page wants…", a:"A YES 💞", b:"A ‘maybe’ 😭", correct:"a" },
-      { q:"Be honest:", a:"We’re a cute story ✨", b:"We’re a CSV file 🧾", correct:"a" },
-      { q:"What’s the correct choice?", a:"YES 💘", b:"Try again 😌", correct:"a" },
-      { q:"Love language?", a:"Time + cuddles 💗", b:"404 + silence 🫠", correct:"a" },
-      { q:"Pick the warmest thing:", a:"Your hug 🫂", b:"A broken AC 🥶", correct:"a" },
-      { q:"What should we do more?", a:"Make memories 🌸", b:"Make excuses 🙈", correct:"a" },
-      { q:"If I say 'valentine' you say…", a:"YES 💞", b:"Error 😭", correct:"a" },
-      { q:"What’s my weakness?", a:"You 😭💗", b:"Tax forms 🧾", correct:"a" },
-      { q:"Which is sweeter?", a:"You + me 😌", b:"A 500 error 😵", correct:"a" },
-      { q:"Pick a date vibe:", a:"Soft lights + laughs ✨", b:"Harsh neon + stress 😵‍💫", correct:"a" },
-      { q:"Where do I want to be?", a:"Next to you 💗", b:"In a meeting 🙃", correct:"a" },
-    ];
+      addLove(0.42);
+      const boost = 14 + Math.min(14, loveEarned*7);
+      setCharge(charge + boost);
+      spawnFizzBurst(1.2 + Math.min(1.6, loveEarned));
+      confetti({ particleCount: 16, spread: 42, startVelocity: 16, scalar: 0.7, origin: { y: 0.72 } });
 
-    // generator templates to never end
-    const GEN_LEFT = [
-      "Choose the cutest:",
-      "Pick the romantic one:",
-      "My heart prefers:",
-      "This is a love test:",
-      "Quick! Which one:",
-      "Pick a vibe:",
-      "Select the right answer:",
-      "Which is the best plan:",
-      "My favorite thing:",
-      "What do you want today:"
-    ];
-    const GEN_GOOD = [
-      ["You 💗","Also you 💞"],
-      ["A YES 💘","A no 😭"],
-      ["Hand holding 🫶","Cold emails 🥶"],
-      ["Cute date 🌙","Tax forms 🧾"],
-      ["Forehead kiss 😚","404 😵"],
-      ["Hug 🫂","Busy schedule 😵‍💫"],
-      ["Us ✨","Stress 🙃"],
-      ["Coffee + walk ☕️","Status meeting 📊"],
-      ["Smile 😳","Server reboot 🧯"],
-      ["Romance 💗","Chaos 🫠"],
-    ];
+      setTimeout(() => { nextQuestion(); }, 520);
+    } else {
+      btn.classList.add("wrong");
+      other.classList.add("correct");
 
-    let qQueue = [];
-    let currentQ = null;
-
-    function shuffle(arr){
-      const a = arr.slice();
-      for(let i=a.length-1;i>0;i--){
-        const j = (Math.random()*(i+1))|0;
-        [a[i],a[j]] = [a[j],a[i]];
-      }
-      return a;
-    }
-
-    function makeGeneratedQuestion(){
-      const title = pick(GEN_LEFT);
-      const pair = pick(GEN_GOOD);
-      // always A is the "correct" (romantic) one; keep the pattern consistent
-      return { q: title, a: pair[0], b: pair[1], correct:"a" };
-    }
-
-    function refillQueue(){
-      const fixed = shuffle(FIXED_QUESTIONS);
-      const gens = Array.from({length: 40}, makeGeneratedQuestion); // plenty
-      qQueue = fixed.concat(gens);
-      qQueue = shuffle(qQueue);
-    }
-
-    function nextQuestion(){
-      if(qQueue.length === 0) refillQueue();
-      currentQ = qQueue.pop();
-
-      qTitle.textContent = currentQ.q;
-      optA.textContent = currentQ.a;
-      optB.textContent = currentQ.b;
-
-      optA.classList.remove("correct","wrong");
-      optB.classList.remove("correct","wrong");
-      qHint.textContent = pick([
-        "Correct = fizzy boost 🫧💗",
-        "Earn love → YES fills faster 😌✨",
-        "Tiny quiz, big feelings 💞",
-        "Pick wisely… my heart is watching 👀💗"
-      ]);
-
-      optA.dataset.correct = (currentQ.correct === "a") ? "1" : "0";
-      optB.dataset.correct = (currentQ.correct === "b") ? "1" : "0";
-    }
-
-    function addLove(amount){
-      loveEarned = Math.min(2.2, loveEarned + amount);
-      if(earnedDecayTimer) clearInterval(earnedDecayTimer);
-      earnedDecayTimer = setInterval(() => {
-        loveEarned = Math.max(0, loveEarned - 0.03);
-        if(loveEarned <= 0){
-          clearInterval(earnedDecayTimer);
-          earnedDecayTimer = null;
-        }
-      }, 220);
-    }
-
-    function setValMood(kind, text){
-      const moods = {
-        yes: [
-          { e:"😍", m:"YES?? 😭💗 My heart just did a backflip." },
-          { e:"🥹", m:"Stoppp—I'm melting 🥹💞" },
-          { e:"💓", m:"Okay… heart is beating FAST 💓" },
-          { e:"😘", m:"Come here you 😘💘" },
-          { e:"🤭", m:"Hehe… I knew you’d say yes 🤭💗" }
-        ],
-        good: [
-          { e:"✨", m:"Correct 😌💗 +love boost!" },
-          { e:"🥰", m:"You’re too good at this 🥰💞" },
-          { e:"😚", m:"Mhm… that’s my favorite answer 😚" }
-        ],
-        bad: [
-          { e:"😤", m:"Wrong 😤 …but cute try." },
-          { e:"🙈", m:"Nope 🙈 try again (I’ll help)" },
-          { e:"🥺", m:"Aww no… but I still like you 🥺💗" }
-        ],
-        idle: [
-          { e:"😊", m:"Answer a question… or hold YES 😌💗" },
-          { e:"😌", m:"Play along… I’m enjoying this 😌✨" },
-          { e:"🫶", m:"I’m right here 🫶💞" }
-        ]
-      };
-      const pool = moods[kind] || moods.idle;
-      const p = pool[(Math.random() * pool.length) | 0];
-
-      valEmoji.textContent = p.e;
-      valMood.textContent = text || p.m;
-
-      gsap.killTweensOf([valEmoji, valMood]);
-      gsap.fromTo(valEmoji,
-        { scale: 0.92, rotation: -2 },
-        { scale: 1.08, rotation: 2, duration: 0.18, ease:"power2.out", yoyo:true, repeat:1 }
-      );
-      gsap.fromTo(valMood,
-        { opacity: 0, y: 6 },
-        { opacity: 1, y: 0, duration: 0.22, ease:"power2.out" }
-      );
-    }
-
-    function answer(btn){
-      const correct = btn.dataset.correct === "1";
-      const other = (btn === optA) ? optB : optA;
-
-      if(correct){
-        btn.classList.add("correct");
-        other.classList.add("wrong");
-
-        SFX.correct();
-        setValMood("good", pick(["Correct 😌💗 +fizz boost!", "That’s the answer I wanted 🥰", "Perfect. My heart approves 💞"]));
-
-        // Boost charge and holding speed
-        addLove(0.42);
-
-        // Fill jump + heavy fizz burst
-        const boost = 14 + Math.min(14, loveEarned*7);
-        setCharge(charge + boost);
-
-        spawnFizzBurst(1.2 + Math.min(1.6, loveEarned)); // lots of bubbles
-
-        // micro confetti
-        confetti({ particleCount: 16, spread: 42, startVelocity: 16, scalar: 0.7, origin: { y: 0.72 } });
-
-        setTimeout(() => { nextQuestion(); }, 520);
-      } else {
-        btn.classList.add("wrong");
-        other.classList.add("correct");
-
-        SFX.wrong();
-        setValMood("bad", pick(["Nope 🙈 try again", "Wrong 😤 but still cute", "Not that one 😌✨"]));
-
-        // tiny pity boost so it never feels stuck
-        setCharge(charge + 3);
-        spawnFizzBurst(0.4);
-
-        setTimeout(() => { nextQuestion(); }, 620);
-      }
-
-      gsap.fromTo(btn, {scale:0.98}, {scale:1.06, duration:0.16, yoyo:true, repeat:1, ease:"power2.out"});
-    }
-
-    optA.addEventListener("click", () => answer(optA));
-    optB.addEventListener("click", () => answer(optB));
-
-    function acceptYes(){
-      if(yesBtn.dataset.done === "1") return;
-      yesBtn.dataset.done = "1";
-      charging = false;
-      if(chargeRaf) cancelAnimationFrame(chargeRaf);
-      stopFizz();
-
-      setValMood("yes", "Yesss… you just made my whole heart blush 💗");
-      SFX.win();
-
-      confetti({ particleCount: 170, spread: 75, startVelocity: 32, scalar: 0.95, origin: { y: 0.6 } });
-      setTimeout(() => confetti({ particleCount: 120, spread: 110, startVelocity: 26, scalar: 0.85, origin: { y: 0.55 } }), 160);
-
-      const day = state.metDay ?? "";
-      document.getElementById("finalLine1").textContent = `You have won my heart, ${CUTIE_NAME}.`;
-      document.getElementById("finalLine2").textContent =
-        day ? `And I’ll never forget ${MONTH_NAME} ${day}, ${YEAR}. 💗` : `Happy Valentine’s Day ✨`;
-
-      renderCheesyCards();
-      setTimeout(() => showScreen("s4"), 520);
-    }
-
-    function placeValInitial(){
-      yesBtn.dataset.done = "0";
-      setCharge(0);
-      loveEarned = 0;
-      setSlosh(0,0);
-      setValMood("idle", pick(["Answer a question… or hold YES 😌💗","I’m watching 👀💞","Let’s play… gently 😌✨"]));
-      qQueue = [];
-      nextQuestion();
-    }
-
-    // =======================
-    // SCREEN 4: Final
-    // =======================
-    const cheesyGrid = document.getElementById("cheesyGrid");
-    const heartLayer = document.getElementById("heartLayer");
-    let finalHeartsTimer = null;
-
-    function renderCheesyCards(){
-      const cards = [
-        { icon:"👻", title:"Ghost Hug", text:"You can’t see it… but it’s always there." },
-        { icon:"🫂", title:"Hugs Speak", text:"Hugs speak louder than words. Always." },
-        { icon:"🌍", title:"Wherever You Are", text:"No distance can change this: I love you." },
-        { icon:"📈", title:"My Love Graph", text:"It’s increasing… day by day. (No limit 😌)" },
-        { icon:"📐", title:"If you were an angle…", text:"You’d be A-CUTE-ONE 💗" },
-        { icon:"📝", title:"Thank You", text:"For being you. For existing. For making me smile." },
-      ];
-
-      cheesyGrid.innerHTML = cards.map(c => `
-        <div class="noteCard">
-          <div class="noteIcon">${c.icon}</div>
-          <div class="noteTitle">${c.title}</div>
-          <div class="noteText">${c.text}</div>
-        </div>
-      `).join("");
-    }
-
-    function spawnFloatingHeart(){
-      const hearts = ["💗","💞","💘","💕","💓"];
-      const el = document.createElement("div");
-      el.className = "floatHeart";
-      el.textContent = pick(hearts);
-
-      const w = heartLayer.clientWidth;
-      const h = heartLayer.clientHeight;
-
-      const x = 12 + Math.random()*(w - 24);
-      const startY = h + 10;
-      const endY = -40 - Math.random()*60;
-
-      el.style.left = x + "px";
-      el.style.top = startY + "px";
-      el.style.fontSize = (14 + Math.random()*12) + "px";
-      heartLayer.appendChild(el);
-
-      const driftX = -30 + Math.random()*60;
-      const rot = -18 + Math.random()*36;
-
-      gsap.fromTo(el,
-        { opacity: 0, y: 0, x: 0, rotation: 0, scale: 0.9 },
-        { opacity: 0.85, duration: 0.18, ease: "power2.out",
-          onComplete: () => {
-            gsap.to(el, {
-              y: endY - startY,
-              x: driftX,
-              rotation: rot,
-              opacity: 0,
-              scale: 1.15,
-              duration: 2.8 + Math.random()*1.6,
-              ease: "power1.out",
-              onComplete: () => el.remove()
-            });
-          }
-        }
-      );
-    }
-
-    function startFinalEffects(){
-      SFX.win();
-      confetti({ particleCount: 120, spread: 80, startVelocity: 28, scalar: 0.95, origin: { y: 0.55 } });
-      setTimeout(() => confetti({ particleCount: 90, spread: 120, startVelocity: 22, scalar: 0.8, origin: { y: 0.5 } }), 180);
-
-      heartLayer.innerHTML = "";
-      if(finalHeartsTimer) clearInterval(finalHeartsTimer);
-      finalHeartsTimer = setInterval(spawnFloatingHeart, 220);
-
-      setTimeout(() => {
-        if(finalHeartsTimer) clearInterval(finalHeartsTimer);
-        finalHeartsTimer = null;
-      }, 9000);
-    }
-
-    // =======================
-    // Navigation
-    // =======================
-    document.getElementById("toS2").addEventListener("click", () => { SFX.sparkle(); showScreen("s2"); initTTT(); });
-
-    toS3.addEventListener("click", async () => {
-      SFX.sparkle();
-      const valSub = document.getElementById("valSub");
-      const day = state.metDay ?? "that day";
-      valSub.innerHTML = `Since <span class="name">${MONTH_NAME} ${day}, ${YEAR}</span>, I’ve been smiling more.`;
-
-      showScreen("s3");
-      placeValInitial();
-
-      try{
-        if (typeof DeviceMotionEvent !== "undefined" && typeof DeviceMotionEvent.requestPermission === "function") {
-          const res = await DeviceMotionEvent.requestPermission();
-          if(res === "granted") enableMotion();
-        } else {
-          enableMotion();
-        }
-      }catch(e){ enableMotion(); }
-    });
-
-    document.getElementById("replay").addEventListener("click", () => {
       SFX.wrong();
-      state.metDay = null;
-      state.tttWon = false;
+      setValMood("bad", pick(["Nope 🙈 try again", "Wrong 😤 but still cute", "Not that one 😌✨"]));
 
-      document.getElementById("toS2").disabled = true;
-      dateNote.textContent = "Choose our day…";
-      document.querySelectorAll(".dateBtn").forEach(x => x.classList.remove("selected"));
+      setCharge(charge + 3);
+      spawnFizzBurst(0.4);
 
-      initTTT();
-      showScreen("s1");
-    });
-
-    // =======================
-    // Calendar init
-    // =======================
-    buildCalendar();
-
-    // =======================
-    // Audio toggle init
-    // =======================
-    updateAudioUI();
-
-    // =======================
-    // TicTacToe init
-    // =======================
-    initTTT();
-
-    // =======================
-    // Calendar click handler
-    // =======================
-    function selectDay(day, btn){
-      SFX.tap();
-      state.metDay = day;
-      document.querySelectorAll(".dateBtn").forEach(x => x.classList.remove("selected"));
-      btn.classList.add("selected");
-      document.getElementById("toS2").disabled = false;
-
-      if(CORRECT_DAY){
-        if(day !== CORRECT_DAY){
-          dateNote.textContent = wrongDayMessage(day);
-          suggestCorrectDay();
-          SFX.wrong();
-        } else {
-          dateNote.textContent = wrongDayMessage(day);
-          SFX.correct();
-        }
-      } else {
-        dateNote.textContent = `So… ${MONTH_NAME} ${day}, ${YEAR} 💗`;
-        SFX.soft();
-      }
-      gsap.fromTo(btn, {scale:0.96}, {scale:1.03, duration:0.16, ease:"power2.out", yoyo:true, repeat:1});
+      setTimeout(() => { nextQuestion(); }, 620);
     }
+
+    gsap.fromTo(btn, {scale:0.98}, {scale:1.06, duration:0.16, yoyo:true, repeat:1, ease:"power2.out"});
+  }
+
+  optA.addEventListener("click", () => answer(optA));
+  optB.addEventListener("click", () => answer(optB));
+
+  function placeValInitial(){
+    yesBtn.dataset.done = "0";
+    setCharge(0);
+    loveEarned = 0;
+    setSlosh(0,0);
+    setValMood("idle", pick(["Answer a question… or hold YES 😌💗","I’m watching 👀💞","Let’s play… gently 😌✨"]));
+    qQueue = [];
+    refillQueue();
+    nextQuestion();
+  }
+
+  function acceptYes(){
+    if(yesBtn.dataset.done === "1") return;
+    yesBtn.dataset.done = "1";
+    charging = false;
+    if(chargeRaf) cancelAnimationFrame(chargeRaf);
+    stopFizz();
+
+    setValMood("yes", "Yesss… you just made my whole heart blush 💗");
+    SFX.win();
+
+    confetti({ particleCount: 170, spread: 75, startVelocity: 32, scalar: 0.95, origin: { y: 0.6 } });
+    setTimeout(() => confetti({ particleCount: 120, spread: 110, startVelocity: 26, scalar: 0.85, origin: { y: 0.55 } }), 160);
+
+    const day = state.metDay ?? "";
+    document.getElementById("finalLine1").textContent = `You have won my heart, ${CUTIE_NAME}.`;
+    document.getElementById("finalLine2").textContent =
+      day ? `And I’ll never forget ${MONTH_NAME} ${day}, ${YEAR}. 💗` : `Happy Valentine’s Day ✨`;
+
+    renderCheesyCards();
+    setTimeout(() => showScreen("s4"), 520);
+  }
+
+  // =======================
+  // SCREEN 4 effects
+  // =======================
+  const cheesyGrid = document.getElementById("cheesyGrid");
+  const heartLayer = document.getElementById("heartLayer");
+  let finalHeartsTimer = null;
+
+  function renderCheesyCards(){
+    const cards = [
+      { icon:"👻", title:"Ghost Hug", text:"You can’t see it… but it’s always there." },
+      { icon:"🫂", title:"Hugs Speak", text:"Hugs speak louder than words. Always." },
+      { icon:"🌍", title:"Wherever You Are", text:"No distance can change this: I love you." },
+      { icon:"📈", title:"My Love Graph", text:"It’s increasing… day by day. (No limit 😌)" },
+      { icon:"📐", title:"If you were an angle…", text:"You’d be A-CUTE-ONE 💗" },
+      { icon:"📝", title:"Thank You", text:"For being you. For existing. For making me smile." },
+    ];
+
+    cheesyGrid.innerHTML = cards.map(c => `
+      <div class="noteCard">
+        <div class="noteIcon">${c.icon}</div>
+        <div class="noteTitle">${c.title}</div>
+        <div class="noteText">${c.text}</div>
+      </div>
+    `).join("");
+  }
+
+  function spawnFloatingHeart(){
+    const hearts = ["💗","💞","💘","💕","💓"];
+    const el = document.createElement("div");
+    el.className = "floatHeart";
+    el.textContent = pick(hearts);
+
+    const w = heartLayer.clientWidth;
+    const h = heartLayer.clientHeight;
+
+    const x = 12 + Math.random()*(w - 24);
+    const startY = h + 10;
+    const endY = -40 - Math.random()*60;
+
+    el.style.left = x + "px";
+    el.style.top = startY + "px";
+    el.style.fontSize = (14 + Math.random()*12) + "px";
+    heartLayer.appendChild(el);
+
+    const driftX = -30 + Math.random()*60;
+    const rot = -18 + Math.random()*36;
+
+    gsap.fromTo(el,
+      { opacity: 0, y: 0, x: 0, rotation: 0, scale: 0.9 },
+      { opacity: 0.85, duration: 0.18, ease: "power2.out",
+        onComplete: () => {
+          gsap.to(el, {
+            y: endY - startY,
+            x: driftX,
+            rotation: rot,
+            opacity: 0,
+            scale: 1.15,
+            duration: 2.8 + Math.random()*1.6,
+            ease: "power1.out",
+            onComplete: () => el.remove()
+          });
+        }
+      }
+    );
+  }
+
+  function startFinalEffects(){
+    SFX.win();
+    confetti({ particleCount: 120, spread: 80, startVelocity: 28, scalar: 0.95, origin: { y: 0.55 } });
+    setTimeout(() => confetti({ particleCount: 90, spread: 120, startVelocity: 22, scalar: 0.8, origin: { y: 0.5 } }), 180);
+
+    heartLayer.innerHTML = "";
+    if(finalHeartsTimer) clearInterval(finalHeartsTimer);
+    finalHeartsTimer = setInterval(spawnFloatingHeart, 220);
+
+    setTimeout(() => {
+      if(finalHeartsTimer) clearInterval(finalHeartsTimer);
+      finalHeartsTimer = null;
+    }, 9000);
+  }
+
+  // =======================
+  // Navigation
+  // =======================
+  toS3.addEventListener("click", async () => {
+    SFX.sparkle();
+
+    const valSub = document.getElementById("valSub");
+    const day = state.metDay ?? "that day";
+    valSub.innerHTML = `Since <span class="name">${MONTH_NAME} ${day}, ${YEAR}</span>, I’ve been smiling more.`;
+
+    showScreen("s3");
+    placeValInitial();
+
+    try{
+      if (typeof DeviceMotionEvent !== "undefined" && typeof DeviceMotionEvent.requestPermission === "function") {
+        const res = await DeviceMotionEvent.requestPermission();
+        if(res === "granted") enableMotion();
+      } else {
+        enableMotion();
+      }
+    }catch(e){ enableMotion(); }
+  });
+
+  document.getElementById("replay").addEventListener("click", () => {
+    SFX.wrong();
+    state.metDay = null;
+    state.tttWon = false;
+
+    toS2.disabled = true;
+    dateNote.textContent = "Choose our day…";
+    document.querySelectorAll(".dateBtn").forEach(x => x.classList.remove("selected"));
+
+    initTTT();
+    showScreen("s1");
+  });
+
+  // init
+  initTTT();
 
   </script>
 </body>
