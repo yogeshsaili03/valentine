@@ -525,11 +525,10 @@
       transform: translateX(-50%);
       bottom: 170px;
       z-index: 11;
-      min-width: min(520px, 92%);
       text-align:center;
       border-radius: 16px;
       padding: 10px 12px;
-      background: rgba(255,255,255,.76);
+      background: transparent !important;
       border: 1px solid rgba(43,15,29,.10);
       box-shadow: 0 18px 44px rgba(36,10,20,.10);
       font-weight: 900;
@@ -1717,15 +1716,15 @@ body{
         setCharge(charge - 3);
         setValMood("bad", pick(["Bomb?! 😭💣", "Nooo… avoid that 🙈", "Ouch 😤 careful!"]));
         SFX.wrong();
-        showToast(pick(["Bomb! -love 💣", "Ouch! -3% 😭", "That one hurts 💣😤"]));
+        showToast(pick(["Bomb! -love 💣", "Ouch! -3% 😭", "That one hurts 💣"]));
         confetti({ particleCount: 10, spread: 40, startVelocity: 16, scalar: 0.6, origin: { y: 0.72 } });
       } else {
         score++;
         scoreEl.textContent = String(score);
-        setCharge(charge + 7);
-        setValMood("good", pick(["Cute catch 🥰💗", "YES energy +7% 😭💞", "Awwww 😍 keep going"]));
+        setCharge(charge + 10);
+        setValMood("good", pick(["Cute catch 🥰💗", "YES energy +10% 😭💞", "Awwww 😍 keep going"]));
         SFX.correct();
-        showToast(pick(["Aww +7% 💗", "Cute! +7% 💞", "More love +7% 💘"]));
+        showToast(pick(["Aww +10% 💗", "Cute! +10% 💞", "More love +10% 💘"]));
         spawnFizzBubble(1.2);
         confetti({ particleCount: 12, spread: 46, startVelocity: 18, scalar: 0.65, origin: { y: 0.7 } });
       }
