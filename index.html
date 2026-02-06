@@ -54,12 +54,11 @@
       background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.30'/%3E%3C/svg%3E");
     }
 
-    /* phone-friendly wrapper */
     .wrap{
       min-height: 100svh;
       display:grid;
       place-items:center;
-      padding: max(10px, env(safe-area-inset-top)) 12px max(14px, env(safe-area-inset-bottom));
+      padding: max(14px, env(safe-area-inset-top)) 14px max(18px, env(safe-area-inset-bottom));
     }
 
     .card{
@@ -69,7 +68,7 @@
       border: 1px solid var(--stroke);
       box-shadow: var(--shadow);
       backdrop-filter: blur(14px);
-      padding: clamp(14px, 4vw, 28px);
+      padding: clamp(16px, 4.2vw, 30px);
       position:relative;
       overflow:hidden;
     }
@@ -83,10 +82,10 @@
       pointer-events:none;
     }
 
-    /* Tiny mute toggle (non-overlapping) */
+    /* Tiny mute toggle */
     .audioFab{
       position: fixed;
-      top: max(10px, env(safe-area-inset-top));
+      top: 10px;
       right: 10px;
       width: 38px;
       height: 38px;
@@ -102,14 +101,10 @@
       -webkit-tap-highlight-color: transparent;
       user-select:none;
     }
-    .audioFab::before{
-      content:"🔊";
-      font-size: 16px;
-      filter: drop-shadow(0 6px 10px rgba(181,22,82,.10));
-    }
+    .audioFab::before{ content:"🔊"; font-size: 16px; }
     .audioFab.off::before{ content:"🔇"; }
 
-    .screens{ position: relative; }
+    .screens{ position: relative; min-height: 72svh; }
     .screen{ display:none; animation: fadeIn .25s ease-out; }
     .screen.active{ display:block; }
 
@@ -127,8 +122,8 @@
       line-height: 1.12;
       color: #240a14;
     }
-    h1{ font-size: clamp(20px, 6vw, 44px); }
-    h2{ font-size: clamp(18px, 5.6vw, 40px); }
+    h1{ font-size: clamp(22px, 6.2vw, 44px); }
+    h2{ font-size: clamp(20px, 6vw, 40px); }
 
     .sub{
       margin: 10px 0 0;
@@ -172,12 +167,6 @@
       user-select:none;
       -webkit-tap-highlight-color: transparent;
       cursor:pointer;
-      touch-action: manipulation;
-    }
-    .btn:disabled{
-      opacity:.55;
-      cursor:not-allowed;
-      filter: grayscale(.15);
     }
     .btn.primary{
       color:#fff;
@@ -262,7 +251,6 @@
       position:relative;
       cursor:pointer;
       user-select:none;
-      touch-action: manipulation;
     }
     .blank{
       width: 100%;
@@ -282,7 +270,6 @@
       bottom: -7px;
       right: -2px;
       font-size: 14px;
-      filter: drop-shadow(0 8px 12px rgba(181,22,82,.12));
     }
     .dateBtn.suggest{
       border-color: rgba(181,22,82,.25);
@@ -344,14 +331,13 @@
     }
     .tttBoardShell{
       width: 100%;
-      max-width: 440px;
+      max-width: 420px;
       margin: 0 auto;
       position:relative;
-      padding: 0 18px; /* prevents cut on phone */
+      padding: 0 18px;
     }
     .tttBoard{
       width: 100%;
-      margin: 0 auto;
       display:grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: clamp(8px, 2.2vw, 10px);
@@ -359,9 +345,8 @@
       border-radius: 22px;
       background: rgba(255,255,255,.45);
       border: 1px solid rgba(255,255,255,.55);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.45);
-      touch-action: manipulation;
       overflow: hidden;
+      touch-action: manipulation;
     }
     .cell{
       aspect-ratio: 1/1;
@@ -377,12 +362,11 @@
       user-select:none;
       position:relative;
       overflow:hidden;
-      touch-action: manipulation;
     }
     .cell.pop{ animation: popIn .22s ease-out; }
     @keyframes popIn{
-      from{ transform: scale(.78); filter: blur(1px); opacity:.2; }
-      to{ transform: scale(1); filter: blur(0); opacity:1; }
+      from{ transform: scale(.78); opacity:.2; }
+      to{ transform: scale(1); opacity:1; }
     }
     .cell.hint::after{
       content:"";
@@ -412,7 +396,7 @@
       pointer-events:none;
     }
 
-    /* ===== Screen 3: Valentine ===== */
+    /* ===== Screen 3: Valentine + Catch game ===== */
     .emojiRow{
       display:grid;
       place-items:center;
@@ -435,11 +419,12 @@
       user-select:none;
     }
 
-    /* arena tuned for phone (no huge empty space) */
+    /* compact on phone */
     .arena{
       margin-top: 10px;
       position:relative;
-      height: min(540px, 54svh);
+      height: auto;
+      min-height: 320px;
       border-radius: 22px;
       border: 1px solid rgba(255,255,255,.55);
       background: rgba(255,255,255,.38);
@@ -447,72 +432,101 @@
       overflow:hidden;
       padding: 12px;
     }
-    @media (max-width: 420px){
-      .arena{ height: min(500px, 56svh); }
+    @media (max-width: 430px){
+      .arena{ min-height: 290px; padding: 10px; }
     }
 
-    .qCard{
+    /* mini HUD */
+    .catchHud{
       position:absolute;
-      left: 50%;
-      top: 90px;
-      transform: translateX(-50%);
-      width: min(560px, 92%);
-      border-radius: 20px;
-      background: rgba(255,255,255,.72);
-      border: 1px solid rgba(43,15,29,.10);
-      box-shadow: 0 18px 50px rgba(36,10,20,.08);
-      padding: 12px 12px 10px;
-      backdrop-filter: blur(10px);
-      user-select:none;
-    }
-    .qTitle{
-      font-weight: 900;
-      font-size: clamp(13px, 3.8vw, 15px);
-      color: rgba(43,15,29,.86);
-      text-align:center;
-      margin-bottom: 10px;
-    }
-    .qOpts{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
+      left: 12px;
+      right: 12px;
+      top: 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
       gap: 10px;
+      z-index: 6;
+      user-select:none;
+      pointer-events:none;
     }
-    .qOpt{
-      border-radius: 16px;
-      padding: 11px 10px;
+    .hudPill{
+      pointer-events:none;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.70);
       border: 1px solid rgba(43,15,29,.10);
-      background: rgba(255,255,255,.88);
       box-shadow: 0 12px 30px rgba(36,10,20,.06);
       font-weight: 900;
-      font-size: clamp(12px, 3.6vw, 14px);
-      cursor:pointer;
-      -webkit-tap-highlight-color: transparent;
-      user-select:none;
-      line-height: 1.18;
-      text-align:center;
-      touch-action: manipulation;
-    }
-    .qOpt.correct{
-      border-color: rgba(181,22,82,.22);
-      box-shadow: 0 18px 44px rgba(181,22,82,.14);
-      background: linear-gradient(135deg, rgba(181,22,82,.08), rgba(240,143,177,.10));
-    }
-    .qOpt.wrong{
-      border-color: rgba(43,15,29,.16);
-      background: rgba(255,255,255,.82);
-      filter: grayscale(.05);
-    }
-    .qHint{
-      text-align:center;
-      margin-top: 8px;
-      font-weight: 800;
       font-size: 12px;
-      color: rgba(43,15,29,.70);
-      min-height: 1.4em;
-      user-select:none;
+      color: rgba(43,15,29,.82);
+      backdrop-filter: blur(10px);
+      white-space: nowrap;
     }
 
-    /* YES fixed to bottom inside arena */
+    /* toast messages */
+    .toast{
+      position:absolute;
+      left: 50%;
+      top: 58px;
+      transform: translateX(-50%);
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(43,15,29,.10);
+      box-shadow: 0 18px 50px rgba(36,10,20,.10);
+      font-weight: 900;
+      font-size: 12.5px;
+      color: rgba(43,15,29,.82);
+      backdrop-filter: blur(10px);
+      z-index: 7;
+      opacity: 0;
+      pointer-events:none;
+      user-select:none;
+      text-align:center;
+      max-width: min(520px, 92%);
+    }
+
+    /* play field */
+    .catchField{
+      position:absolute;
+      inset: 54px 10px 86px 10px; /* leaves space for YES at bottom */
+      border-radius: 18px;
+      background: rgba(255,255,255,.35);
+      border: 1px solid rgba(255,255,255,.52);
+      overflow:hidden;
+      z-index: 2;
+    }
+    @media (max-width:430px){
+      .catchField{ inset: 52px 8px 80px 8px; }
+    }
+
+    .drop{
+      position:absolute;
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      display:grid;
+      place-items:center;
+      font-size: 22px;
+      cursor:pointer;
+      user-select:none;
+      -webkit-tap-highlight-color: transparent;
+      transform: translateZ(0);
+      will-change: transform;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(43,15,29,.10);
+      box-shadow: 0 16px 40px rgba(36,10,20,.10);
+      backdrop-filter: blur(8px);
+    }
+    .drop.heart{ }
+    .drop.bomb{
+      background: rgba(255,255,255,.66);
+      filter: saturate(.95);
+    }
+    .drop:active{ transform: scale(.95); }
+
+    /* YES button pinned bottom */
     .chargeBtn{
       position:absolute;
       left: 50%;
@@ -529,41 +543,16 @@
       user-select:none;
       -webkit-user-select:none;
       z-index: 5;
-      -webkit-tap-highlight-color: transparent;
     }
+    @media (max-width:430px){ .chargeBtn{ height: 48px; bottom: 10px; } }
 
     .premiumYes{
       border: 1px solid rgba(255,255,255,.42);
       background: radial-gradient(120px 70px at 30% 20%, rgba(255,255,255,.28), transparent 60%),
                   linear-gradient(135deg, rgba(181,22,82,.92), rgba(240,143,177,.92));
       box-shadow: 0 20px 46px rgba(181,22,82,.16), inset 0 1px 0 rgba(255,255,255,.35);
-    }
-    .premiumYes .yesTopShine{
-      position:absolute;
-      inset:-30px -20px auto -20px;
-      height: 70px;
-      background: linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0));
-      transform: rotate(-6deg);
-      z-index: 3;
-      pointer-events:none;
-    }
-    .premiumYes .yesRing{
-      position:absolute;
-      inset: -2px;
       border-radius: 999px;
-      background: conic-gradient(from 270deg,
-        rgba(255,255,255,.0) 0%,
-        rgba(255,255,255,.0) 30%,
-        rgba(255,255,255,.85) 35%,
-        rgba(255,255,255,.0) 40%,
-        rgba(255,255,255,.0) 100%
-      );
-      opacity: .20;
-      filter: blur(.2px);
-      z-index: 2;
-      pointer-events:none;
     }
-
     .chargeBtn .yesText{ position:relative; z-index: 6; }
     .chargeBtn .chargePct{ position:relative; z-index: 6; font-weight: 900; opacity: .95; }
 
@@ -581,7 +570,6 @@
         linear-gradient(180deg, rgba(255,255,255,.18), rgba(0,0,0,.05)),
         linear-gradient(135deg, rgba(181,22,82,.95), rgba(240,143,177,.95));
       transform: translateY(8px);
-      will-change: transform, height;
       box-shadow: inset 0 8px 18px rgba(255,255,255,.10);
       overflow:hidden;
     }
@@ -619,16 +607,11 @@
       background: rgba(255,255,255,.62);
       box-shadow: inset 0 1px 0 rgba(255,255,255,.8);
       opacity: 0;
-      will-change: transform, opacity;
-    }
-
-    .chargeBtn.charged{
-      box-shadow: 0 26px 56px rgba(181,22,82,.22), inset 0 1px 0 rgba(255,255,255,.35);
     }
 
     .hint{
       text-align:center;
-      font-size: 12.5px;
+      font-size: 12px;
       color: rgba(43,15,29,.66);
       margin-top: 10px;
       user-select:none;
@@ -663,28 +646,12 @@
       0%,100%{ transform: translateY(0) scale(1); opacity:.85; }
       50%{ transform: translateY(-6px) scale(1.02); opacity:1; }
     }
-    .finalBox::after{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.22) 38%, transparent 70%);
-      transform: translateX(-140%) skewX(-18deg);
-      animation: finalSweep 4.2s ease-in-out infinite;
-      pointer-events:none;
-      z-index: 0;
-    }
-    @keyframes finalSweep{
-      0%{ transform: translateX(-140%) skewX(-18deg); }
-      45%{ transform: translateX(160%) skewX(-18deg); }
-      100%{ transform: translateX(160%) skewX(-18deg); }
-    }
     .finalEmoji{
       font-size: clamp(68px, 18vw, 110px);
       line-height:1;
       margin-bottom: 6px;
       position: relative;
       z-index: 1;
-      filter: drop-shadow(0 18px 22px rgba(181,22,82,.12));
       animation: heartbeat 1.6s ease-in-out infinite;
       user-select:none;
     }
@@ -702,18 +669,8 @@
       position: relative;
       z-index: 1;
       user-select:none;
+      text-shadow: 0 0 18px rgba(181,22,82,.18);
     }
-    .finalLine.glowy{
-      text-shadow:
-        0 0 16px rgba(181,22,82,.20),
-        0 0 34px rgba(240,143,177,.18);
-      animation: textGlow 2.2s ease-in-out infinite;
-    }
-    @keyframes textGlow{
-      0%,100%{ opacity:.92; transform: translateY(0); }
-      50%{ opacity:1; transform: translateY(-1px); }
-    }
-
     .cheesyGrid{
       margin-top: 14px;
       display:grid;
@@ -723,7 +680,6 @@
     @media (max-width: 720px){
       .cheesyGrid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
-
     .noteCard{
       border-radius: 18px;
       background: rgba(255,255,255,.72);
@@ -740,18 +696,9 @@
     .noteCard:nth-child(4){ animation-delay: 1.2s; }
     .noteCard:nth-child(5){ animation-delay: 1.6s; }
     .noteCard:nth-child(6){ animation-delay: 2.0s; }
-
     @keyframes cardFloat{
       0%,100%{ transform: translateY(0); }
       50%{ transform: translateY(-4px); }
-    }
-
-    .noteCard::after{
-      content:"";
-      position:absolute;
-      inset: 0;
-      background: radial-gradient(220px 140px at 30% 10%, rgba(240,143,177,.18), transparent 60%);
-      pointer-events:none;
     }
     .noteTitle{
       font-family:"Playfair Display", serif;
@@ -759,49 +706,16 @@
       font-size: 14px;
       color: rgba(43,15,29,.92);
       margin-bottom: 6px;
-      position: relative;
-      z-index: 1;
     }
     .noteText{
       font-weight: 800;
       font-size: 12.5px;
       color: rgba(43,15,29,.76);
       line-height: 1.25;
-      position: relative;
-      z-index: 1;
-    }
-    .noteIcon{
-      position:absolute;
-      right: 10px;
-      top: 10px;
-      opacity:.95;
-      filter: drop-shadow(0 10px 14px rgba(181,22,82,.10));
-      animation: iconGlow 2.8s ease-in-out infinite;
-      z-index: 1;
-    }
-    @keyframes iconGlow{
-      0%,100%{ transform: scale(1); opacity:.92; }
-      50%{ transform: scale(1.06); opacity:1; }
     }
 
-    .heartLayer{
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      overflow:hidden;
-      z-index: 2;
-      border-radius: 22px;
-    }
-    .floatHeart{
-      position:absolute;
-      opacity: 0;
-      filter: drop-shadow(0 10px 14px rgba(181,22,82,.10));
-      will-change: transform, opacity;
-      user-select:none;
-    }
-
-    /* prevent selection on mobile long-press */
-    .arena, .qCard, .chargeBtn, .qOpt, .btn, .chargePct, .yesText { -webkit-user-select:none; user-select:none; }
+    /* prevent text selection on mobile */
+    .arena, .btn, .chargeBtn, .drop, .toast { -webkit-user-select:none; user-select:none; }
   </style>
 </head>
 
@@ -814,6 +728,7 @@
       <div class="shine"></div>
 
       <div class="screens">
+
         <!-- SCREEN 1 -->
         <section class="screen active" id="s1">
           <h1>Let’s start with a memory ✨</h1>
@@ -821,7 +736,7 @@
           <p class="sub">Tap the date… <b>when we met</b> 💗</p>
 
           <div class="paperBlock">
-            <div class="monthTitle" id="monthTitle">December 2022</div>
+            <div class="monthTitle" id="monthTitle">July 2022</div>
             <div class="dowRow" id="dowRow"></div>
             <div class="calendarGrid" id="calendarGrid"></div>
             <div class="noteLine" id="dateNote">Choose our day…</div>
@@ -854,35 +769,34 @@
           </div>
         </section>
 
-        <!-- SCREEN 3 -->
+        <!-- SCREEN 3 (Catch hearts + bombs) -->
         <section class="screen" id="s3">
-          <h1>One more question…</h1>
+          <h1>One more thing…</h1>
           <div class="divider">💞</div>
 
           <h2 style="margin-top:6px;">
             Will you be my Valentine, <span class="name" id="cutieNameInline"></span>? 💘
           </h2>
 
-          <p class="sub" id="valSub">I’ll make it easy… just play along 😌💗</p>
+          <p class="sub" id="valSub">Catch hearts to fill YES 💗 (avoid bombs 😭)</p>
 
           <div class="emojiRow">
             <div class="emoji" id="valEmoji">😊</div>
-            <div class="mood" id="valMood">Answer the mini questions to “unlock” love… 💞</div>
+            <div class="mood" id="valMood">Tap the falling hearts… make the YES bar fizzy ✨</div>
           </div>
 
           <div class="arena" id="arena">
-            <div class="qCard" id="qCard">
-              <div class="qTitle" id="qTitle">Loading…</div>
-              <div class="qOpts">
-                <button class="qOpt" id="optA" type="button"></button>
-                <button class="qOpt" id="optB" type="button"></button>
-              </div>
-              <div class="qHint" id="qHint"></div>
+            <div class="catchHud">
+              <div class="hudPill" id="hudScore">Score: 0</div>
+              <div class="hudPill" id="hudMiss">Miss: 0/5</div>
             </div>
 
+            <div class="toast" id="toast"></div>
+
+            <div class="catchField" id="catchField"></div>
+
+            <!-- YES (pinned bottom) -->
             <button class="btn primary chargeBtn premiumYes" id="yesBtn" type="button" aria-label="Hold to say yes">
-              <span class="yesTopShine"></span>
-              <span class="yesRing" id="yesRing"></span>
               <span class="yesText" id="yesText">Hold to say YES 💘</span>
               <span class="chargePct" id="chargePct">0%</span>
               <span class="wave" id="wave">
@@ -891,7 +805,7 @@
             </button>
           </div>
 
-          <div class="hint">Correct answers = faster fill + fizzy love bubbles ✨ • Hold YES anytime (slow until you earn it 😌)</div>
+          <div class="hint">Hearts = +love +bubbles • Bombs = -love • Fill to 100% 💞</div>
         </section>
 
         <!-- SCREEN 4 -->
@@ -901,11 +815,9 @@
 
           <div class="finalWrap">
             <div class="finalBox">
-              <div class="heartLayer" id="heartLayer"></div>
-
-              <div class="finalEmoji" id="finalEmoji">😍</div>
-              <div class="finalLine glowy" id="finalLine1">You have won my heart.</div>
-              <div class="finalLine glowy" id="finalLine2" style="margin-top:6px;">Happy Valentine’s Day ✨</div>
+              <div class="finalEmoji">😍</div>
+              <div class="finalLine" id="finalLine1">You have won my heart.</div>
+              <div class="finalLine" id="finalLine2" style="margin-top:6px;">Happy Valentine’s Day ✨</div>
             </div>
 
             <div class="cheesyGrid" id="cheesyGrid"></div>
@@ -925,223 +837,216 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
 
   <script>
-  "use strict";
+    // =======================
+    // CONFIG (edit these)
+    // =======================
+    var CUTIE_NAME = "CUTIE_NAME";
 
-  // =======================
-  // CONFIG (edit these)
-  // =======================
-  const CUTIE_NAME = "CUTIE_NAME";
+    // July 2022, correct date 16, start day Thursday
+    var MONTH_NAME = "July";
+    var YEAR = 2022;
+    var DAYS_IN_MONTH = 31;
 
-  const MONTH_NAME = "December";
-  const YEAR = 2022;
-  const DAYS_IN_MONTH = 31;
+    // 0=Mon,1=Tue,2=Wed,3=Thu,4=Fri,5=Sat,6=Sun
+    var MONTH_START_DOW = 3;  // Thursday
+    var CORRECT_DAY = 16;
 
-  // 0=Mon,1=Tue,2=Wed,3=Thu,4=Fri,5=Sat,6=Sun
-  const MONTH_START_DOW = 2;
+    // Catch game config
+    var FALL_SPEED_PX_PER_SEC = 320;     // <-- configurable speed
+    var SPAWN_EVERY_MS = 620;            // spawn frequency
+    var BOMB_CHANCE = 0.22;              // 22% bombs
+    var MAX_MISS = 5;
 
-  // Set correct day (1..DAYS_IN_MONTH) or null to disable
-  const CORRECT_DAY = 18;
+    // =======================
+    // WebAudio (no external files)
+    // =======================
+    var audioUI = { enabled: true, ctx: null, master: null, unlocked: false };
+    var audioToggle = document.getElementById("audioToggle");
 
-  // =======================
-  // WebAudio (no external files)
-  // =======================
-  const audioUI = { enabled: true, ctx: null, master: null, unlocked: false };
-  const audioToggle = document.getElementById("audioToggle");
-
-  function updateAudioUI(){ audioToggle.classList.toggle("off", !audioUI.enabled); }
-  updateAudioUI();
-
-  function ensureAudio(){
-    if(!audioUI.enabled) return false;
-    if(audioUI.ctx) return true;
-    try{
-      audioUI.ctx = new (window.AudioContext || window.webkitAudioContext)();
-      audioUI.master = audioUI.ctx.createGain();
-      audioUI.master.gain.value = 0.42;
-      audioUI.master.connect(audioUI.ctx.destination);
-      return true;
-    }catch(e){ return false; }
-  }
-
-  async function unlockAudio(){
-    if(!audioUI.enabled) return;
-    if(!ensureAudio()) return;
-    if(audioUI.unlocked) return;
-    try{
-      if(audioUI.ctx.state !== "running") await audioUI.ctx.resume();
-      const o = audioUI.ctx.createOscillator();
-      const g = audioUI.ctx.createGain();
-      g.gain.value = 0.0001;
-      o.connect(g); g.connect(audioUI.master);
-      o.frequency.value = 440;
-      o.start();
-      o.stop(audioUI.ctx.currentTime + 0.01);
-      audioUI.unlocked = true;
-    }catch(e){}
-  }
-
-  audioToggle.addEventListener("click", async () => {
-    audioUI.enabled = !audioUI.enabled;
+    function updateAudioUI(){ audioToggle.classList.toggle("off", !audioUI.enabled); }
     updateAudioUI();
-    if(audioUI.enabled) await unlockAudio();
-  });
-  window.addEventListener("pointerdown", unlockAudio, { passive:true });
 
-  function now(){ return audioUI.ctx ? audioUI.ctx.currentTime : 0; }
-
-  function tone(freq=440, dur=0.08, type="sine", gain=0.06, slide=0){
-    if(!audioUI.enabled) return;
-    if(!ensureAudio()) return;
-    const t0 = now();
-
-    const o = audioUI.ctx.createOscillator();
-    const g = audioUI.ctx.createGain();
-    const f = Math.max(40, freq);
-
-    o.type = type;
-    o.frequency.setValueAtTime(f, t0);
-    if(slide) o.frequency.exponentialRampToValueAtTime(Math.max(40, f+slide), t0 + dur);
-
-    g.gain.setValueAtTime(0.0001, t0);
-    g.gain.exponentialRampToValueAtTime(gain, t0 + 0.01);
-    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
-
-    o.connect(g); g.connect(audioUI.master);
-    o.start(t0);
-    o.stop(t0 + dur + 0.02);
-  }
-
-  function noiseBurst(dur=0.08, gain=0.03){
-    if(!audioUI.enabled) return;
-    if(!ensureAudio()) return;
-    const t0 = now();
-    const bufferSize = Math.floor(audioUI.ctx.sampleRate * dur);
-    const buffer = audioUI.ctx.createBuffer(1, bufferSize, audioUI.ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    for(let i=0;i<bufferSize;i++){
-      data[i] = (Math.random()*2 - 1) * (1 - i/bufferSize);
+    function ensureAudio(){
+      if(!audioUI.enabled) return false;
+      if(audioUI.ctx) return true;
+      try{
+        audioUI.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        audioUI.master = audioUI.ctx.createGain();
+        audioUI.master.gain.value = 0.38;
+        audioUI.master.connect(audioUI.ctx.destination);
+        return true;
+      }catch(e){ return false; }
     }
-    const src = audioUI.ctx.createBufferSource();
-    src.buffer = buffer;
 
-    const filt = audioUI.ctx.createBiquadFilter();
-    filt.type = "highpass";
-    filt.frequency.value = 1200;
+    function now(){ return audioUI.ctx ? audioUI.ctx.currentTime : 0; }
 
-    const g = audioUI.ctx.createGain();
-    g.gain.setValueAtTime(gain, t0);
-    g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    function tone(freq, dur, type, gain, slide){
+      if(!audioUI.enabled) return;
+      if(!ensureAudio()) return;
+      var t0 = now();
+      var o = audioUI.ctx.createOscillator();
+      var g = audioUI.ctx.createGain();
+      var f = Math.max(40, freq);
 
-    src.connect(filt); filt.connect(g); g.connect(audioUI.master);
-    src.start(t0);
-    src.stop(t0 + dur + 0.02);
-  }
+      o.type = type || "sine";
+      o.frequency.setValueAtTime(f, t0);
+      if(slide) o.frequency.exponentialRampToValueAtTime(Math.max(40, f + slide), t0 + dur);
 
-  const SFX = {
-    tap(){ tone(560, 0.07, "sine", 0.075, 120); },
-    soft(){ tone(320, 0.08, "triangle", 0.04, -20); },
-    wrong(){ tone(220, 0.12, "sawtooth", 0.06, -40); noiseBurst(0.06, 0.03); },
-    correct(){ tone(660, 0.06, "sine", 0.06, 90); setTimeout(()=>tone(880,0.07,"sine",0.05,120), 50); },
-    win(){
-      tone(740, 0.09, "triangle", 0.07, 90);
-      setTimeout(()=>tone(980,0.10,"triangle",0.06,140), 80);
-      setTimeout(()=>tone(1240,0.12,"sine",0.055,200), 160);
-    },
-    bubble(){ tone(640, 0.04, "sine", 0.02, 70); },
-    sparkle(){ tone(900, 0.05, "sine", 0.04, 150); setTimeout(()=>tone(1250,0.06,"sine",0.035,200), 40); },
-    charge(){ tone(250, 0.06, "triangle", 0.03, 40); }
-  };
+      g.gain.setValueAtTime(0.0001, t0);
+      g.gain.exponentialRampToValueAtTime(gain || 0.05, t0 + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
 
-  // =======================
-  // Global state
-  // =======================
-  const state = { metDay: null, tttWon: false };
+      o.connect(g); g.connect(audioUI.master);
+      o.start(t0);
+      o.stop(t0 + dur + 0.02);
+    }
 
-  // =======================
-  // Helpers
-  // =======================
-  function showScreen(id){
-    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-    window.scrollTo({top: 0, behavior: "smooth"});
-    if(id === "s4") startFinalEffects();
-  }
-  function pick(arr){ return arr[(Math.random() * arr.length) | 0]; }
+    function unlockAudio(){
+      if(!audioUI.enabled) return;
+      if(!ensureAudio()) return;
+      if(audioUI.unlocked) return;
+      try{
+        if(audioUI.ctx.state !== "running") audioUI.ctx.resume();
+        tone(440, 0.01, "sine", 0.0001, 0);
+        audioUI.unlocked = true;
+      }catch(e){}
+    }
 
-  function distanceBucket(diff){
-    if(diff === 0) return "exact";
-    if(diff === 1) return "one";
-    if(diff <= 3) return "near";
-    if(diff <= 7) return "mid";
-    return "far";
-  }
-  function wrongDayMessage(day){
-    const diff = Math.abs(day - CORRECT_DAY);
-    const bucket = distanceBucket(diff);
-    const msgs = {
-      one: [
-        "Oof… SO close 😭 Just one day away 💗",
-        "Almost! You’re literally 1 day off 😌✨",
-        "My heart says… ‘one tiny step’ 💞",
-        "You nearly nailed it 🥺 (just 1 day!)"
-      ],
-      near: [
-        "Closeee 😌 Try the glowing date 💗",
-        "You’re in the neighborhood 🏡✨ (look for the ring)",
-        "Warm warm warm 🔥💗 The glow will guide you",
-        "Not perfect… but cute attempt 🥺💞"
-      ],
-      mid: [
-        "Hmm… not quite 😌 Follow the glowing ring 💗",
-        "A little off… but I like the confidence 😏✨",
-        "We’re drifting 😭 Find the shining date 💞",
-        "Nope 🙈 but I’ll help—watch the glow 💗"
-      ],
-      far: [
-        "That’s… very wrong 😭😂 The glow will save you 💗",
-        "Aww nooo 🙈 That’s far… look for the shining ring ✨",
-        "We weren’t even close 🥺💞 Try the glowing date",
-        "My calendar just blushed and panicked 😂💗 Follow the glow"
-      ],
-      exact: [
-        `YESSS 😍 ${MONTH_NAME} ${CORRECT_DAY}, ${YEAR} 💗`,
-        `Perfect! You remembered 🥹💞 ${MONTH_NAME} ${CORRECT_DAY}, ${YEAR}`,
-        `That’s the one! My heart approves 💘`,
-        `Correct 😌💗 (I knew you’d get it)`
-      ]
+    audioToggle.addEventListener("click", function(){
+      audioUI.enabled = !audioUI.enabled;
+      updateAudioUI();
+      unlockAudio();
+    });
+    window.addEventListener("pointerdown", unlockAudio, { passive:true });
+
+    var SFX = {
+      tap: function(){ tone(560, 0.07, "sine", 0.075, 120); },
+      soft: function(){ tone(320, 0.08, "triangle", 0.035, -20); },
+      wrong: function(){ tone(220, 0.12, "sawtooth", 0.05, -40); },
+      correct: function(){ tone(660, 0.06, "sine", 0.06, 90); setTimeout(function(){ tone(880,0.07,"sine",0.05,120); }, 50); },
+      win: function(){ tone(740, 0.09, "triangle", 0.065, 90); setTimeout(function(){ tone(980,0.10,"triangle",0.055,140); }, 80); setTimeout(function(){ tone(1240,0.12,"sine",0.05,200); }, 160); },
+      bubble: function(){ tone(640, 0.04, "sine", 0.02, 70); },
+      charge: function(){ tone(250, 0.06, "triangle", 0.025, 40); }
     };
-    return pick(msgs[bucket] || msgs.mid);
-  }
 
-  // =======================
-  // SCREEN 1: Calendar
-  // =======================
-  const monthTitle = document.getElementById("monthTitle");
-  const calendarGrid = document.getElementById("calendarGrid");
-  const dowRow = document.getElementById("dowRow");
-  const dateNote = document.getElementById("dateNote");
-  const toS2 = document.getElementById("toS2");
+    // =======================
+    // Helpers
+    // =======================
+    function pick(arr){ return arr[(Math.random() * arr.length) | 0]; }
 
-  monthTitle.textContent = `${MONTH_NAME} ${YEAR}`;
-  dowRow.innerHTML = ["M","T","W","T","F","S","S"].map(d => `<div class="dow">${d}</div>`).join("");
+    function showScreen(id){
+      var screens = document.querySelectorAll(".screen");
+      for(var i=0;i<screens.length;i++) screens[i].classList.remove("active");
+      document.getElementById(id).classList.add("active");
+      window.scrollTo({top: 0, behavior: "smooth"});
+    }
 
-  function suggestCorrectDay(){
-    if(!CORRECT_DAY) return;
-    const el = calendarGrid.querySelector(`.dateBtn[data-day="${CORRECT_DAY}"]`);
-    if(!el) return;
-    el.classList.add("suggest");
-    setTimeout(() => el.classList.remove("suggest"), 1200);
-  }
+    // =======================
+    // SCREEN 1: Calendar
+    // =======================
+    var state = { metDay: null, tttWon: false, loveCharge: 0 };
 
-  function selectDay(day, btn){
-    SFX.tap();
-    state.metDay = day;
+    var monthTitle = document.getElementById("monthTitle");
+    var calendarGrid = document.getElementById("calendarGrid");
+    var dowRow = document.getElementById("dowRow");
+    var dateNote = document.getElementById("dateNote");
+    var toS2 = document.getElementById("toS2");
 
-    document.querySelectorAll(".dateBtn").forEach(x => x.classList.remove("selected"));
-    btn.classList.add("selected");
-    toS2.disabled = false;
+    monthTitle.textContent = MONTH_NAME + " " + YEAR;
 
-    if(CORRECT_DAY){
+    var DOW = ["M","T","W","T","F","S","S"];
+    dowRow.innerHTML = "";
+    for(var di=0; di<7; di++){
+      var d = document.createElement("div");
+      d.className = "dow";
+      d.textContent = DOW[di];
+      dowRow.appendChild(d);
+    }
+
+    function distanceBucket(diff){
+      if(diff === 0) return "exact";
+      if(diff === 1) return "one";
+      if(diff <= 3) return "near";
+      if(diff <= 7) return "mid";
+      return "far";
+    }
+
+    function wrongDayMessage(day){
+      var diff = Math.abs(day - CORRECT_DAY);
+      var bucket = distanceBucket(diff);
+      var msgs = {
+        one: [
+          "Oof… SO close 😭 Just one day away 💗",
+          "Almost! You’re literally 1 day off 😌✨",
+          "My heart says… ‘one tiny step’ 💞",
+          "You nearly nailed it 🥺 (just 1 day!)"
+        ],
+        near: [
+          "Closeee 😌 Try the glowing date 💗",
+          "You’re in the neighborhood 🏡✨ (look for the ring)",
+          "Warm warm warm 🔥💗 The glow will guide you",
+          "Not perfect… but cute attempt 🥺💞"
+        ],
+        mid: [
+          "Hmm… not quite 😌 Follow the glowing ring 💗",
+          "A little off… but I like the confidence 😏✨",
+          "We’re drifting 😭 Find the shining date 💞",
+          "Nope 🙈 but I’ll help—watch the glow 💗"
+        ],
+        far: [
+          "That’s… very wrong 😭😂 The glow will save you 💗",
+          "Aww nooo 🙈 That’s far… look for the shining ring ✨",
+          "We weren’t even close 🥺💞 Try the glowing date",
+          "My calendar just panicked 😂💗 Follow the glow"
+        ],
+        exact: [
+          "YESSS 😍 " + MONTH_NAME + " " + CORRECT_DAY + ", " + YEAR + " 💗",
+          "Perfect! You remembered 🥹💞",
+          "That’s the one! My heart approves 💘",
+          "Correct 😌💗 (I knew you’d get it)"
+        ]
+      };
+      return pick(msgs[bucket] || msgs.mid);
+    }
+
+    function buildCalendar(){
+      calendarGrid.innerHTML = "";
+
+      for(var i=0;i<MONTH_START_DOW;i++){
+        var b = document.createElement("div");
+        b.className = "blank";
+        calendarGrid.appendChild(b);
+      }
+
+      for(var d=1; d<=DAYS_IN_MONTH; d++){
+        (function(day){
+          var btn = document.createElement("button");
+          btn.className = "dateBtn";
+          btn.type = "button";
+          btn.textContent = day;
+          btn.setAttribute("data-day", String(day));
+          btn.addEventListener("click", function(){ selectDay(day, btn); });
+          calendarGrid.appendChild(btn);
+        })(d);
+      }
+    }
+
+    function suggestCorrectDay(){
+      var el = calendarGrid.querySelector('.dateBtn[data-day="'+ CORRECT_DAY +'"]');
+      if(!el) return;
+      el.classList.add("suggest");
+      setTimeout(function(){ el.classList.remove("suggest"); }, 1200);
+    }
+
+    function selectDay(day, btn){
+      SFX.tap();
+      state.metDay = day;
+
+      var all = document.querySelectorAll(".dateBtn");
+      for(var i=0;i<all.length;i++) all[i].classList.remove("selected");
+      btn.classList.add("selected");
+      toS2.disabled = false;
+
       if(day !== CORRECT_DAY){
         dateNote.textContent = wrongDayMessage(day);
         suggestCorrectDay();
@@ -1150,793 +1055,680 @@
         dateNote.textContent = wrongDayMessage(day);
         SFX.correct();
       }
-    } else {
-      dateNote.textContent = `So… ${MONTH_NAME} ${day}, ${YEAR} 💗`;
+
+      gsap.fromTo(btn, {scale:0.96}, {scale:1.03, duration:0.16, ease:"power2.out", yoyo:true, repeat:1});
+    }
+
+    buildCalendar();
+
+    toS2.addEventListener("click", function(){
+      SFX.correct();
+      showScreen("s2");
+      initTTT();
+    });
+
+    // =======================
+    // SCREEN 2: TicTacToe (user always wins)
+    // =======================
+    var tttBoard = document.getElementById("tttBoard");
+    var tttStatus = document.getElementById("tttStatus");
+    var tttTopWin = document.getElementById("tttTopWin");
+    var winSvg = document.getElementById("winSvg");
+    var toS3 = document.getElementById("toS3");
+    var resetTTT = document.getElementById("resetTTT");
+
+    var USER = "💗";
+    var AI = "🖤";
+    var LINES = [
+      [0,1,2],[3,4,5],[6,7,8],
+      [0,3,6],[1,4,7],[2,5,8],
+      [0,4,8],[2,4,6]
+    ];
+
+    var board = Array(9);
+    var userMoves = 0;
+    var locked = false;
+
+    function renderTTT(){
+      tttBoard.innerHTML = "";
+      for(var i=0;i<9;i++){
+        (function(idx){
+          var v = board[idx];
+          var c = document.createElement("div");
+          c.className = "cell";
+          c.setAttribute("data-i", String(idx));
+          c.textContent = v ? v : "";
+          if(v) c.classList.add("pop");
+          c.addEventListener("click", function(){ onUserMove(idx); });
+          tttBoard.appendChild(c);
+        })(i);
+      }
+    }
+
+    function animateCell(i){
+      var el = tttBoard.querySelector('.cell[data-i="'+ i +'"]');
+      if(!el) return;
+      gsap.fromTo(el, {scale:0.88}, {scale:1.04, duration:0.18, ease:"power2.out", yoyo:true, repeat:1});
+    }
+
+    function winningLine(sym){
+      for(var li=0; li<LINES.length; li++){
+        var line = LINES[li];
+        if(board[line[0]]===sym && board[line[1]]===sym && board[line[2]]===sym) return line;
+      }
+      return null;
+    }
+
+    function bestLineForUser(){
+      var best = null;
+      var bestCount = -1;
+      for(var li=0; li<LINES.length; li++){
+        var line = LINES[li];
+        var aiCount = 0;
+        for(var k=0;k<3;k++) if(board[line[k]]===AI) aiCount++;
+        if(aiCount>0) continue;
+
+        var uCount = 0;
+        for(var k2=0;k2<3;k2++) if(board[line[k2]]===USER) uCount++;
+        if(uCount > bestCount){
+          bestCount = uCount;
+          best = line;
+        }
+      }
+      return best || LINES[0];
+    }
+
+    function hintBestMove(){
+      var cells = tttBoard.querySelectorAll(".cell");
+      for(var i=0;i<cells.length;i++) cells[i].classList.remove("hint");
+      var line = bestLineForUser();
+      var empty = null;
+      for(var k=0;k<3;k++){
+        if(!board[line[k]]){ empty = line[k]; break; }
+      }
+      if(empty !== null){
+        var el = tttBoard.querySelector('.cell[data-i="'+ empty +'"]');
+        if(el) el.classList.add("hint");
+      }
+    }
+
+    function aiMoveSoft(){
+      if(winningLine(USER)) return;
+      var line = bestLineForUser();
+      var avoid = {};
+      avoid[line[0]] = true; avoid[line[1]] = true; avoid[line[2]] = true;
+
+      var empties = [];
+      for(var i=0;i<9;i++) if(!board[i]) empties.push(i);
+
+      var choices = [];
+      for(var j=0;j<empties.length;j++){
+        if(!avoid[empties[j]]) choices.push(empties[j]);
+      }
+      if(choices.length===0) choices = empties;
+
+      var pickI = choices[(Math.random()*choices.length)|0];
+      board[pickI] = AI;
+      renderTTT();
+      animateCell(pickI);
       SFX.soft();
     }
 
-    gsap.fromTo(btn, {scale:0.96}, {scale:1.03, duration:0.16, ease:"power2.out", yoyo:true, repeat:1});
-  }
-
-  function buildCalendar(){
-    calendarGrid.innerHTML = "";
-    for(let i=0;i<MONTH_START_DOW;i++){
-      const b = document.createElement("div");
-      b.className = "blank";
-      calendarGrid.appendChild(b);
-    }
-    for(let d=1; d<=DAYS_IN_MONTH; d++){
-      const btn = document.createElement("button");
-      btn.className = "dateBtn";
-      btn.type = "button";
-      btn.textContent = d;
-      btn.dataset.day = String(d);
-      btn.addEventListener("click", () => selectDay(d, btn));
-      calendarGrid.appendChild(btn);
-    }
-  }
-  buildCalendar();
-
-  toS2.addEventListener("click", () => {
-    SFX.sparkle();
-    showScreen("s2");
-    initTTT();
-  });
-
-  // =======================
-  // SCREEN 2: TicTacToe (user always wins)
-  // =======================
-  const tttBoard = document.getElementById("tttBoard");
-  const tttStatus = document.getElementById("tttStatus");
-  const tttTopWin = document.getElementById("tttTopWin");
-  const winSvg = document.getElementById("winSvg");
-  const toS3 = document.getElementById("toS3");
-  const resetTTT = document.getElementById("resetTTT");
-
-  const USER = "💗";
-  const AI = "🖤";
-  const LINES = [
-    [0,1,2],[3,4,5],[6,7,8],
-    [0,3,6],[1,4,7],[2,5,8],
-    [0,4,8],[2,4,6]
-  ];
-
-  let board = Array(9).fill(null);
-  let userMoves = 0;
-  let locked = false;
-
-  function renderTTT(){
-    tttBoard.innerHTML = "";
-    board.forEach((v, i) => {
-      const c = document.createElement("div");
-      c.className = "cell";
-      c.dataset.i = String(i);
-      c.textContent = v ? v : "";
-      if(v) c.classList.add("pop");
-      c.addEventListener("click", () => onUserMove(i));
-      if(v) c.style.cursor = "default";
-      tttBoard.appendChild(c);
-    });
-  }
-
-  function animateCell(i){
-    // ✅ this is the correct template literal (no backslash)
-    const el = tttBoard.querySelector(`.cell[data-i="${i}"]`);
-    if(!el) return;
-    gsap.fromTo(el, {scale:0.88}, {scale:1.04, duration:0.18, ease:"power2.out", yoyo:true, repeat:1});
-  }
-
-  function winningLine(sym){
-    for(const line of LINES){
-      if(line.every(idx => board[idx] === sym)) return line;
-    }
-    return null;
-  }
-
-  function bestLineForUser(){
-    let best = null;
-    let bestCount = -1;
-    for(const line of LINES){
-      const aiCount = line.filter(i => board[i] === AI).length;
-      if(aiCount > 0) continue;
-      const uCount = line.filter(i => board[i] === USER).length;
-      if(uCount > bestCount){
-        bestCount = uCount;
-        best = line;
-      }
-    }
-    return best || LINES[0];
-  }
-
-  function hintBestMove(){
-    const cells = [...tttBoard.querySelectorAll(".cell")];
-    cells.forEach(c => c.classList.remove("hint"));
-    const line = bestLineForUser();
-    const empty = line.find(i => !board[i]);
-    if(empty != null){
-      const el = tttBoard.querySelector(`.cell[data-i="${empty}"]`);
-      if(el) el.classList.add("hint");
-    }
-  }
-
-  function aiMoveSoft(){
-    if(winningLine(USER)) return;
-    const line = bestLineForUser();
-    const avoid = new Set(line);
-
-    const empties = board.map((v,i)=>v?null:i).filter(v=>v!==null);
-    let choices = empties.filter(i => !avoid.has(i));
-    if(choices.length === 0) choices = empties;
-
-    const pickI = choices[Math.floor(Math.random()*choices.length)];
-    board[pickI] = AI;
-    renderTTT();
-    animateCell(pickI);
-    SFX.soft();
-  }
-
-  function forceUserWin(){
-    const line = bestLineForUser();
-    const empties = line.filter(i => !board[i]);
-    if(empties.length){
-      board[empties[0]] = USER;
-      renderTTT();
-      animateCell(empties[0]);
-      SFX.tap();
-    }
-    if(winningLine(USER)) winTTT();
-  }
-
-  function countInLine(sym, line){ return line.filter(i => board[i] === sym).length; }
-  function emptyInLine(line){ return line.filter(i => !board[i]).length; }
-  function userAlmostWinning(){ return LINES.some(line => countInLine(USER, line) === 2 && emptyInLine(line) === 1); }
-  function userCloseLines(){ return LINES.some(line => countInLine(USER, line) === 1 && emptyInLine(line) === 2); }
-
-  function onUserMove(i){
-    if(locked) return;
-    if(board[i]) return;
-
-    board[i] = USER;
-    userMoves++;
-    renderTTT();
-    animateCell(i);
-    SFX.tap();
-
-    if(winningLine(USER)){ winTTT(); return; }
-
-    if(userAlmostWinning()){
-      tttStatus.textContent = pick(["OMG one more and you win 😳💞","Final move incoming… 😌💗","So close I can feel it 🥹💘"]);
-    } else if(userCloseLines()){
-      tttStatus.textContent = pick(["That was cute 😌💗","Okayyy I see you 👀💞","Ooo this is getting serious 💘"]);
-    } else {
-      tttStatus.textContent = pick(["Your turn 💗","Go on 😌","Make it count 💘"]);
-    }
-
-    locked = true;
-    setTimeout(() => {
-      aiMoveSoft();
-      locked = false;
-
-      if(winningLine(USER)){ winTTT(); return; }
-      if(userMoves >= 4) forceUserWin();
-      hintBestMove();
-    }, 230);
-  }
-
-  function drawWinLine(line){
-    const a = tttBoard.querySelector(`.cell[data-i="${line[0]}"]`);
-    const c = tttBoard.querySelector(`.cell[data-i="${line[2]}"]`);
-    if(!a || !c) return;
-
-    const br = tttBoard.getBoundingClientRect();
-    const ar = a.getBoundingClientRect();
-    const cr = c.getBoundingClientRect();
-
-    const x1 = (ar.left + ar.width/2) - br.left;
-    const y1 = (ar.top + ar.height/2) - br.top;
-    const x2 = (cr.left + cr.width/2) - br.left;
-    const y2 = (cr.top + cr.height/2) - br.top;
-
-    winSvg.setAttribute("viewBox", `0 0 ${br.width} ${br.height}`);
-    winSvg.innerHTML = `
-      <path id="p" d="M ${x1} ${y1} L ${x2} ${y2}"
-            stroke="rgba(181,22,82,.85)"
-            stroke-width="8"
-            stroke-linecap="round"
-            fill="none"
-            opacity="0.95"/>
-      <text id="heartEnd" x="${x2}" y="${y2}" text-anchor="middle" dominant-baseline="middle"
-            style="font-size:22px; filter: drop-shadow(0 12px 16px rgba(181,22,82,.18));">💗</text>
-    `;
-
-    const path = winSvg.querySelector("#p");
-    const heart = winSvg.querySelector("#heartEnd");
-    const len = path.getTotalLength();
-
-    path.style.strokeDasharray = `${len}`;
-    path.style.strokeDashoffset = `${len}`;
-
-    gsap.to(path, { strokeDashoffset: 0, duration: 0.45, ease: "power2.out" });
-    gsap.fromTo(heart, { scale: 0.9 }, { scale: 1.22, duration: 0.18, yoyo: true, repeat: 3, ease: "power2.inOut",
-      transformOrigin: "50% 50%"
-    });
-  }
-
-  function winTTT(){
-    state.tttWon = true;
-    const line = winningLine(USER);
-    if(line) drawWinLine(line);
-
-    tttTopWin.textContent = "YOU HAVE WON MY HEART 💞";
-    tttTopWin.classList.add("glow");
-    setTimeout(() => tttTopWin.classList.remove("glow"), 1300);
-
-    tttStatus.textContent = pick(["Okay okay… you win 😌💗","I surrender 🥹💞","Fine… take my heart 💘"]);
-    toS3.disabled = false;
-
-    SFX.win();
-    confetti({ particleCount: 90, spread: 70, startVelocity: 22, scalar: 0.9, origin: { y: 0.55 } });
-  }
-
-  function initTTT(){
-    state.tttWon = false;
-    toS3.disabled = true;
-    tttTopWin.textContent = "";
-    tttTopWin.classList.remove("glow");
-    winSvg.innerHTML = "";
-    board = Array(9).fill(null);
-    userMoves = 0;
-    locked = false;
-    tttStatus.textContent = "Your turn 💗";
-    renderTTT();
-    hintBestMove();
-  }
-
-  resetTTT.addEventListener("click", () => { SFX.wrong(); initTTT(); });
-
-  // =======================
-  // SCREEN 3: Valentine
-  // =======================
-  const yesBtn = document.getElementById("yesBtn");
-  const valEmoji = document.getElementById("valEmoji");
-  const valMood = document.getElementById("valMood");
-  const wave = document.getElementById("wave");
-  const fizz = document.getElementById("fizz");
-  const yesText = document.getElementById("yesText");
-  const chargePct = document.getElementById("chargePct");
-  const yesRing = document.getElementById("yesRing");
-
-  const qTitle = document.getElementById("qTitle");
-  const optA = document.getElementById("optA");
-  const optB = document.getElementById("optB");
-  const qHint = document.getElementById("qHint");
-
-  document.getElementById("cutieNameInline").textContent = CUTIE_NAME;
-
-  let motionEnabled = false;
-  function setSlosh(tx, ty){
-    const clampedX = Math.max(-1, Math.min(1, tx));
-    const clampedY = Math.max(-1, Math.min(1, ty));
-
-    gsap.to(wave, {
-      rotate: clampedX * 3.2,
-      x: clampedX * 10,
-      y: clampedY * 6,
-      transformOrigin: "50% 100%",
-      duration: 0.25,
-      ease: "power2.out"
-    });
-
-    gsap.to(yesBtn, {
-      rotation: clampedX * 0.8,
-      duration: 0.35,
-      ease: "power2.out"
-    });
-  }
-
-  function enableMotion(){
-    if(motionEnabled) return;
-    motionEnabled = true;
-
-    window.addEventListener("deviceorientation", (e) => {
-      const gx = (e.gamma ?? 0) / 25;
-      const by = (e.beta ?? 0) / 25;
-      setSlosh(gx, by);
-    }, { passive: true });
-
-    window.addEventListener("mousemove", (e) => {
-      const cx = (e.clientX / window.innerWidth) * 2 - 1;
-      const cy = (e.clientY / window.innerHeight) * 2 - 1;
-      setSlosh(cx, cy);
-    }, { passive: true });
-  }
-
-  function setValMood(kind, text){
-    const moods = {
-      yes: [
-        { e:"😍", m:"YES?? 😭💗 My heart just did a backflip." },
-        { e:"🥹", m:"Stoppp—I'm melting 🥹💞" },
-        { e:"💓", m:"Okay… heart is beating FAST 💓" },
-        { e:"😘", m:"Come here you 😘💘" },
-        { e:"🤭", m:"Hehe… I knew you’d say yes 🤭💗" }
-      ],
-      good: [
-        { e:"✨", m:"Correct 😌💗 +love boost!" },
-        { e:"🥰", m:"You’re too good at this 🥰💞" },
-        { e:"😚", m:"Mhm… that’s my favorite answer 😚" }
-      ],
-      bad: [
-        { e:"😤", m:"Wrong 😤 …but cute try." },
-        { e:"🙈", m:"Nope 🙈 try again (I’ll help)" },
-        { e:"🥺", m:"Aww no… but I still like you 🥺💗" }
-      ],
-      idle: [
-        { e:"😊", m:"Answer a question… or hold YES 😌💗" },
-        { e:"😌", m:"Play along… I’m enjoying this 😌✨" },
-        { e:"🫶", m:"I’m right here 🫶💞" }
-      ]
-    };
-    const pool = moods[kind] || moods.idle;
-    const p = pool[(Math.random() * pool.length) | 0];
-
-    valEmoji.textContent = p.e;
-    valMood.textContent = text || p.m;
-
-    gsap.killTweensOf([valEmoji, valMood]);
-    gsap.fromTo(valEmoji,
-      { scale: 0.92, rotation: -2 },
-      { scale: 1.08, rotation: 2, duration: 0.18, ease:"power2.out", yoyo:true, repeat:1 }
-    );
-    gsap.fromTo(valMood,
-      { opacity: 0, y: 6 },
-      { opacity: 1, y: 0, duration: 0.22, ease:"power2.out" }
-    );
-  }
-
-  let charge = 0;
-  let charging = false;
-  let chargeRaf = null;
-  let lastTs = 0;
-  let loveEarned = 0;
-  let earnedDecayTimer = null;
-
-  function setCharge(p){
-    charge = Math.max(0, Math.min(100, p));
-    wave.style.height = `${charge}%`;
-    wave.style.transform = `translateY(${8 - (charge*0.08)}px)`;
-    chargePct.textContent = `${Math.round(charge)}%`;
-
-    yesRing.style.opacity = (0.18 + (charge/100)*0.35).toFixed(2);
-    yesRing.style.transform = `rotate(${charge*3.2}deg)`;
-
-    if(charge < 20) yesText.textContent = "Hold to say YES 💘";
-    else if(charge < 55) yesText.textContent = "It’s getting fizzy… 🫧";
-    else if(charge < 90) yesText.textContent = "Almost there… 🥹💗";
-    else yesText.textContent = "Release to seal it 💞";
-
-    if(charge >= 100){
-      yesBtn.classList.add("charged");
-      yesText.textContent = "YES locked 💗";
-      acceptYes();
-    } else {
-      yesBtn.classList.remove("charged");
-    }
-  }
-
-  let fizzTimer = null;
-
-  function spawnFizzBubble(intensity=1){
-    if(charge <= 1) return;
-    const b = document.createElement("span");
-    b.className = "fizzBubble";
-
-    const w = yesBtn.clientWidth;
-    const x = 8 + Math.random()*(w - 16);
-    const size = 2 + Math.random()*6*intensity;
-    b.style.width = size + "px";
-    b.style.height = size + "px";
-    b.style.left = x + "px";
-
-    const startY = 6 + Math.random()*14;
-    b.style.bottom = startY + "px";
-    fizz.appendChild(b);
-
-    const rise = 22 + Math.random()*28 + intensity*18;
-    const drift = (-12 + Math.random()*24) * intensity;
-    const dur = 0.6 + Math.random()*0.55;
-
-    gsap.fromTo(b,
-      { opacity: 0, y: 0, x: 0, scale: 0.85 },
-      { opacity: 0.9, duration: 0.10, ease:"power2.out", onComplete: () => {
-        gsap.to(b, {
-          y: -rise,
-          x: drift,
-          opacity: 0,
-          scale: 1.25,
-          duration: dur,
-          ease: "power1.out",
-          onComplete: () => b.remove()
-        });
-      }}
-    );
-
-    if(Math.random() < 0.25) SFX.bubble();
-  }
-
-  function spawnFizzBurst(power=1){
-    const n = 10 + Math.floor(power * 8);
-    for(let i=0;i<n;i++){
-      setTimeout(() => spawnFizzBubble(1 + power*0.6), i * 22);
-    }
-  }
-
-  function startFizz(){
-    if(fizzTimer) return;
-    fizzTimer = setInterval(() => {
-      if(!charging) return;
-      const intensity = 0.9 + Math.min(2.2, loveEarned * 1.2);
-      spawnFizzBubble(intensity);
-      if(Math.random() < 0.55) spawnFizzBubble(intensity);
-    }, 140);
-  }
-
-  function stopFizz(){
-    if(!fizzTimer) return;
-    clearInterval(fizzTimer);
-    fizzTimer = null;
-  }
-
-  function startCharging(){
-    if(charging) return;
-    if(yesBtn.dataset.done === "1") return;
-
-    charging = true;
-    lastTs = 0;
-    startFizz();
-    SFX.charge();
-
-    gsap.fromTo(yesBtn, {scale:0.99}, {scale:1.02, duration:0.18, ease:"power2.out", yoyo:true, repeat:1});
-
-    const baseSpeed = 9; // slow by default
-    const tick = (ts) => {
-      if(!charging) return;
-      if(!lastTs) lastTs = ts;
-      const dt = (ts - lastTs) / 1000;
-      lastTs = ts;
-
-      const boostFactor = 1 + Math.min(2.3, loveEarned * 1.25);
-      setCharge(charge + baseSpeed * dt * boostFactor);
-
-      setSlosh((Math.sin(ts/240) * 0.18), (Math.cos(ts/300) * 0.12));
-
-      if(charge < 100) chargeRaf = requestAnimationFrame(tick);
-    };
-
-    chargeRaf = requestAnimationFrame(tick);
-  }
-
-  function stopCharging(){
-    charging = false;
-    if(chargeRaf) cancelAnimationFrame(chargeRaf);
-    chargeRaf = null;
-    stopFizz();
-
-    if(charge < 100){
-      gsap.to({p: charge}, {
-        p: Math.max(0, charge - 8),
-        duration: 0.35,
-        ease: "power2.out",
-        onUpdate: function(){ setCharge(this.targets()[0].p); }
-      });
-    }
-  }
-
-  yesBtn.addEventListener("pointerdown", (e) => {
-    e.preventDefault();
-    startCharging();
-  }, { passive:false });
-
-  yesBtn.addEventListener("pointerup", (e) => {
-    e.preventDefault();
-    stopCharging();
-  }, { passive:false });
-
-  yesBtn.addEventListener("pointercancel", stopCharging);
-  yesBtn.addEventListener("pointerleave", () => { if(charging) stopCharging(); });
-  yesBtn.addEventListener("click", (e) => e.preventDefault());
-
-  const FIXED_QUESTIONS = [
-    { q:"Pick the cutest answer 😌", a:"You 💗", b:"Also you 💞", correct:"a" },
-    { q:"What’s my favorite vibe?", a:"Us + soft playlist 🎶", b:"Cold email threads 🥶", correct:"a" },
-    { q:"Best Valentine plan?", a:"Food + laughs + long walk 🌙", b:"Excel reconciliation 📊", correct:"a" },
-    { q:"Which one is romance?", a:"Forehead kiss 😚", b:"404 Not Found 😵", correct:"a" },
-    { q:"Choose the correct spell:", a:"Abra-ka-YES 💗", b:"No-no-no 🙈", correct:"a" },
-    { q:"What makes me blush?", a:"Your smile 😳", b:"Server reboot 🧯", correct:"a" },
-    { q:"Pick one:", a:"Hold my hand 🫶", b:"Hold my bugs 🐛", correct:"a" },
-    { q:"This page wants…", a:"A YES 💞", b:"A ‘maybe’ 😭", correct:"a" },
-    { q:"Be honest:", a:"We’re a cute story ✨", b:"We’re a CSV file 🧾", correct:"a" },
-    { q:"What’s the correct choice?", a:"YES 💘", b:"Try again 😌", correct:"a" },
-    { q:"Love language?", a:"Time + cuddles 💗", b:"404 + silence 🫠", correct:"a" },
-    { q:"Pick the warmest thing:", a:"Your hug 🫂", b:"A broken AC 🥶", correct:"a" },
-    { q:"What should we do more?", a:"Make memories 🌸", b:"Make excuses 🙈", correct:"a" },
-    { q:"If I say 'valentine' you say…", a:"YES 💞", b:"Error 😭", correct:"a" },
-    { q:"What’s my weakness?", a:"You 😭💗", b:"Tax forms 🧾", correct:"a" },
-    { q:"Which is sweeter?", a:"You + me 😌", b:"A 500 error 😵", correct:"a" },
-    { q:"Pick a date vibe:", a:"Soft lights + laughs ✨", b:"Harsh neon + stress 😵‍💫", correct:"a" },
-    { q:"Where do I want to be?", a:"Next to you 💗", b:"In a meeting 🙃", correct:"a" },
-  ];
-
-  const GEN_LEFT = [
-    "Choose the cutest:",
-    "Pick the romantic one:",
-    "My heart prefers:",
-    "This is a love test:",
-    "Quick! Which one:",
-    "Pick a vibe:",
-    "Select the right answer:",
-    "Which is the best plan:",
-    "My favorite thing:",
-    "What do you want today:"
-  ];
-  const GEN_GOOD = [
-    ["You 💗","Also you 💞"],
-    ["A YES 💘","A no 😭"],
-    ["Hand holding 🫶","Cold emails 🥶"],
-    ["Cute date 🌙","Tax forms 🧾"],
-    ["Forehead kiss 😚","404 😵"],
-    ["Hug 🫂","Busy schedule 😵‍💫"],
-    ["Us ✨","Stress 🙃"],
-    ["Coffee + walk ☕️","Status meeting 📊"],
-    ["Smile 😳","Server reboot 🧯"],
-    ["Romance 💗","Chaos 🫠"],
-  ];
-
-  let qQueue = [];
-  let currentQ = null;
-
-  function shuffle(arr){
-    const a = arr.slice();
-    for(let i=a.length-1;i>0;i--){
-      const j = (Math.random()*(i+1))|0;
-      [a[i],a[j]] = [a[j],a[i]];
-    }
-    return a;
-  }
-
-  function makeGeneratedQuestion(){
-    const title = pick(GEN_LEFT);
-    const pair = pick(GEN_GOOD);
-    return { q: title, a: pair[0], b: pair[1], correct:"a" };
-  }
-
-  function refillQueue(){
-    const fixed = shuffle(FIXED_QUESTIONS);
-    const gens = Array.from({length: 40}, makeGeneratedQuestion);
-    qQueue = shuffle(fixed.concat(gens));
-  }
-
-  function nextQuestion(){
-    if(qQueue.length === 0) refillQueue();
-    currentQ = qQueue.pop();
-
-    qTitle.textContent = currentQ.q;
-    optA.textContent = currentQ.a;
-    optB.textContent = currentQ.b;
-
-    optA.classList.remove("correct","wrong");
-    optB.classList.remove("correct","wrong");
-    qHint.textContent = pick([
-      "Correct = fizzy boost 🫧💗",
-      "Earn love → YES fills faster 😌✨",
-      "Tiny quiz, big feelings 💞",
-      "Pick wisely… my heart is watching 👀💗"
-    ]);
-
-    optA.dataset.correct = (currentQ.correct === "a") ? "1" : "0";
-    optB.dataset.correct = (currentQ.correct === "b") ? "1" : "0";
-  }
-
-  function addLove(amount){
-    loveEarned = Math.min(2.2, loveEarned + amount);
-    if(earnedDecayTimer) clearInterval(earnedDecayTimer);
-    earnedDecayTimer = setInterval(() => {
-      loveEarned = Math.max(0, loveEarned - 0.03);
-      if(loveEarned <= 0){
-        clearInterval(earnedDecayTimer);
-        earnedDecayTimer = null;
-      }
-    }, 220);
-  }
-
-  function answer(btn){
-    const correct = btn.dataset.correct === "1";
-    const other = (btn === optA) ? optB : optA;
-
-    if(correct){
-      btn.classList.add("correct");
-      other.classList.add("wrong");
-
-      SFX.correct();
-      setValMood("good", pick(["Correct 😌💗 +fizz boost!", "That’s the answer I wanted 🥰", "Perfect. My heart approves 💞"]));
-
-      addLove(0.42);
-      const boost = 14 + Math.min(14, loveEarned*7);
-      setCharge(charge + boost);
-      spawnFizzBurst(1.2 + Math.min(1.6, loveEarned));
-      confetti({ particleCount: 16, spread: 42, startVelocity: 16, scalar: 0.7, origin: { y: 0.72 } });
-
-      setTimeout(() => { nextQuestion(); }, 520);
-    } else {
-      btn.classList.add("wrong");
-      other.classList.add("correct");
-
-      SFX.wrong();
-      setValMood("bad", pick(["Nope 🙈 try again", "Wrong 😤 but still cute", "Not that one 😌✨"]));
-
-      setCharge(charge + 3);
-      spawnFizzBurst(0.4);
-
-      setTimeout(() => { nextQuestion(); }, 620);
-    }
-
-    gsap.fromTo(btn, {scale:0.98}, {scale:1.06, duration:0.16, yoyo:true, repeat:1, ease:"power2.out"});
-  }
-
-  optA.addEventListener("click", () => answer(optA));
-  optB.addEventListener("click", () => answer(optB));
-
-  function placeValInitial(){
-    yesBtn.dataset.done = "0";
-    setCharge(0);
-    loveEarned = 0;
-    setSlosh(0,0);
-    setValMood("idle", pick(["Answer a question… or hold YES 😌💗","I’m watching 👀💞","Let’s play… gently 😌✨"]));
-    qQueue = [];
-    refillQueue();
-    nextQuestion();
-  }
-
-  function acceptYes(){
-    if(yesBtn.dataset.done === "1") return;
-    yesBtn.dataset.done = "1";
-    charging = false;
-    if(chargeRaf) cancelAnimationFrame(chargeRaf);
-    stopFizz();
-
-    setValMood("yes", "Yesss… you just made my whole heart blush 💗");
-    SFX.win();
-
-    confetti({ particleCount: 170, spread: 75, startVelocity: 32, scalar: 0.95, origin: { y: 0.6 } });
-    setTimeout(() => confetti({ particleCount: 120, spread: 110, startVelocity: 26, scalar: 0.85, origin: { y: 0.55 } }), 160);
-
-    const day = state.metDay ?? "";
-    document.getElementById("finalLine1").textContent = `You have won my heart, ${CUTIE_NAME}.`;
-    document.getElementById("finalLine2").textContent =
-      day ? `And I’ll never forget ${MONTH_NAME} ${day}, ${YEAR}. 💗` : `Happy Valentine’s Day ✨`;
-
-    renderCheesyCards();
-    setTimeout(() => showScreen("s4"), 520);
-  }
-
-  // =======================
-  // SCREEN 4 effects
-  // =======================
-  const cheesyGrid = document.getElementById("cheesyGrid");
-  const heartLayer = document.getElementById("heartLayer");
-  let finalHeartsTimer = null;
-
-  function renderCheesyCards(){
-    const cards = [
-      { icon:"👻", title:"Ghost Hug", text:"You can’t see it… but it’s always there." },
-      { icon:"🫂", title:"Hugs Speak", text:"Hugs speak louder than words. Always." },
-      { icon:"🌍", title:"Wherever You Are", text:"No distance can change this: I love you." },
-      { icon:"📈", title:"My Love Graph", text:"It’s increasing… day by day. (No limit 😌)" },
-      { icon:"📐", title:"If you were an angle…", text:"You’d be A-CUTE-ONE 💗" },
-      { icon:"📝", title:"Thank You", text:"For being you. For existing. For making me smile." },
-    ];
-
-    cheesyGrid.innerHTML = cards.map(c => `
-      <div class="noteCard">
-        <div class="noteIcon">${c.icon}</div>
-        <div class="noteTitle">${c.title}</div>
-        <div class="noteText">${c.text}</div>
-      </div>
-    `).join("");
-  }
-
-  function spawnFloatingHeart(){
-    const hearts = ["💗","💞","💘","💕","💓"];
-    const el = document.createElement("div");
-    el.className = "floatHeart";
-    el.textContent = pick(hearts);
-
-    const w = heartLayer.clientWidth;
-    const h = heartLayer.clientHeight;
-
-    const x = 12 + Math.random()*(w - 24);
-    const startY = h + 10;
-    const endY = -40 - Math.random()*60;
-
-    el.style.left = x + "px";
-    el.style.top = startY + "px";
-    el.style.fontSize = (14 + Math.random()*12) + "px";
-    heartLayer.appendChild(el);
-
-    const driftX = -30 + Math.random()*60;
-    const rot = -18 + Math.random()*36;
-
-    gsap.fromTo(el,
-      { opacity: 0, y: 0, x: 0, rotation: 0, scale: 0.9 },
-      { opacity: 0.85, duration: 0.18, ease: "power2.out",
-        onComplete: () => {
-          gsap.to(el, {
-            y: endY - startY,
-            x: driftX,
-            rotation: rot,
-            opacity: 0,
-            scale: 1.15,
-            duration: 2.8 + Math.random()*1.6,
-            ease: "power1.out",
-            onComplete: () => el.remove()
-          });
+    function forceUserWin(){
+      var line = bestLineForUser();
+      for(var k=0;k<3;k++){
+        var idx = line[k];
+        if(!board[idx]){
+          board[idx] = USER;
+          renderTTT();
+          animateCell(idx);
+          SFX.tap();
+          break;
         }
       }
-    );
-  }
+      if(winningLine(USER)) winTTT();
+    }
 
-  function startFinalEffects(){
-    SFX.win();
-    confetti({ particleCount: 120, spread: 80, startVelocity: 28, scalar: 0.95, origin: { y: 0.55 } });
-    setTimeout(() => confetti({ particleCount: 90, spread: 120, startVelocity: 22, scalar: 0.8, origin: { y: 0.5 } }), 180);
-
-    heartLayer.innerHTML = "";
-    if(finalHeartsTimer) clearInterval(finalHeartsTimer);
-    finalHeartsTimer = setInterval(spawnFloatingHeart, 220);
-
-    setTimeout(() => {
-      if(finalHeartsTimer) clearInterval(finalHeartsTimer);
-      finalHeartsTimer = null;
-    }, 9000);
-  }
-
-  // =======================
-  // Navigation
-  // =======================
-  toS3.addEventListener("click", async () => {
-    SFX.sparkle();
-
-    const valSub = document.getElementById("valSub");
-    const day = state.metDay ?? "that day";
-    valSub.innerHTML = `Since <span class="name">${MONTH_NAME} ${day}, ${YEAR}</span>, I’ve been smiling more.`;
-
-    showScreen("s3");
-    placeValInitial();
-
-    try{
-      if (typeof DeviceMotionEvent !== "undefined" && typeof DeviceMotionEvent.requestPermission === "function") {
-        const res = await DeviceMotionEvent.requestPermission();
-        if(res === "granted") enableMotion();
-      } else {
-        enableMotion();
+    function countInLine(sym, line){
+      var c=0;
+      for(var k=0;k<3;k++) if(board[line[k]]===sym) c++;
+      return c;
+    }
+    function emptyInLine(line){
+      var e=0;
+      for(var k=0;k<3;k++) if(!board[line[k]]) e++;
+      return e;
+    }
+    function userAlmostWinning(){
+      for(var li=0; li<LINES.length; li++){
+        var line=LINES[li];
+        if(countInLine(USER,line)===2 && emptyInLine(line)===1) return true;
       }
-    }catch(e){ enableMotion(); }
-  });
+      return false;
+    }
+    function userCloseLines(){
+      for(var li=0; li<LINES.length; li++){
+        var line=LINES[li];
+        if(countInLine(USER,line)===1 && emptyInLine(line)===2) return true;
+      }
+      return false;
+    }
 
-  document.getElementById("replay").addEventListener("click", () => {
-    SFX.wrong();
-    state.metDay = null;
-    state.tttWon = false;
+    function onUserMove(i){
+      if(locked) return;
+      if(board[i]) return;
 
-    toS2.disabled = true;
-    dateNote.textContent = "Choose our day…";
-    document.querySelectorAll(".dateBtn").forEach(x => x.classList.remove("selected"));
+      board[i] = USER;
+      userMoves++;
+      renderTTT();
+      animateCell(i);
+      SFX.tap();
 
+      if(winningLine(USER)){ winTTT(); return; }
+
+      if(userAlmostWinning()){
+        tttStatus.textContent = pick(["OMG one more and you win 😳💞","Final move incoming… 😌💗","So close I can feel it 🥹💘"]);
+      } else if(userCloseLines()){
+        tttStatus.textContent = pick(["That was cute 😌💗","Okayyy I see you 👀💞","Ooo this is getting serious 💘"]);
+      } else {
+        tttStatus.textContent = pick(["Your turn 💗","Go on 😌","Make it count 💘"]);
+      }
+
+      locked = true;
+      setTimeout(function(){
+        aiMoveSoft();
+        locked = false;
+        if(userMoves >= 4) forceUserWin();
+        hintBestMove();
+      }, 230);
+    }
+
+    function drawWinLine(line){
+      var a = tttBoard.querySelector('.cell[data-i="'+ line[0] +'"]');
+      var c = tttBoard.querySelector('.cell[data-i="'+ line[2] +'"]');
+      if(!a || !c) return;
+
+      var br = tttBoard.getBoundingClientRect();
+      var ar = a.getBoundingClientRect();
+      var cr = c.getBoundingClientRect();
+
+      var x1 = (ar.left + ar.width/2) - br.left;
+      var y1 = (ar.top + ar.height/2) - br.top;
+      var x2 = (cr.left + cr.width/2) - br.left;
+      var y2 = (cr.top + cr.height/2) - br.top;
+
+      winSvg.setAttribute("viewBox", "0 0 " + br.width + " " + br.height);
+      winSvg.innerHTML =
+        '<path id="p" d="M ' + x1 + ' ' + y1 + ' L ' + x2 + ' ' + y2 + '" ' +
+        'stroke="rgba(181,22,82,.85)" stroke-width="8" stroke-linecap="round" fill="none" opacity="0.95"/>' +
+        '<text id="heartEnd" x="'+ x2 +'" y="'+ y2 +'" text-anchor="middle" dominant-baseline="middle" '+
+        'style="font-size:22px;">💗</text>';
+
+      var path = winSvg.querySelector("#p");
+      var heart = winSvg.querySelector("#heartEnd");
+      var len = path.getTotalLength();
+
+      path.style.strokeDasharray = String(len);
+      path.style.strokeDashoffset = String(len);
+
+      gsap.to(path, { strokeDashoffset: 0, duration: 0.45, ease: "power2.out" });
+      gsap.fromTo(heart, { scale: 0.9 }, { scale: 1.22, duration: 0.18, yoyo: true, repeat: 3, ease: "power2.inOut" });
+    }
+
+    function winTTT(){
+      state.tttWon = true;
+      var line = winningLine(USER);
+      if(line) drawWinLine(line);
+
+      tttTopWin.textContent = "YOU HAVE WON MY HEART 💞";
+      tttTopWin.classList.add("glow");
+      setTimeout(function(){ tttTopWin.classList.remove("glow"); }, 1300);
+
+      tttStatus.textContent = pick(["Okay okay… you win 😌💗","I surrender 🥹💞","Fine… take my heart 💘"]);
+      toS3.disabled = false;
+
+      SFX.win();
+      confetti({ particleCount: 90, spread: 70, startVelocity: 22, scalar: 0.9, origin: { y: 0.55 } });
+    }
+
+    function initTTT(){
+      state.tttWon = false;
+      toS3.disabled = true;
+      tttTopWin.textContent = "";
+      tttTopWin.classList.remove("glow");
+      winSvg.innerHTML = "";
+
+      for(var i=0;i<9;i++) board[i]=null;
+      userMoves = 0;
+      locked = false;
+      tttStatus.textContent = "Your turn 💗";
+      renderTTT();
+      hintBestMove();
+    }
+
+    resetTTT.addEventListener("click", function(){ SFX.wrong(); initTTT(); });
+
+    // =======================
+    // SCREEN 3: Catch hearts + bombs -> fill YES
+    // =======================
+    document.getElementById("cutieNameInline").textContent = CUTIE_NAME;
+
+    var yesBtn = document.getElementById("yesBtn");
+    var valEmoji = document.getElementById("valEmoji");
+    var valMood = document.getElementById("valMood");
+    var wave = document.getElementById("wave");
+    var fizz = document.getElementById("fizz");
+    var yesText = document.getElementById("yesText");
+    var chargePct = document.getElementById("chargePct");
+
+    var catchField = document.getElementById("catchField");
+    var hudScore = document.getElementById("hudScore");
+    var hudMiss = document.getElementById("hudMiss");
+    var toast = document.getElementById("toast");
+
+    var catchRunning = false;
+    var spawnTimer = null;
+    var rafTimer = null;
+    var drops = [];
+    var score = 0;
+    var miss = 0;
+
+    var heartMsgs = [
+      "Awww that heart was for you 💗",
+      "You’re collecting love… suspiciously good 😌✨",
+      "Stop being cute 😭💞",
+      "That one made me blush 😳",
+      "Okay… heart is warming up 💓",
+      "Love detected ✅💗",
+      "You + hearts = perfection 🥹💞"
+    ];
+    var bombMsgs = [
+      "NOOO 😭 you tapped a bomb 💣",
+      "That hurt 😤 (but I forgive you) 💗",
+      "Bomb?? really? 🙈",
+      "Ouch. That was evil 😂💣",
+      "Minus love 😭 try again 💗"
+    ];
+
+    function setValMood(kind, text){
+      var moods = {
+        idle: [
+          { e:"😊", m:"Catch hearts to fill YES 💗" },
+          { e:"😌", m:"Play gently… I’m watching 😌✨" },
+          { e:"🫶", m:"Tap tap tap… for love 🫶💞" }
+        ],
+        good: [
+          { e:"🥰", m:"Good catch 🥰 +love!" },
+          { e:"✨", m:"That’s a cute one ✨💗" },
+          { e:"😍", m:"More hearts!! 😍💞" }
+        ],
+        bad: [
+          { e:"🥺", m:"Bomb?? 😭 careful" },
+          { e:"😤", m:"Nooo not that 💣😤" },
+          { e:"🙈", m:"Ouch… try again 🙈💗" }
+        ],
+        yes: [
+          { e:"🥹", m:"YES?? I’m melting 🥹💞" },
+          { e:"😍", m:"You said YES 😭💗" },
+          { e:"💓", m:"Heart beating FAST 💓" }
+        ]
+      };
+
+      var pool = moods[kind] || moods.idle;
+      var p = pool[(Math.random()*pool.length)|0];
+      valEmoji.textContent = p.e;
+      valMood.textContent = text || p.m;
+
+      gsap.killTweensOf(valEmoji);
+      gsap.fromTo(valEmoji, {scale:0.92, rotation:-2}, {scale:1.08, rotation:2, duration:0.18, ease:"power2.out", yoyo:true, repeat:1});
+    }
+
+    function toastMsg(msg){
+      toast.textContent = msg;
+      gsap.killTweensOf(toast);
+      gsap.fromTo(toast, {opacity:0, y:-6}, {opacity:1, y:0, duration:0.18, ease:"power2.out"});
+      gsap.to(toast, {opacity:0, y:-8, duration:0.28, delay:1.0, ease:"power2.in"});
+    }
+
+    // YES charging (wavy + bubbles)
+    var charging = false;
+    var chargeRaf = null;
+    var lastTs = 0;
+
+    function setCharge(p){
+      state.loveCharge = Math.max(0, Math.min(100, p));
+      wave.style.height = String(state.loveCharge) + "%";
+      wave.style.transform = "translateY(" + (8 - (state.loveCharge*0.08)) + "px)";
+      chargePct.textContent = String(Math.round(state.loveCharge)) + "%";
+
+      if(state.loveCharge < 20) yesText.textContent = "Hold to say YES 💘";
+      else if(state.loveCharge < 55) yesText.textContent = "It’s getting fizzy… 🫧";
+      else if(state.loveCharge < 90) yesText.textContent = "Almost there… 🥹💗";
+      else yesText.textContent = "Release to seal it 💞";
+
+      if(state.loveCharge >= 100){
+        acceptYes();
+      }
+    }
+
+    function spawnFizzBubble(intensity){
+      if(state.loveCharge <= 1) return;
+      var b = document.createElement("span");
+      b.className = "fizzBubble";
+
+      var w = yesBtn.clientWidth;
+      var x = 8 + Math.random()*(w - 16);
+      var size = 2 + Math.random()*6*(intensity || 1);
+      b.style.width = size + "px";
+      b.style.height = size + "px";
+      b.style.left = x + "px";
+      b.style.bottom = (6 + Math.random()*14) + "px";
+      fizz.appendChild(b);
+
+      var rise = 22 + Math.random()*34 + (intensity||1)*12;
+      var drift = (-12 + Math.random()*24) * (intensity||1);
+      var dur = 0.6 + Math.random()*0.55;
+
+      gsap.fromTo(b, {opacity:0, y:0, x:0, scale:0.85}, {opacity:0.9, duration:0.10, ease:"power2.out", onComplete:function(){
+        gsap.to(b, {y:-rise, x:drift, opacity:0, scale:1.25, duration:dur, ease:"power1.out", onComplete:function(){ b.remove(); }});
+      }});
+
+      if(Math.random() < 0.18) SFX.bubble();
+    }
+
+    var fizzTimer = null;
+    function startFizz(){
+      if(fizzTimer) return;
+      fizzTimer = setInterval(function(){
+        if(!charging) return;
+        spawnFizzBubble(1.2);
+        if(Math.random() < 0.5) spawnFizzBubble(1.0);
+      }, 140);
+    }
+    function stopFizz(){
+      if(!fizzTimer) return;
+      clearInterval(fizzTimer);
+      fizzTimer = null;
+    }
+
+    // gentle wave motion (no permissions)
+    function waveLoop(){
+      gsap.to(wave, {
+        keyframes: [
+          { rotate: -2.2, x: -8, y: 2, duration: 1.2, ease: "sine.inOut" },
+          { rotate:  2.6, x:  9, y: -1, duration: 1.1, ease: "sine.inOut" },
+          { rotate: -1.6, x: -6, y: 1, duration: 1.0, ease: "sine.inOut" }
+        ],
+        repeat: -1
+      });
+    }
+
+    function startCharging(){
+      if(charging) return;
+      if(yesBtn.dataset.done === "1") return;
+
+      charging = true;
+      lastTs = 0;
+      startFizz();
+      SFX.charge();
+
+      var baseSpeed = 8; // holding is slow (game fills faster)
+      function tick(ts){
+        if(!charging) return;
+        if(!lastTs) lastTs = ts;
+        var dt = (ts - lastTs) / 1000;
+        lastTs = ts;
+
+        setCharge(state.loveCharge + baseSpeed * dt);
+        if(state.loveCharge < 100) chargeRaf = requestAnimationFrame(tick);
+      }
+      chargeRaf = requestAnimationFrame(tick);
+    }
+
+    function stopCharging(){
+      charging = false;
+      if(chargeRaf) cancelAnimationFrame(chargeRaf);
+      chargeRaf = null;
+      stopFizz();
+
+      if(state.loveCharge < 100){
+        gsap.to({p: state.loveCharge}, {
+          p: Math.max(0, state.loveCharge - 6),
+          duration: 0.35,
+          ease: "power2.out",
+          onUpdate: function(){ setCharge(this.targets()[0].p); }
+        });
+      }
+    }
+
+    yesBtn.addEventListener("pointerdown", function(e){
+      e.preventDefault();
+      if(yesBtn.dataset.done === "1") return;
+      startCharging();
+    }, { passive:false });
+
+    yesBtn.addEventListener("pointerup", function(e){
+      e.preventDefault();
+      if(yesBtn.dataset.done === "1") return;
+      stopCharging();
+    }, { passive:false });
+
+    yesBtn.addEventListener("pointercancel", stopCharging);
+    yesBtn.addEventListener("pointerleave", function(){ if(charging) stopCharging(); });
+    yesBtn.addEventListener("click", function(e){ e.preventDefault(); });
+
+    // Catch game
+    function updateHud(){
+      hudScore.textContent = "Score: " + score;
+      hudMiss.textContent = "Miss: " + miss + "/" + MAX_MISS;
+    }
+
+    function makeDrop(){
+      var isBomb = Math.random() < BOMB_CHANCE;
+      var el = document.createElement("div");
+      el.className = "drop " + (isBomb ? "bomb" : "heart");
+      el.textContent = isBomb ? "💣" : pick(["💗","💞","💘","💕","💓"]);
+
+      var fieldRect = catchField.getBoundingClientRect();
+      var x = 8 + Math.random() * (fieldRect.width - 52);
+      el.style.left = x + "px";
+      el.style.top = "-50px";
+
+      var obj = {
+        el: el,
+        y: -50,
+        x: x,
+        isBomb: isBomb,
+        alive: true,
+        speed: FALL_SPEED_PX_PER_SEC * (0.85 + Math.random()*0.45)
+      };
+
+      el.addEventListener("click", function(e){
+        e.preventDefault();
+        if(!obj.alive) return;
+        obj.alive = false;
+
+        if(obj.isBomb){
+          score = Math.max(0, score - 2);
+          setCharge(state.loveCharge - 10);
+          toastMsg(pick(bombMsgs));
+          setValMood("bad", pick(bombMsgs));
+          SFX.wrong();
+          gsap.to(el, {scale:0.6, opacity:0, duration:0.22, ease:"power2.in", onComplete:function(){ if(el.parentNode) el.parentNode.removeChild(el); }});
+        } else {
+          score += 1;
+          setCharge(state.loveCharge + 7);
+          toastMsg(pick(heartMsgs));
+          setValMood("good", pick(heartMsgs));
+          SFX.correct();
+
+          // fizz burst + tiny confetti
+          for(var i=0;i<10;i++) setTimeout(function(){ spawnFizzBubble(1.5); }, i*20);
+          confetti({ particleCount: 12, spread: 46, startVelocity: 16, scalar: 0.75, origin: { y: 0.70 } });
+
+          gsap.to(el, {scale:1.25, opacity:0, duration:0.18, ease:"power2.out", onComplete:function(){ if(el.parentNode) el.parentNode.removeChild(el); }});
+        }
+
+        updateHud();
+      });
+
+      catchField.appendChild(el);
+      drops.push(obj);
+    }
+
+    function gameLoop(ts){
+      if(!catchRunning) return;
+      if(!gameLoop.last) gameLoop.last = ts;
+      var dt = (ts - gameLoop.last) / 1000;
+      gameLoop.last = ts;
+
+      var fieldRect = catchField.getBoundingClientRect();
+      for(var i=drops.length-1;i>=0;i--){
+        var d = drops[i];
+        if(!d.alive){
+          drops.splice(i,1);
+          continue;
+        }
+
+        d.y += d.speed * dt;
+        d.el.style.transform = "translateY(" + d.y + "px)";
+
+        if(d.y > fieldRect.height + 60){
+          // missed
+          d.alive = false;
+          if(d.el.parentNode) d.el.parentNode.removeChild(d.el);
+          drops.splice(i,1);
+
+          if(!d.isBomb){
+            miss += 1;
+            setCharge(state.loveCharge - 4);
+            toastMsg(pick(["Aww missed 😭", "It slipped 😭💗", "Nooo come back 💞"]));
+            SFX.soft();
+          }
+          updateHud();
+
+          if(miss >= MAX_MISS){
+            toastMsg("Okay okay… slow down 😌 Restarting hearts 💗");
+            miss = 0;
+            updateHud();
+          }
+        }
+      }
+
+      rafTimer = requestAnimationFrame(gameLoop);
+    }
+
+    function startCatchGame(){
+      // reset
+      catchField.innerHTML = "";
+      drops = [];
+      score = 0;
+      miss = 0;
+      updateHud();
+
+      catchRunning = true;
+      if(spawnTimer) clearInterval(spawnTimer);
+      spawnTimer = setInterval(function(){
+        // spawn 1-2 sometimes
+        makeDrop();
+        if(Math.random() < 0.18) setTimeout(makeDrop, 140);
+      }, SPAWN_EVERY_MS);
+
+      gameLoop.last = null;
+      rafTimer = requestAnimationFrame(gameLoop);
+    }
+
+    function stopCatchGame(){
+      catchRunning = false;
+      if(spawnTimer) clearInterval(spawnTimer);
+      spawnTimer = null;
+      if(rafTimer) cancelAnimationFrame(rafTimer);
+      rafTimer = null;
+    }
+
+    function acceptYes(){
+      if(yesBtn.dataset.done === "1") return;
+      yesBtn.dataset.done = "1";
+      stopCatchGame();
+      charging = false;
+      stopFizz();
+
+      setValMood("yes", "Yesss… you just made my whole heart blush 💗");
+      SFX.win();
+
+      confetti({ particleCount: 170, spread: 75, startVelocity: 32, scalar: 0.95, origin: { y: 0.6 } });
+      setTimeout(function(){ confetti({ particleCount: 120, spread: 110, startVelocity: 26, scalar: 0.85, origin: { y: 0.55 } }); }, 160);
+
+      document.getElementById("finalLine1").textContent = "You have won my heart, " + CUTIE_NAME + ".";
+      document.getElementById("finalLine2").textContent = "And I’ll never forget " + MONTH_NAME + " " + state.metDay + ", " + YEAR + ". 💗";
+      renderCheesyCards();
+
+      setTimeout(function(){ showScreen("s4"); }, 520);
+    }
+
+    function placeValScreen(){
+      yesBtn.dataset.done = "0";
+      setCharge(0);
+      setValMood("idle", pick(["Catch hearts to fill YES 💗","Avoid bombs 😭💣","Tap tap… for love 🫶💞"]));
+      waveLoop();
+      startCatchGame();
+    }
+
+    // =======================
+    // SCREEN 4: Final cards
+    // =======================
+    var cheesyGrid = document.getElementById("cheesyGrid");
+    function renderCheesyCards(){
+      var cards = [
+        { title:"Ghost Hug 👻", text:"You can’t see it… but it’s always there." },
+        { title:"Hugs Speak 🫂", text:"Hugs speak louder than words. Always." },
+        { title:"Wherever You Are 🌍", text:"No distance can change this: I love you." },
+        { title:"My Love Graph 📈", text:"It’s increasing… day by day. (No limit 😌)" },
+        { title:"Angle Joke 📐", text:"If you were an angle… you’d be A-CUTE-ONE 💗" },
+        { title:"Thank You 📝", text:"For being you. For existing. For making me smile." }
+      ];
+
+      cheesyGrid.innerHTML = "";
+      for(var i=0;i<cards.length;i++){
+        var c = document.createElement("div");
+        c.className = "noteCard";
+        c.innerHTML =
+          '<div class="noteTitle">'+ cards[i].title +'</div>' +
+          '<div class="noteText">'+ cards[i].text +'</div>';
+        cheesyGrid.appendChild(c);
+      }
+    }
+
+    // =======================
+    // Navigation
+    // =======================
+    toS3.addEventListener("click", function(){
+      SFX.correct();
+      var valSub = document.getElementById("valSub");
+      valSub.textContent = "Since " + MONTH_NAME + " " + state.metDay + ", " + YEAR + ", I’ve been smiling more. 💗";
+      showScreen("s3");
+      placeValScreen();
+    });
+
+    document.getElementById("replay").addEventListener("click", function(){
+      SFX.wrong();
+      stopCatchGame();
+      state.metDay = null;
+      state.tttWon = false;
+      state.loveCharge = 0;
+
+      document.getElementById("toS2").disabled = true;
+      dateNote.textContent = "Choose our day…";
+      var all = document.querySelectorAll(".dateBtn");
+      for(var i=0;i<all.length;i++) all[i].classList.remove("selected");
+
+      initTTT();
+      showScreen("s1");
+    });
+
+    // Init
     initTTT();
-    showScreen("s1");
-  });
-
-  // init
-  initTTT();
+    document.getElementById("toS2").disabled = true;
 
   </script>
 </body>
