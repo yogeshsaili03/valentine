@@ -638,6 +638,35 @@
     }
 
     /* ===== Screen 4: Final ===== */
+    /* ===== Screen 4: Sparkle sweep (runs only when class is added) ===== */
+.finalLine.sparkle::after{
+  content:"";
+  position:absolute;
+  inset: -2px -8px;
+  pointer-events:none;
+  opacity:.75;
+
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255,255,255,.10) 28%,
+    rgba(255,255,255,.70) 45%,
+    rgba(255,255,255,.10) 62%,
+    transparent 78%
+  );
+
+  transform: translateX(-140%) skewX(-18deg);
+  filter: blur(.2px);
+  animation: lineSweep 1.05s ease-out 1;
+}
+
+@keyframes lineSweep{
+  0%   { transform: translateX(-140%) skewX(-18deg); opacity: 0; }
+  10%  { opacity: .75; }
+  70%  { opacity: .75; }
+  100% { transform: translateX(140%) skewX(-18deg); opacity: 0; }
+}
+
     .finalWrap{ position: relative; margin-top: 14px; }
     .finalBox{
       border-radius: 22px;
@@ -1936,6 +1965,16 @@ body{
 
     function startFinalEffects(){
       SFX.win();
+      // sparkle sweep on the final lines (once per entry)
+const l1 = document.getElementById("finalLine1");
+const l2 = document.getElementById("finalLine2");
+l1.classList.add("sparkle");
+l2.classList.add("sparkle");
+setTimeout(function(){
+  l1.classList.remove("sparkle");
+  l2.classList.remove("sparkle");
+}, 1200);
+
       confetti({ particleCount: 120, spread: 80, startVelocity: 28, scalar: 0.95, origin: { y: 0.55 } });
       setTimeout(function(){
         confetti({ particleCount: 90, spread: 120, startVelocity: 22, scalar: 0.8, origin: { y: 0.5 } });
