@@ -1811,9 +1811,12 @@ body{
 
         // collision: drop center within basket area
         const w = catchField.clientWidth;
-        const xpx = d.x * w;
-        const cx = xpx;
-        const cy = d.y + 24;
+const DROP_SIZE = 42;          // matches your .drop { width/height: 42px }
+const xpx = d.x * w;
+
+const cx = xpx + (DROP_SIZE / 2);  // ✅ center X
+const cy = d.y + (DROP_SIZE / 2);  // ✅ center Y (optional but cleaner)
+
 
         const inX = (cx > bb.left + 6) && (cx < bb.right - 6);
         const inY = (cy > bb.top + 6) && (cy < bb.bottom - 6);
